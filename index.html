@@ -1,73 +1,837 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LUXURY STORE | Premium Software</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VEXQORA — Premium Minecraft Visuals</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root {
+    --bg: #070706;
+    --bg2: #0d0c09;
+    --card: rgba(20, 18, 12, 0.72);
+    --gold: #d6a94a;
+    --gold-light: #ffe09a;
+    --gold-dark: #8c651e;
+    --text: #f5f0e5;
+    --muted: #969087;
+    --border: rgba(214,169,74,.18);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: 
+        radial-gradient(circle at 20% 10%, rgba(214,169,74,.10), transparent 25%),
+        radial-gradient(circle at 80% 30%, rgba(214,169,74,.06), transparent 25%),
+        var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #080705;
+}
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(var(--gold-light), var(--gold-dark));
+    border-radius: 20px;
+}
+
+.grid {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: .18;
+    background-image: 
+        linear-gradient(rgba(214,169,74,.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(214,169,74,.08) 1px, transparent 1px);
+    background-size: 55px 55px;
+    mask-image: linear-gradient(to bottom, black, transparent 80%);
+    z-index: -2;
+}
+
+.glow {
+    position: fixed;
+    width: 500px;
+    height: 500px;
+    background: var(--gold);
+    filter: blur(180px);
+    opacity: .06;
+    border-radius: 50%;
+    z-index: -3;
+}
+.glow.one { top: -200px; left: -200px; }
+.glow.two { right: -200px; top: 40%; }
+
+/* NAVBAR */
+nav {
+    width: 100%;
+    height: 82px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 7%;
+    border-bottom: 1px solid var(--border);
+    background: rgba(7,7,6,.75);
+    backdrop-filter: blur(18px);
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: 4px;
+}
+
+.logo span {
+    color: var(--gold);
+}
+
+.nav-links {
+    display: flex;
+    gap: 30px;
+}
+
+.nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 14px;
+    transition: .25s;
+}
+
+.nav-links a:hover {
+    color: var(--gold-light);
+}
+
+.account-btn {
+    border: 1px solid var(--border);
+    background: rgba(214,169,74,.07);
+    color: var(--gold-light);
+    padding: 11px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: .25s;
+    font-weight: 600;
+}
+
+.account-btn:hover {
+    background: var(--gold);
+    color: black;
+    box-shadow: 0 0 35px rgba(214,169,74,.25);
+}
+
+/* HERO */
+.hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 130px 20px 80px;
+}
+
+.hero-content {
+    max-width: 1000px;
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 15px;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    background: rgba(214,169,74,.06);
+    color: var(--gold-light);
+    font-size: 12px;
+    margin-bottom: 28px;
+}
+
+.dot {
+    width: 7px;
+    height: 7px;
+    background: #d6a94a;
+    border-radius: 50%;
+    box-shadow: 0 0 15px var(--gold);
+}
+
+.hero h1 {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: clamp(45px, 8vw, 110px);
+    line-height: .95;
+    letter-spacing: -4px;
+    font-weight: 800;
+}
+
+.hero h1 span {
+    color: var(--gold);
+    text-shadow: 0 0 50px rgba(214,169,74,.25);
+}
+
+.hero p {
+    max-width: 650px;
+    margin: 30px auto;
+    color: var(--muted);
+    font-size: 17px;
+    line-height: 1.7;
+}
+
+.hero-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.primary-btn {
+    padding: 16px 27px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--gold-light), var(--gold));
+    color: #1a1305;
+    font-weight: 800;
+    cursor: pointer;
+    transition: .25s;
+    box-shadow: 0 10px 50px rgba(214,169,74,.16);
+}
+
+.primary-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 60px rgba(214,169,74,.30);
+}
+
+.secondary-btn {
+    padding: 16px 27px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: rgba(255,255,255,.02);
+    color: var(--text);
+    cursor: pointer;
+    transition: .25s;
+}
+
+.secondary-btn:hover {
+    border-color: var(--gold);
+}
+
+/* SECTIONS */
+section {
+    padding: 110px 7%;
+}
+
+.section-header {
+    margin-bottom: 50px;
+}
+
+.section-tag {
+    color: var(--gold);
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.section-header h2 {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: clamp(30px, 4vw, 50px);
+    margin-top: 10px;
+}
+
+/* PRODUCTS */
+.products {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+}
+
+.product {
+    padding: 30px;
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    background: linear-gradient(145deg, rgba(214,169,74,.06), rgba(255,255,255,.01));
+    position: relative;
+    transition: .35s;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.product:hover {
+    transform: translateY(-8px);
+    border-color: rgba(214,169,74,.6);
+    box-shadow: 0 20px 80px rgba(0,0,0,.5), 0 0 50px rgba(214,169,74,.1);
+}
+
+.product h3 {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.product-desc {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+/* Выбор срока подписки */
+.duration-selector {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.dur-btn {
+    background: rgba(0,0,0,0.4);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 8px 5px;
+    border-radius: 8px;
+    font-size: 11px;
+    cursor: pointer;
+    transition: .2s;
+    text-align: center;
+}
+
+.dur-btn.active, .dur-btn:hover {
+    border-color: var(--gold);
+    background: rgba(214,169,74,.15);
+    color: var(--text);
+}
+
+.dur-btn b {
+    display: block;
+    color: var(--gold-light);
+    font-size: 12px;
+    margin-top: 2px;
+}
+
+.product-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    border-top: 1px solid var(--border);
+    padding-top: 20px;
+}
+
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.price-label {
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.price {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--gold-light);
+}
+
+.buy-btn {
+    width: 100%;
+    padding: 13px;
+    border-radius: 10px;
+    border: none;
+    background: linear-gradient(135deg, var(--gold-light), var(--gold));
+    color: #100c03;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .25s;
+}
+
+.buy-btn:hover {
+    opacity: 0.9;
+    box-shadow: 0 0 20px rgba(214,169,74,.4);
+}
+
+/* MODALS */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 5000;
+    background: rgba(0,0,0,.8);
+    backdrop-filter: blur(12px);
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-box {
+    width: 100%;
+    max-width: 440px;
+    padding: 35px;
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    background: linear-gradient(145deg, rgba(25,22,14,.98), rgba(8,7,5,.99));
+    position: relative;
+    animation: modalIn .3s ease;
+}
+
+@keyframes modalIn {
+    from { opacity: 0; transform: scale(.9) translateY(20px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.close {
+    position: absolute;
+    right: 20px;
+    top: 16px;
+    color: var(--muted);
+    background: none;
+    border: none;
+    font-size: 26px;
+    cursor: pointer;
+}
+.close:hover { color: var(--gold); }
+
+.modal-box h2 {
+    font-family: "Space Grotesk", sans-serif;
+    margin-bottom: 8px;
+    font-size: 24px;
+}
+
+.modal-box > p {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 20px;
+}
+
+.input {
+    width: 100%;
+    padding: 13px 15px;
+    margin-bottom: 12px;
+    background: rgba(255,255,255,.03);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: white;
+    outline: none;
+    font-size: 14px;
+}
+.input:focus { border-color: var(--gold); }
+
+.full-btn {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--gold-light), var(--gold));
+    color: #181005;
+    font-weight: 800;
+    cursor: pointer;
+    margin-top: 5px;
+}
+
+.switch-auth {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 13px;
+    color: var(--muted);
+}
+.switch-auth span {
+    color: var(--gold);
+    cursor: pointer;
+    font-weight: 600;
+}
+.switch-auth span:hover { text-decoration: underline; }
+
+/* Личный кабинет внутри модалки */
+.cabinet-panel {
+    display: none;
+}
+.cabinet-panel.active {
+    display: block;
+}
+.user-info-box {
+    background: rgba(0,0,0,0.4);
+    border: 1px solid var(--border);
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    font-size: 13px;
+}
+.user-info-box p { margin-bottom: 5px; color: var(--muted); }
+.user-info-box span { color: var(--text); font-weight: 600; }
+
+.keys-container {
+    max-height: 150px;
+    overflow-y: auto;
+    background: rgba(0,0,0,0.5);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px;
+    margin-top: 10px;
+}
+.key-row {
+    background: rgba(214,169,74,.08);
+    padding: 8px;
+    border-radius: 6px;
+    margin-bottom: 6px;
+    font-family: monospace;
+    font-size: 12px;
+    border-left: 3px solid var(--gold);
+}
+
+/* FOOTER */
+footer {
+    padding: 40px 7%;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+@media(max-width: 900px) {
+    .products { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+}
+</style>
 </head>
+
 <body>
 
-    <!-- Шапка сайта -->
-    <header>
-        <div class="logo">LUXURY<span>STORE</span></div>
-        <nav>
-            <a href="#shop">Магазин</a>
-            <a href="#features">Преимущества</a>
-            <a href="#" onclick="openCabinet()">Личный кабинет</a>
-        </nav>
-    </header>
+<div class="grid"></div>
+<div class="glow one"></div>
+<div class="glow two"></div>
 
-    <!-- Главный экран (Hero) -->
-    <section class="hero">
-        <h1>Элитный софт нового поколения</h1>
-        <p>Максимальный функционал, полная безопасность и обход любых античитов.</p>
-        <a href="#shop" class="btn-gold">Выбрать продукт</a>
-    </section>
+<!-- NAVBAR -->
+<nav>
+    <div class="logo">VEXQORA<span>.</span></div>
+    <div class="nav-links">
+        <a href="#shop">Магазин</a>
+        <a href="#features">Преимущества</a>
+    </div>
+    <button class="account-btn" onclick="openAccountModal()">Личный кабинет</button>
+</nav>
 
-    <!-- Секция магазина -->
-    <section id="shop" class="shop-section">
-        <h2 class="section-title">Наши продукты</h2>
-        
-        <div class="product-card">
-            <div class="badge">VIP STATUS</div>
-            <h3>ULTIMATE PRIVATE SOFTWARE</h3>
-            <p class="product-desc">Топовый софт с регулярными обновлениями, кастомными визуалами и мощным функционалом.</p>
-            
-            <!-- Выбор срока -->
-            <div class="duration-selector">
-                <button class="dur-btn active" onclick="selectDuration(this, 300, '7 Дней')">7 Дней <br><b>300 ₽</b></button>
-                <button class="dur-btn" onclick="selectDuration(this, 750, '30 Дней')">30 Дней <br><b>750 ₽</b></button>
-                <button class="dur-btn" onclick="selectDuration(this, 1800, 'Навсегда')">Навсегда <br><b>1800 ₽</b></button>
-            </div>
-
-            <div class="price-display">Цена: <span id="current-price">300</span> ₽</div>
-            
-            <button class="btn-gold buy-btn" onclick="buyProduct()">Купить ключ</button>
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-content">
+        <div class="badge">
+            <div class="dot"></div>
+            ELITE MINECRAFT VISUAL SOFTWARE
         </div>
-    </section>
-
-    <!-- Модальное окно личного кабинета -->
-    <div id="cabinetModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeCabinet()">&times;</span>
-            <h2>Личный кабинет</h2>
-            <div class="cabinet-info">
-                <p>Ваш статус: <span style="color: gold;">Гость</span></p>
-                <p>Купленные ключи:</p>
-                <div class="keys-list" id="userKeys">
-                    <div class="no-keys">У вас пока нет активных ключей. Совершите покупку!</div>
-                </div>
-            </div>
+        <h1>
+            VEXQORA<br>
+            <span>VISUALS.</span>
+        </h1>
+        <p>
+            Элитный софт и кастомные визуальные модули для Minecraft. Максимальная производительность, уникальный золотой интерфейс и полная безопасность.
+        </p>
+        <div class="hero-buttons">
+            <a href="#shop"><button class="primary-btn">Купить софт →</button></a>
+            <button class="secondary-btn" onclick="openAccountModal()">Личный кабинет</button>
         </div>
     </div>
+</section>
 
-    <!-- Футер -->
-    <footer>
-        <p>&copy; 2026 LUXURY STORE. Все права защищены.</p>
-    </footer>
+<!-- SHOP SECTION -->
+<section id="shop">
+    <div class="section-header">
+        <div class="section-tag">STORE</div>
+        <h2>Выбери свой продукт</h2>
+    </div>
 
-    <script src="script.js"></script>
+    <div class="products">
+
+        <!-- Продукт 1 -->
+        <div class="product" data-product="Vexqora Visual Base">
+            <div>
+                <h3>VEXQORA BASE</h3>
+                <p class="product-desc">Базовая версия софта с основными визуальными эффектами, кастомным HUD и защитой.</p>
+                
+                <div class="duration-selector">
+                    <button class="dur-btn" onclick="setDuration(this, 7, 250)">7 Дней<b>250 ₽</b></button>
+                    <button class="dur-btn active" onclick="setDuration(this, 30, 600)">30 Дней<b>600 ₽</b></button>
+                    <button class="dur-btn" onclick="setDuration(this, 'Lifetime', 1400)">Навсегда<b>1400 ₽</b></button>
+                </div>
+            </div>
+
+            <div class="product-footer">
+                <div class="price-row">
+                    <span class="price-label">К к оплате:</span>
+                    <span class="price"><span class="dynamic-price">600</span> ₽</span>
+                </div>
+                <button class="buy-btn" onclick="buySoft(this, 'Vexqora Base')">Купить ключ</button>
+            </div>
+        </div>
+
+        <!-- Продукт 2 -->
+        <div class="product" data-product="Vexqora Private HUD">
+            <div>
+                <h3>PRIVATE HUD & ESP</h3>
+                <p class="product-desc">Продвинутый чит-модуль с глубокой кастомизацией визуалов, подсветкой игроков и эспейсом.</p>
+                
+                <div class="duration-selector">
+                    <button class="dur-btn" onclick="setDuration(this, 7, 450)">7 Дней<b>450 ₽</b></button>
+                    <button class="dur-btn active" onclick="setDuration(this, 30, 1100)">30 Дней<b>1100 ₽</b></button>
+                    <button class="dur-btn" onclick="setDuration(this, 'Lifetime', 2500)">Навсегда<b>2500 ₽</b></button>
+                </div>
+            </div>
+
+            <div class="product-footer">
+                <div class="price-row">
+                    <span class="price-label">К оплате:</span>
+                    <span class="price"><span class="dynamic-price">1100</span> ₽</span>
+                </div>
+                <button class="buy-btn" onclick="buySoft(this, 'Private HUD & ESP')">Купить ключ</button>
+            </div>
+        </div>
+
+        <!-- Продукт 3 -->
+        <div class="product" data-product="Vexqora Ultimate Lifetime">
+            <div>
+                <div style="color:var(--gold); font-size:11px; font-weight:800; margin-bottom:5px;">★ BEST CHOICE</div>
+                <h3>VEXQORA ULTIMATE</h3>
+                <p class="product-desc">Полный комплект всех функций, эксклюзивные темы, приоритетная поддержка и доступ ко всем обновлениям.</p>
+                
+                <div class="duration-selector">
+                    <button class="dur-btn" onclick="setDuration(this, 7, 800)">7 Дней<b>800 ₽</b></button>
+                    <button class="dur-btn" onclick="setDuration(this, 30, 1900)">30 Дней<b>1900 ₽</b></button>
+                    <button class="dur-btn active" onclick="setDuration(this, 'Lifetime', 3999)">Навсегда<b>3999 ₽</b></button>
+                </div>
+            </div>
+
+            <div class="product-footer">
+                <div class="price-row">
+                    <span class="price-label">К оплате:</span>
+                    <span class="price"><span class="dynamic-price">3999</span> ₽</span>
+                </div>
+                <button class="buy-btn" onclick="buySoft(this, 'Ultimate Lifetime')">Купить ключ</button>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div>© 2026 VEXQORA VISUALS. All rights reserved.</div>
+    <div>ELITE SOFTWARE STORE</div>
+</footer>
+
+<!-- MODAL: ACCOUNT & REGISTRATION & CABINET -->
+<div class="modal" id="accountModal">
+    <div class="modal-box">
+        <button class="close" onclick="closeAccountModal()">×</button>
+
+        <!-- ФОРМА ВХОДА -->
+        <div id="loginFormContainer">
+            <h2>Авторизация</h2>
+            <p>Войдите в свой аккаунт Vexqora.</p>
+            <input class="input" type="text" id="loginUser" placeholder="Ваш логин">
+            <input class="input" type="password" id="loginPass" placeholder="Пароль">
+            <button class="full-btn" onclick="handleLogin()">Войти →</button>
+            <div class="switch-auth">Нет аккаунта? <span onclick="switchForm('register')">Зарегистрироваться</span></div>
+        </div>
+
+        <!-- ФОРМА РЕГИСТРАЦИИ -->
+        <div id="registerFormContainer" style="display: none;">
+            <h2>Регистрация</h2>
+            <p>Создайте новый аккаунт в один клик.</p>
+            <input class="input" type="text" id="regUser" placeholder="Придумайте логин">
+            <input class="input" type="password" id="regPass" placeholder="Придумайте пароль">
+            <button class="full-btn" onclick="handleRegister()">Создать аккаунт →</button>
+            <div class="switch-auth">Уже есть аккаунт? <span onclick="switchForm('login')">Войти</span></div>
+        </div>
+
+        <!-- ЛИЧНЫЙ КАБИНЕТ (если авторизован) -->
+        <div id="cabinetContainer" class="cabinet-panel">
+            <h2>Личный кабинет</h2>
+            <p>Добро пожаловать, управлению ключами и софтом.</p>
+            
+            <div class="user-info-box">
+                <p>Логин: <span id="cabUsername">-</span></p>
+                <p>Статус подписки: <span style="color:var(--gold);" id="cabStatus">Активен</span></p>
+            </div>
+
+            <p style="font-size:13px; font-weight:600; margin-bottom:5px;">Ваши купленные ключи:</p>
+            <div class="keys-container" id="cabKeysList">
+                <div style="color:var(--muted); font-size:12px; text-align:center; padding:10px;">У вас пока нет ключей.</div>
+            </div>
+
+            <button class="full-btn" style="margin-top:20px; background:rgba(255,50,50,0.2); color:#ff7777; border:1px solid rgba(255,50,50,0.4);" onclick="handleLogout()">Выйти из аккаунта</button>
+        </div>
+
+    </div>
+</div>
+
+<script>
+// Переключение срока подписки внутри карточки товара
+function setDuration(btn, days, price) {
+    const card = btn.closest('.product');
+    card.querySelectorAll('.dur-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    
+    // Сохраняем выбранные данные в атрибутах карточки
+    card.setAttribute('data-days', days);
+    card.setAttribute('data-price', price);
+    
+    // Обновляем отображение цены
+    card.querySelector('.dynamic-price').innerText = price;
+}
+
+// Логика покупки софта (симуляция оплаты и выдача ключа)
+function buySoft(button, productName) {
+    let currentUser = localStorage.getItem('vex_logged_user');
+    if (!currentUser) {
+        alert('Сначала войдите в личный кабинет или зарегистрируйтесь, чтобы купить софт!');
+        openAccountModal();
+        return;
+    }
+
+    const card = button.closest('.product');
+    const days = card.getAttribute('data-days') || '30';
+    const price = card.getAttribute('data-price') || '600';
+
+    if (confirm(`Подтверждаете покупку продукта "${productName}" (${days === 'Lifetime' ? 'Навсегда' : days + ' дней'}) за ${price} ₽?`)) {
+        // Генерация случайного ключа
+        const randomKey = 'VEX-' + Math.random().toString(36).substring(2, 6).toUpperCase() + '-' + Math.random().toString(36).substring(2, 6).toUpperCase() + '-' + Math.random().toString(36).substring(2, 6).toUpperCase();
+        
+        // Сохраняем ключ для текущего пользователя
+        let allKeys = JSON.parse(localStorage.getItem('vex_keys_' + currentUser)) || [];
+        allKeys.push({ product: productName, duration: days === 'Lifetime' ? 'Навсегда' : days + ' дн.', key: randomKey });
+        localStorage.setItem('vex_keys_' + currentUser, JSON.stringify(allKeys));
+
+        alert('Оплата прошла успешно! Ключ добавлен в ваш личный кабинет.');
+        openAccountModal();
+    }
+}
+
+// Управление модальным окном
+function openAccountModal() {
+    document.getElementById('accountModal').classList.add('active');
+    checkAuthStatus();
+}
+
+function closeAccountModal() {
+    document.getElementById('accountModal').classList.remove('active');
+}
+
+function switchForm(type) {
+    if (type === 'register') {
+        document.getElementById('loginFormContainer').style.display = 'none';
+        document.getElementById('registerFormContainer').style.display = 'block';
+    } else {
+        document.getElementById('registerFormContainer').style.display = 'none';
+        document.getElementById('loginFormContainer').style.display = 'block';
+    }
+}
+
+// Регистрация
+function handleRegister() {
+    const user = document.getElementById('regUser').value.trim();
+    const pass = document.getElementById('regPass').value.trim();
+
+    if (!user || !pass) {
+        alert('Заполните все поля!');
+        return;
+    }
+
+    if (localStorage.getItem('vex_user_' + user)) {
+        alert('Пользователь с таким логином уже существует!');
+        return;
+    }
+
+    localStorage.setItem('vex_user_' + user, pass);
+    localStorage.setItem('vex_logged_user', user);
+    alert('Регистрация успешна!');
+    checkAuthStatus();
+}
+
+// Вход
+function handleLogin() {
+    const user = document.getElementById('loginUser').value.trim();
+    const pass = document.getElementById('loginPass').value.trim();
+
+    const savedPass = localStorage.getItem('vex_user_' + user);
+    if (!savedPass || savedPass !== pass) {
+        alert('Неверный логин или пароль!');
+        return;
+    }
+
+    localStorage.setItem('vex_logged_user', user);
+    checkAuthStatus();
+}
+
+// Выход
+function handleLogout() {
+    localStorage.removeItem('vex_logged_user');
+    checkAuthStatus();
+    switchForm('login');
+}
+
+// Проверка состояния авторизации для отображения нужного блока в модалке
+function checkAuthStatus() {
+    const loggedUser = localStorage.getItem('vex_logged_user');
+    
+    const loginCont = document.getElementById('loginFormContainer');
+    const regCont = document.getElementById('registerFormContainer');
+    const cabCont = document.getElementById('cabinetContainer');
+
+    if (loggedUser) {
+        loginCont.style.display = 'none';
+        regCont.style.display = 'none';
+        cabCont.classList.add('active');
+
+        document.getElementById('cabUsername').innerText = loggedUser;
+        
+        // Загружаем ключи пользователя
+        let userKeys = JSON.parse(localStorage.getItem('vex_keys_' + loggedUser)) || [];
+        let keysHtml = '';
+        
+        if (userKeys.length === 0) {
+            keysHtml = '<div style="color:var(--muted); font-size:12px; text-align:center; padding:10px;">У вас пока нет ключей.</div>';
+        } else {
+            userKeys.forEach(k => {
+                keysHtml += `<div class="key-row"><b>[${k.product} - ${k.duration}]</b><br>${k.key}</div>`;
+            });
+        }
+        document.getElementById('cabKeysList').innerHTML = keysHtml;
+    } else {
+        cabCont.classList.remove('active');
+        loginCont.style.display = 'block';
+        regCont.style.display = 'none';
+    }
+}
+
+// Инициализация дефолтных атрибутов цен на продукты при загрузке
+window.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.product').forEach(card => {
+        card.setAttribute('data-days', '30');
+        card.setAttribute('data-price', card.querySelector('.dynamic-price').innerText);
+    });
+});
+</script>
+
 </body>
 </html>
