@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUXURY STORE | Premium Software</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Шапка сайта -->
+    <header>
+        <div class="logo">LUXURY<span>STORE</span></div>
+        <nav>
+            <a href="#shop">Магазин</a>
+            <a href="#features">Преимущества</a>
+            <a href="#" onclick="openCabinet()">Личный кабинет</a>
+        </nav>
+    </header>
+
+    <!-- Главный экран (Hero) -->
+    <section class="hero">
+        <h1>Элитный софт нового поколения</h1>
+        <p>Максимальный функционал, полная безопасность и обход любых античитов.</p>
+        <a href="#shop" class="btn-gold">Выбрать продукт</a>
+    </section>
+
+    <!-- Секция магазина -->
+    <section id="shop" class="shop-section">
+        <h2 class="section-title">Наши продукты</h2>
+        
+        <div class="product-card">
+            <div class="badge">VIP STATUS</div>
+            <h3>ULTIMATE PRIVATE SOFTWARE</h3>
+            <p class="product-desc">Топовый софт с регулярными обновлениями, кастомными визуалами и мощным функционалом.</p>
+            
+            <!-- Выбор срока -->
+            <div class="duration-selector">
+                <button class="dur-btn active" onclick="selectDuration(this, 300, '7 Дней')">7 Дней <br><b>300 ₽</b></button>
+                <button class="dur-btn" onclick="selectDuration(this, 750, '30 Дней')">30 Дней <br><b>750 ₽</b></button>
+                <button class="dur-btn" onclick="selectDuration(this, 1800, 'Навсегда')">Навсегда <br><b>1800 ₽</b></button>
+            </div>
+
+            <div class="price-display">Цена: <span id="current-price">300</span> ₽</div>
+            
+            <button class="btn-gold buy-btn" onclick="buyProduct()">Купить ключ</button>
+        </div>
+    </section>
+
+    <!-- Модальное окно личного кабинета -->
+    <div id="cabinetModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeCabinet()">&times;</span>
+            <h2>Личный кабинет</h2>
+            <div class="cabinet-info">
+                <p>Ваш статус: <span style="color: gold;">Гость</span></p>
+                <p>Купленные ключи:</p>
+                <div class="keys-list" id="userKeys">
+                    <div class="no-keys">У вас пока нет активных ключей. Совершите покупку!</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Футер -->
+    <footer>
+        <p>&copy; 2026 LUXURY STORE. Все права защищены.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
