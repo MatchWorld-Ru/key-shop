@@ -3,27 +3,28 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VEXQORA — Premium Minecraft Visuals</title>
+<title>VEXQORA — Premium HWID & Software Protection</title>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syncopate:wght@700&display=swap');
 
 :root {
-    --bg: #070706;
-    --bg2: #0d0c09;
-    --card: rgba(20, 18, 12, 0.72);
-    --gold: #d6a94a;
-    --gold-light: #ffe09a;
-    --gold-dark: #8c651e;
-    --text: #f5f0e5;
-    --muted: #969087;
-    --border: rgba(214,169,74,.18);
+    --bg: #050505;
+    --card-bg: rgba(18, 16, 12, 0.85);
+    --gold: #f3ba4f;
+    --gold-light: #ffeaae;
+    --gold-dark: #997120;
+    --text: #f3f3f3;
+    --muted: #8a857b;
+    --border: rgba(243, 186, 79, 0.22);
+    --border-hover: rgba(243, 186, 79, 0.6);
 }
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
 html {
@@ -31,89 +32,60 @@ html {
 }
 
 body {
-    background: 
-        radial-gradient(circle at 20% 10%, rgba(214,169,74,.10), transparent 25%),
-        radial-gradient(circle at 80% 30%, rgba(214,169,74,.06), transparent 25%),
-        var(--bg);
+    background-color: var(--bg);
     color: var(--text);
-    font-family: 'Inter', sans-serif;
     overflow-x: hidden;
-}
-
-::-webkit-scrollbar {
-    width: 8px;
-}
-::-webkit-scrollbar-track {
-    background: #080705;
-}
-::-webkit-scrollbar-thumb {
-    background: linear-gradient(var(--gold-light), var(--gold-dark));
-    border-radius: 20px;
-}
-
-.grid {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    opacity: .18;
     background-image: 
-        linear-gradient(rgba(214,169,74,.08) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(214,169,74,.08) 1px, transparent 1px);
-    background-size: 55px 55px;
-    mask-image: linear-gradient(to bottom, black, transparent 80%);
-    z-index: -2;
+        radial-gradient(circle at 10% 15%, rgba(243, 186, 79, 0.08), transparent 30%),
+        radial-gradient(circle at 90% 85%, rgba(243, 186, 79, 0.05), transparent 30%);
 }
 
-.glow {
-    position: fixed;
-    width: 500px;
-    height: 500px;
-    background: var(--gold);
-    filter: blur(180px);
-    opacity: .06;
-    border-radius: 50%;
-    z-index: -3;
-}
-.glow.one { top: -200px; left: -200px; }
-.glow.two { right: -200px; top: 40%; }
+/* Скроллбар */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #080808; }
+::-webkit-scrollbar-thumb { background: linear-gradient(var(--gold-light), var(--gold-dark)); border-radius: 10px; }
 
-/* NAVBAR */
+/* Навигация */
 nav {
-    width: 100%;
-    height: 82px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 7%;
-    border-bottom: 1px solid var(--border);
-    background: rgba(7,7,6,.75);
-    backdrop-filter: blur(18px);
     position: fixed;
     top: 0;
+    left: 0;
+    width: 100%;
+    height: 85px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 7%;
+    background: rgba(5, 5, 5, 0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
     z-index: 1000;
 }
 
 .logo {
-    font-family: "Space Grotesk", sans-serif;
-    font-size: 24px;
-    font-weight: 800;
-    letter-spacing: 4px;
+    font-family: 'Syncopate', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: #fff;
 }
 
 .logo span {
     color: var(--gold);
+    text-shadow: 0 0 20px rgba(243, 186, 79, 0.4);
 }
 
 .nav-links {
     display: flex;
-    gap: 30px;
+    gap: 35px;
 }
 
 .nav-links a {
     color: var(--muted);
     text-decoration: none;
     font-size: 14px;
-    transition: .25s;
+    font-weight: 500;
+    transition: 0.3s;
 }
 
 .nav-links a:hover {
@@ -121,216 +93,239 @@ nav {
 }
 
 .account-btn {
+    background: linear-gradient(135deg, rgba(243,186,79,0.1), rgba(243,186,79,0.02));
     border: 1px solid var(--border);
-    background: rgba(214,169,74,.07);
     color: var(--gold-light);
-    padding: 11px 20px;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: .25s;
+    padding: 12px 24px;
+    border-radius: 12px;
     font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
 .account-btn:hover {
     background: var(--gold);
-    color: black;
-    box-shadow: 0 0 35px rgba(214,169,74,.25);
-}
-
-/* HERO */
-.hero {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 130px 20px 80px;
-}
-
-.hero-content {
-    max-width: 1000px;
-}
-
-.badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 15px;
-    border: 1px solid var(--border);
-    border-radius: 100px;
-    background: rgba(214,169,74,.06);
-    color: var(--gold-light);
-    font-size: 12px;
-    margin-bottom: 28px;
-}
-
-.dot {
-    width: 7px;
-    height: 7px;
-    background: #d6a94a;
-    border-radius: 50%;
-    box-shadow: 0 0 15px var(--gold);
-}
-
-.hero h1 {
-    font-family: "Space Grotesk", sans-serif;
-    font-size: clamp(45px, 8vw, 110px);
-    line-height: .95;
-    letter-spacing: -4px;
-    font-weight: 800;
-}
-
-.hero h1 span {
-    color: var(--gold);
-    text-shadow: 0 0 50px rgba(214,169,74,.25);
-}
-
-.hero p {
-    max-width: 650px;
-    margin: 30px auto;
-    color: var(--muted);
-    font-size: 17px;
-    line-height: 1.7;
-}
-
-.hero-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    flex-wrap: wrap;
-}
-
-.primary-btn {
-    padding: 16px 27px;
-    border: none;
-    border-radius: 12px;
-    background: linear-gradient(135deg, var(--gold-light), var(--gold));
-    color: #1a1305;
-    font-weight: 800;
-    cursor: pointer;
-    transition: .25s;
-    box-shadow: 0 10px 50px rgba(214,169,74,.16);
-}
-
-.primary-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 15px 60px rgba(214,169,74,.30);
-}
-
-.secondary-btn {
-    padding: 16px 27px;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    background: rgba(255,255,255,.02);
-    color: var(--text);
-    cursor: pointer;
-    transition: .25s;
-}
-
-.secondary-btn:hover {
+    color: #000;
+    box-shadow: 0 0 30px rgba(243, 186, 79, 0.3);
     border-color: var(--gold);
 }
 
-/* SECTIONS */
+/* Главный блок (Hero) */
+.hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 140px 20px 80px;
+    position: relative;
+}
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    background: rgba(243, 186, 79, 0.05);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    color: var(--gold-light);
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.hero-badge .dot {
+    width: 6px;
+    height: 6px;
+    background: var(--gold);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--gold);
+}
+
+.hero h1 {
+    font-size: clamp(40px, 7vw, 85px);
+    font-weight: 800;
+    line-height: 1.05;
+    max-width: 900px;
+    margin-bottom: 20px;
+    letter-spacing: -1px;
+}
+
+.hero h1 span {
+    background: linear-gradient(135deg, var(--gold-light), var(--gold), var(--gold-dark));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero p {
+    color: var(--muted);
+    font-size: 17px;
+    max-width: 600px;
+    line-height: 1.6;
+    margin-bottom: 40px;
+}
+
+.hero-btns {
+    display: flex;
+    gap: 15px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--gold-light), var(--gold));
+    color: #111;
+    padding: 16px 32px;
+    border-radius: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 10px 40px rgba(243, 186, 79, 0.2);
+    transition: 0.3s;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 50px rgba(243, 186, 79, 0.4);
+}
+
+.btn-secondary {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 16px 32px;
+    border-radius: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-secondary:hover {
+    border-color: var(--gold);
+    background: rgba(243,186,79,0.05);
+}
+
+/* Секция магазина */
 section {
     padding: 110px 7%;
 }
 
-.section-header {
+.section-title {
+    font-size: 32px;
+    font-weight: 800;
+    margin-bottom: 10px;
+    font-family: 'Syncopate', sans-serif;
+    letter-spacing: 1px;
+}
+
+.section-desc {
+    color: var(--muted);
+    font-size: 14px;
     margin-bottom: 50px;
 }
 
-.section-tag {
-    color: var(--gold);
-    font-size: 12px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    font-weight: 700;
-}
-
-.section-header h2 {
-    font-family: "Space Grotesk", sans-serif;
-    font-size: clamp(30px, 4vw, 50px);
-    margin-top: 10px;
-}
-
-/* PRODUCTS */
-.products {
+.products-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 25px;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
 }
 
-.product {
-    padding: 30px;
+.product-card {
+    background: var(--card-bg);
     border: 1px solid var(--border);
-    border-radius: 22px;
-    background: linear-gradient(145deg, rgba(214,169,74,.06), rgba(255,255,255,.01));
+    border-radius: 24px;
+    padding: 35px;
     position: relative;
-    transition: .35s;
+    backdrop-filter: blur(10px);
+    transition: 0.35s;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 }
 
-.product:hover {
-    transform: translateY(-8px);
-    border-color: rgba(214,169,74,.6);
-    box-shadow: 0 20px 80px rgba(0,0,0,.5), 0 0 50px rgba(214,169,74,.1);
+.product-card:hover {
+    border-color: var(--border-hover);
+    transform: translateY(-6px);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 30px rgba(243,186,79,0.08);
 }
 
-.product h3 {
-    font-family: "Space Grotesk", sans-serif;
-    font-size: 24px;
-    margin-bottom: 10px;
+.product-card.featured {
+    border-color: var(--gold);
+    background: linear-gradient(145deg, rgba(243,186,79,0.05), rgba(18,16,12,0.9));
 }
 
-.product-desc {
+.card-tag {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    background: rgba(243,186,79,0.1);
+    color: var(--gold-light);
+    border: 1px solid var(--border);
+    padding: 5px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 20px;
+}
+
+.product-card h3 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.product-card p {
     color: var(--muted);
     font-size: 13px;
     line-height: 1.6;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
-/* Выбор срока подписки */
+/* Выбор срока ключей */
 .duration-selector {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 8px;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
 .dur-btn {
-    background: rgba(0,0,0,0.4);
+    background: rgba(0,0,0,0.3);
     border: 1px solid var(--border);
     color: var(--muted);
-    padding: 8px 5px;
-    border-radius: 8px;
+    padding: 10px 5px;
+    border-radius: 10px;
     font-size: 11px;
+    font-weight: 600;
     cursor: pointer;
-    transition: .2s;
+    transition: 0.25s;
     text-align: center;
+}
+
+.dur-btn span {
+    display: block;
+    color: var(--gold-light);
+    font-size: 13px;
+    font-weight: 700;
+    margin-top: 3px;
 }
 
 .dur-btn.active, .dur-btn:hover {
     border-color: var(--gold);
-    background: rgba(214,169,74,.15);
-    color: var(--text);
+    background: rgba(243,186,79,0.12);
+    color: #fff;
 }
 
-.dur-btn b {
-    display: block;
-    color: var(--gold-light);
-    font-size: 12px;
-    margin-top: 2px;
-}
-
-.product-footer {
+.card-footer {
+    border-top: 1px solid rgba(255,255,255,0.05);
+    padding-top: 20px;
     display: flex;
     flex-direction: column;
     gap: 15px;
-    border-top: 1px solid var(--border);
-    padding-top: 20px;
 }
 
 .price-row {
@@ -339,42 +334,37 @@ section {
     align-items: center;
 }
 
-.price-label {
-    font-size: 13px;
-    color: var(--muted);
-}
-
-.price {
-    font-size: 22px;
+.price-val {
+    font-size: 24px;
     font-weight: 800;
     color: var(--gold-light);
 }
 
 .buy-btn {
     width: 100%;
-    padding: 13px;
-    border-radius: 10px;
-    border: none;
     background: linear-gradient(135deg, var(--gold-light), var(--gold));
-    color: #100c03;
+    color: #111;
+    padding: 14px;
+    border-radius: 12px;
     font-weight: 700;
+    border: none;
     cursor: pointer;
-    transition: .25s;
+    transition: 0.3s;
 }
 
 .buy-btn:hover {
     opacity: 0.9;
-    box-shadow: 0 0 20px rgba(214,169,74,.4);
+    box-shadow: 0 0 25px rgba(243, 186, 79, 0.4);
 }
 
-/* MODALS */
+/* Модальные окна */
 .modal {
     display: none;
     position: fixed;
     inset: 0;
-    z-index: 5000;
-    background: rgba(0,0,0,.8);
-    backdrop-filter: blur(12px);
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(15px);
+    z-index: 2000;
     align-items: center;
     justify-content: center;
     padding: 20px;
@@ -384,125 +374,110 @@ section {
     display: flex;
 }
 
-.modal-box {
-    width: 100%;
-    max-width: 440px;
-    padding: 35px;
+.modal-content {
+    background: #0d0c0a;
     border: 1px solid var(--border);
     border-radius: 24px;
-    background: linear-gradient(145deg, rgba(25,22,14,.98), rgba(8,7,5,.99));
+    width: 100%;
+    max-width: 440px;
+    padding: 40px;
     position: relative;
-    animation: modalIn .3s ease;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.8);
 }
 
-@keyframes modalIn {
-    from { opacity: 0; transform: scale(.9) translateY(20px); }
-    to { opacity: 1; transform: scale(1) translateY(0); }
-}
-
-.close {
+.close-btn {
     position: absolute;
+    top: 20px;
     right: 20px;
-    top: 16px;
-    color: var(--muted);
     background: none;
     border: none;
+    color: var(--muted);
     font-size: 26px;
     cursor: pointer;
 }
-.close:hover { color: var(--gold); }
+.close-btn:hover { color: var(--gold); }
 
-.modal-box h2 {
-    font-family: "Space Grotesk", sans-serif;
+.modal-content h2 {
+    font-size: 22px;
+    font-weight: 700;
     margin-bottom: 8px;
-    font-size: 24px;
 }
 
-.modal-box > p {
+.modal-content p {
     color: var(--muted);
     font-size: 13px;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
-.input {
+.input-field {
     width: 100%;
-    padding: 13px 15px;
-    margin-bottom: 12px;
-    background: rgba(255,255,255,.03);
+    background: rgba(255,255,255,0.03);
     border: 1px solid var(--border);
-    border-radius: 10px;
-    color: white;
-    outline: none;
+    padding: 14px 16px;
+    border-radius: 12px;
+    color: #fff;
     font-size: 14px;
-}
-.input:focus { border-color: var(--gold); }
-
-.full-btn {
-    width: 100%;
-    padding: 14px;
-    border: none;
-    border-radius: 10px;
-    background: linear-gradient(135deg, var(--gold-light), var(--gold));
-    color: #181005;
-    font-weight: 800;
-    cursor: pointer;
-    margin-top: 5px;
+    margin-bottom: 14px;
+    outline: none;
+    transition: 0.3s;
 }
 
-.switch-auth {
+.input-field:focus {
+    border-color: var(--gold);
+}
+
+.auth-switch {
     text-align: center;
-    margin-top: 15px;
+    margin-top: 18px;
     font-size: 13px;
     color: var(--muted);
 }
-.switch-auth span {
+
+.auth-switch span {
     color: var(--gold);
     cursor: pointer;
     font-weight: 600;
 }
-.switch-auth span:hover { text-decoration: underline; }
 
-/* Личный кабинет внутри модалки */
-.cabinet-panel {
-    display: none;
-}
-.cabinet-panel.active {
-    display: block;
-}
-.user-info-box {
-    background: rgba(0,0,0,0.4);
+/* Кабинет пользователя */
+.cabinet-panel { display: none; }
+.cabinet-panel.active { display: block; }
+
+.user-box {
+    background: rgba(255,255,255,0.02);
     border: 1px solid var(--border);
     padding: 15px;
-    border-radius: 10px;
+    border-radius: 12px;
     margin-bottom: 20px;
     font-size: 13px;
 }
-.user-info-box p { margin-bottom: 5px; color: var(--muted); }
-.user-info-box span { color: var(--text); font-weight: 600; }
+.user-box div { margin-bottom: 5px; color: var(--muted); }
+.user-box span { color: #fff; font-weight: 600; }
 
-.keys-container {
-    max-height: 150px;
+.keys-list {
+    max-height: 160px;
     overflow-y: auto;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0,0,0,0.4);
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: 10px;
     padding: 10px;
     margin-top: 10px;
 }
-.key-row {
-    background: rgba(214,169,74,.08);
+
+.key-item {
+    background: rgba(243,186,79,0.07);
+    border-left: 3px solid var(--gold);
     padding: 8px;
     border-radius: 6px;
-    margin-bottom: 6px;
     font-family: monospace;
     font-size: 12px;
-    border-left: 3px solid var(--gold);
+    margin-bottom: 6px;
 }
 
-/* FOOTER */
+/* Футер */
 footer {
     padding: 40px 7%;
-    border-top: 1px solid var(--border);
+    border-top: 1px solid rgba(255,255,255,0.05);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -510,325 +485,312 @@ footer {
     font-size: 12px;
 }
 
-@media(max-width: 900px) {
-    .products { grid-template-columns: 1fr; }
+@media(max-width: 768px) {
     .nav-links { display: none; }
+    .hero h1 { font-size: 38px; }
 }
 </style>
 </head>
 
 <body>
 
-<div class="grid"></div>
-<div class="glow one"></div>
-<div class="glow two"></div>
-
-<!-- NAVBAR -->
+<!-- Навигация -->
 <nav>
     <div class="logo">VEXQORA<span>.</span></div>
     <div class="nav-links">
-        <a href="#shop">Магазин</a>
-        <a href="#features">Преимущества</a>
+        <a href="#shop">Магазин софта</a>
+        <a href="#hwid">HWID Сброс</a>
     </div>
     <button class="account-btn" onclick="openAccountModal()">Личный кабинет</button>
 </nav>
 
-<!-- HERO -->
+<!-- Главный экран -->
 <section class="hero">
-    <div class="hero-content">
-        <div class="badge">
-            <div class="dot"></div>
-            ELITE MINECRAFT VISUAL SOFTWARE
-        </div>
-        <h1>
-            VEXQORA<br>
-            <span>VISUALS.</span>
-        </h1>
-        <p>
-            Элитный софт и кастомные визуальные модули для Minecraft. Максимальная производительность, уникальный золотой интерфейс и полная безопасность.
-        </p>
-        <div class="hero-buttons">
-            <a href="#shop"><button class="primary-btn">Купить софт →</button></a>
-            <button class="secondary-btn" onclick="openAccountModal()">Личный кабинет</button>
-        </div>
+    <div class="hero-badge"><div class="dot"></div> Премиум безопасность и софт</div>
+    <h1>ЭЛИТНЫЙ СОФТ И <span>HWID СИСТЕМА</span></h1>
+    <p>Максимальная защита, мгновенная выдача лицензий и автоматический сброс привязки оборудования.</p>
+    <div class="hero-btns">
+        <a href="#shop" class="btn-primary">Купить софт</a>
+        <a href="#hwid" class="btn-secondary">Сбросить HWID (200 ₽)</a>
     </div>
 </section>
 
-<!-- SHOP SECTION -->
+<!-- Секция Магазина Софта -->
 <section id="shop">
-    <div class="section-header">
-        <div class="section-tag">STORE</div>
-        <h2>Выбери свой продукт</h2>
-    </div>
+    <h2 class="section-title">Магазин продуктов</h2>
+    <p class="section-desc">Выберите срок подписки на софт — от 7 дней до вечного доступа.</p>
 
-    <div class="products">
+    <div class="products-grid">
 
-        <!-- Продукт 1 -->
-        <div class="product" data-product="Vexqora Visual Base">
+        <!-- Товар 1 -->
+        <div class="product-card" data-product="Vexqora Base Client">
             <div>
+                <span class="card-tag">STANDARD</span>
                 <h3>VEXQORA BASE</h3>
-                <p class="product-desc">Базовая версия софта с основными визуальными эффектами, кастомным HUD и защитой.</p>
+                <p>Стабильный софт с полным базовым функционалом и быстрыми обновлениями.</p>
                 
                 <div class="duration-selector">
-                    <button class="dur-btn" onclick="setDuration(this, 7, 250)">7 Дней<b>250 ₽</b></button>
-                    <button class="dur-btn active" onclick="setDuration(this, 30, 600)">30 Дней<b>600 ₽</b></button>
-                    <button class="dur-btn" onclick="setDuration(this, 'Lifetime', 1400)">Навсегда<b>1400 ₽</b></button>
+                    <button class="dur-btn" onclick="selectDuration(this, 7, 250)">7 Дней<span>250 ₽</span></button>
+                    <button class="dur-btn active" onclick="selectDuration(this, 30, 600)">30 Дней<span>600 ₽</span></button>
+                    <button class="dur-btn" onclick="selectDuration(this, 'Lifetime', 1500)">Навсегда<span>1500 ₽</span></button>
                 </div>
             </div>
 
-            <div class="product-footer">
+            <div class="card-footer">
                 <div class="price-row">
-                    <span class="price-label">К к оплате:</span>
-                    <span class="price"><span class="dynamic-price">600</span> ₽</span>
+                    <span style="color:var(--muted); font-size:13px;">Итого:</span>
+                    <span class="price-val"><span class="dynamic-price">600</span> ₽</span>
                 </div>
-                <button class="buy-btn" onclick="buySoft(this, 'Vexqora Base')">Купить ключ</button>
+                <button class="buy-btn" onclick="buyProduct(this, 'Vexqora Base')">Купить ключ</button>
             </div>
         </div>
 
-        <!-- Продукт 2 -->
-        <div class="product" data-product="Vexqora Private HUD">
+        <!-- Товар 2 (Featured) -->
+        <div class="product-card featured" data-product="Vexqora Private Edition">
             <div>
-                <h3>PRIVATE HUD & ESP</h3>
-                <p class="product-desc">Продвинутый чит-модуль с глубокой кастомизацией визуалов, подсветкой игроков и эспейсом.</p>
+                <span class="card-tag" style="background:var(--gold); color:#000;">★ HIT</span>
+                <h3>PRIVATE EDITION</h3>
+                <p>Максимальные возможности обхода, кастомные модули и приоритетная поддержка.</p>
                 
                 <div class="duration-selector">
-                    <button class="dur-btn" onclick="setDuration(this, 7, 450)">7 Дней<b>450 ₽</b></button>
-                    <button class="dur-btn active" onclick="setDuration(this, 30, 1100)">30 Дней<b>1100 ₽</b></button>
-                    <button class="dur-btn" onclick="setDuration(this, 'Lifetime', 2500)">Навсегда<b>2500 ₽</b></button>
+                    <button class="dur-btn" onclick="selectDuration(this, 7, 450)">7 Дней<span>450 ₽</span></button>
+                    <button class="dur-btn active" onclick="selectDuration(this, 30, 1100)">30 Дней<span>1100 ₽</span></button>
+                    <button class="dur-btn" onclick="selectDuration(this, 'Lifetime', 2800)">Навсегда<span>2800 ₽</span></button>
                 </div>
             </div>
 
-            <div class="product-footer">
+            <div class="card-footer">
                 <div class="price-row">
-                    <span class="price-label">К оплате:</span>
-                    <span class="price"><span class="dynamic-price">1100</span> ₽</span>
+                    <span style="color:var(--muted); font-size:13px;">Итого:</span>
+                    <span class="price-val"><span class="dynamic-price">1100</span> ₽</span>
                 </div>
-                <button class="buy-btn" onclick="buySoft(this, 'Private HUD & ESP')">Купить ключ</button>
-            </div>
-        </div>
-
-        <!-- Продукт 3 -->
-        <div class="product" data-product="Vexqora Ultimate Lifetime">
-            <div>
-                <div style="color:var(--gold); font-size:11px; font-weight:800; margin-bottom:5px;">★ BEST CHOICE</div>
-                <h3>VEXQORA ULTIMATE</h3>
-                <p class="product-desc">Полный комплект всех функций, эксклюзивные темы, приоритетная поддержка и доступ ко всем обновлениям.</p>
-                
-                <div class="duration-selector">
-                    <button class="dur-btn" onclick="setDuration(this, 7, 800)">7 Дней<b>800 ₽</b></button>
-                    <button class="dur-btn" onclick="setDuration(this, 30, 1900)">30 Дней<b>1900 ₽</b></button>
-                    <button class="dur-btn active" onclick="setDuration(this, 'Lifetime', 3999)">Навсегда<b>3999 ₽</b></button>
-                </div>
-            </div>
-
-            <div class="product-footer">
-                <div class="price-row">
-                    <span class="price-label">К оплате:</span>
-                    <span class="price"><span class="dynamic-price">3999</span> ₽</span>
-                </div>
-                <button class="buy-btn" onclick="buySoft(this, 'Ultimate Lifetime')">Купить ключ</button>
+                <button class="buy-btn" onclick="buyProduct(this, 'Private Edition')">Купить ключ</button>
             </div>
         </div>
 
     </div>
 </section>
 
-<!-- FOOTER -->
+<!-- Секция HWID Сброса -->
+<section id="hwid" style="background: rgba(243,186,79,0.015); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+    <h2 class="section-title">Сброс HWID Привязки</h2>
+    <p class="section-desc">Сменили ПК, материнскую плату или переустановили Windows? Мгновенный сброс HWID за 200 ₽.</p>
+
+    <div class="product-card" style="max-width: 450px; margin: 0 auto;">
+        <div>
+            <span class="card-tag">INSTANT</span>
+            <h3>HWID RESET TICKET</h3>
+            <p>Автоматический сброс привязки вашего железа в базе данных софта.</p>
+        </div>
+        <div class="card-footer" style="margin-top:20px;">
+            <div class="price-row">
+                <span style="color:var(--muted); font-size:13px;">Стоимость:</span>
+                <span class="price-val">200 ₽</span>
+            </div>
+            <button class="buy-btn" onclick="buyHwidReset()">Сбросить HWID</button>
+        </div>
+    </div>
+</section>
+
+<!-- Футер -->
 <footer>
-    <div>© 2026 VEXQORA VISUALS. All rights reserved.</div>
-    <div>ELITE SOFTWARE STORE</div>
+    <div>© 2026 VEXQORA SOFTWARE. All rights reserved.</div>
+    <div>SECURE LICENSE & HWID SYSTEM</div>
 </footer>
 
-<!-- MODAL: ACCOUNT & REGISTRATION & CABINET -->
+<!-- Модальное окно Авторизации / Кабинета -->
 <div class="modal" id="accountModal">
-    <div class="modal-box">
-        <button class="close" onclick="closeAccountModal()">×</button>
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeAccountModal()">&times;</button>
 
-        <!-- ФОРМА ВХОДА -->
-        <div id="loginFormContainer">
+        <!-- Вход -->
+        <div id="loginForm">
             <h2>Авторизация</h2>
-            <p>Войдите в свой аккаунт Vexqora.</p>
-            <input class="input" type="text" id="loginUser" placeholder="Ваш логин">
-            <input class="input" type="password" id="loginPass" placeholder="Пароль">
-            <button class="full-btn" onclick="handleLogin()">Войти →</button>
-            <div class="switch-auth">Нет аккаунта? <span onclick="switchForm('register')">Зарегистрироваться</span></div>
+            <p>Войдите для доступа к ключам и управлению софтом.</p>
+            <input type="text" class="input-field" id="logUser" placeholder="Логин">
+            <input type="password" class="input-field" id="logPass" placeholder="Пароль">
+            <button class="buy-btn" onclick="handleLogin()">Войти</button>
+            <div class="auth-switch">Нет аккаунта? <span onclick="switchModal('register')">Зарегистрироваться</span></div>
         </div>
 
-        <!-- ФОРМА РЕГИСТРАЦИИ -->
-        <div id="registerFormContainer" style="display: none;">
+        <!-- Регистрация -->
+        <div id="registerForm" style="display:none;">
             <h2>Регистрация</h2>
-            <p>Создайте новый аккаунт в один клик.</p>
-            <input class="input" type="text" id="regUser" placeholder="Придумайте логин">
-            <input class="input" type="password" id="regPass" placeholder="Придумайте пароль">
-            <button class="full-btn" onclick="handleRegister()">Создать аккаунт →</button>
-            <div class="switch-auth">Уже есть аккаунт? <span onclick="switchForm('login')">Войти</span></div>
+            <p>Создайте аккаунт в системе Vexqora.</p>
+            <input type="text" class="input-field" id="regUser" placeholder="Придумайте логин">
+            <input type="password" class="input-field" id="regPass" placeholder="Придумайте пароль">
+            <button class="buy-btn" onclick="handleRegister()">Создать аккаунт</button>
+            <div class="auth-switch">Есть аккаунт? <span onclick="switchModal('login')">Войти</span></div>
         </div>
 
-        <!-- ЛИЧНЫЙ КАБИНЕТ (если авторизован) -->
-        <div id="cabinetContainer" class="cabinet-panel">
+        <!-- Личный кабинет -->
+        <div id="cabinetView" class="cabinet-panel">
             <h2>Личный кабинет</h2>
-            <p>Добро пожаловать, управлению ключами и софтом.</p>
+            <p>Управление вашей учетной записью и лицензиями.</p>
             
-            <div class="user-info-box">
-                <p>Логин: <span id="cabUsername">-</span></p>
-                <p>Статус подписки: <span style="color:var(--gold);" id="cabStatus">Активен</span></p>
+            <div class="user-box">
+                <div>Пользователь: <span id="cabName">-</span></div>
+                <div>Статус: <span style="color:var(--gold);">Активен</span></div>
             </div>
 
-            <p style="font-size:13px; font-weight:600; margin-bottom:5px;">Ваши купленные ключи:</p>
-            <div class="keys-container" id="cabKeysList">
-                <div style="color:var(--muted); font-size:12px; text-align:center; padding:10px;">У вас пока нет ключей.</div>
+            <p style="font-size:13px; font-weight:600; margin-bottom:5px;">Ваши купленные ключи и тикеты:</p>
+            <div class="keys-list" id="cabKeys">
+                <div style="color:var(--muted); font-size:12px; text-align:center; padding:10px;">Список пуст.</div>
             </div>
 
-            <button class="full-btn" style="margin-top:20px; background:rgba(255,50,50,0.2); color:#ff7777; border:1px solid rgba(255,50,50,0.4);" onclick="handleLogout()">Выйти из аккаунта</button>
+            <button class="buy-btn" style="margin-top:20px; background:rgba(255,60,60,0.15); color:#ff7777; border:1px solid rgba(255,60,60,0.3);" onclick="handleLogout()">Выйти из аккаунта</button>
         </div>
 
     </div>
 </div>
 
 <script>
-// Переключение срока подписки внутри карточки товара
-function setDuration(btn, days, price) {
-    const card = btn.closest('.product');
+// Переключение сроков подписки
+function selectDuration(btn, days, price) {
+    const card = btn.closest('.product-card');
     card.querySelectorAll('.dur-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     
-    // Сохраняем выбранные данные в атрибутах карточки
     card.setAttribute('data-days', days);
     card.setAttribute('data-price', price);
-    
-    // Обновляем отображение цены
     card.querySelector('.dynamic-price').innerText = price;
 }
 
-// Логика покупки софта (симуляция оплаты и выдача ключа)
-function buySoft(button, productName) {
-    let currentUser = localStorage.getItem('vex_logged_user');
-    if (!currentUser) {
-        alert('Сначала войдите в личный кабинет или зарегистрируйтесь, чтобы купить софт!');
+// Покупка софта
+function buyProduct(btn, productName) {
+    let user = localStorage.getItem('vex_current_user');
+    if (!user) {
+        alert('Пожалуйста, войдите в личный кабинет перед покупкой!');
         openAccountModal();
         return;
     }
 
-    const card = button.closest('.product');
+    const card = btn.closest('.product-card');
     const days = card.getAttribute('data-days') || '30';
     const price = card.getAttribute('data-price') || '600';
+    const durationName = days === 'Lifetime' ? 'Навсегда' : days + ' дн.';
 
-    if (confirm(`Подтверждаете покупку продукта "${productName}" (${days === 'Lifetime' ? 'Навсегда' : days + ' дней'}) за ${price} ₽?`)) {
-        // Генерация случайного ключа
-        const randomKey = 'VEX-' + Math.random().toString(36).substring(2, 6).toUpperCase() + '-' + Math.random().toString(36).substring(2, 6).toUpperCase() + '-' + Math.random().toString(36).substring(2, 6).toUpperCase();
+    if (confirm(`Купить "${productName}" (${durationName}) за ${price} ₽?`)) {
+        const fakeKey = 'VEX-' + Math.random().toString(36).substring(2,6).toUpperCase() + '-' + Math.random().toString(36).substring(2,6).toUpperCase() + '-' + Math.random().toString(36).substring(2,6).toUpperCase();
         
-        // Сохраняем ключ для текущего пользователя
-        let allKeys = JSON.parse(localStorage.getItem('vex_keys_' + currentUser)) || [];
-        allKeys.push({ product: productName, duration: days === 'Lifetime' ? 'Навсегда' : days + ' дн.', key: randomKey });
-        localStorage.setItem('vex_keys_' + currentUser, JSON.stringify(allKeys));
-
-        alert('Оплата прошла успешно! Ключ добавлен в ваш личный кабинет.');
+        saveUserKey(user, `[${productName} - ${durationName}]`, fakeKey);
+        alert('Оплата прошла успешно! Лицензионный ключ добавлен в ваш личный кабинет.');
         openAccountModal();
     }
 }
 
-// Управление модальным окном
+// Покупка HWID сброса
+function buyHwidReset() {
+    let user = localStorage.getItem('vex_current_user');
+    if (!user) {
+        alert('Сначала войдите в личный кабинет!');
+        openAccountModal();
+        return;
+    }
+
+    if (confirm('Приобрести сброс HWID за 200 ₽?')) {
+        const hwidTicket = 'HWID-RESET-' + Math.random().toString(36).substring(2,8).toUpperCase();
+        saveUserKey(user, '[Сброс HWID тикет]', hwidTicket);
+        alert('Тикет на сброс HWID успешно куплен и добавлен в кабинет!');
+        openAccountModal();
+    }
+}
+
+// Сохранение ключа в localStorage пользователя
+function saveUserKey(user, title, keyStr) {
+    let keys = JSON.parse(localStorage.getItem('vex_keys_' + user)) || [];
+    keys.push({ title, key: keyStr });
+    localStorage.setItem('vex_keys_' + user, JSON.stringify(keys));
+}
+
+// Управление модалкой
 function openAccountModal() {
     document.getElementById('accountModal').classList.add('active');
-    checkAuthStatus();
+    updateCabinetState();
 }
 
 function closeAccountModal() {
     document.getElementById('accountModal').classList.remove('active');
 }
 
-function switchForm(type) {
+function switchModal(type) {
     if (type === 'register') {
-        document.getElementById('loginFormContainer').style.display = 'none';
-        document.getElementById('registerFormContainer').style.display = 'block';
+        document.getElementById('loginForm').style.display = 'none';
+        document.getElementById('registerForm').style.display = 'block';
     } else {
-        document.getElementById('registerFormContainer').style.display = 'none';
-        document.getElementById('loginFormContainer').style.display = 'block';
+        document.getElementById('registerForm').style.display = 'none';
+        document.getElementById('loginForm').style.display = 'block';
     }
 }
 
 // Регистрация
 function handleRegister() {
-    const user = document.getElementById('regUser').value.trim();
-    const pass = document.getElementById('regPass').value.trim();
+    let u = document.getElementById('regUser').value.trim();
+    let p = document.getElementById('regPass').value.trim();
+    if (!u || !p) { alert('Заполните все поля!'); return; }
+    if (localStorage.getItem('vex_u_' + u)) { alert('Логин уже занят!'); return; }
 
-    if (!user || !pass) {
-        alert('Заполните все поля!');
-        return;
-    }
-
-    if (localStorage.getItem('vex_user_' + user)) {
-        alert('Пользователь с таким логином уже существует!');
-        return;
-    }
-
-    localStorage.setItem('vex_user_' + user, pass);
-    localStorage.setItem('vex_logged_user', user);
-    alert('Регистрация успешна!');
-    checkAuthStatus();
+    localStorage.setItem('vex_u_' + u, p);
+    localStorage.setItem('vex_current_user', u);
+    alert('Регистрация прошла успешно!');
+    updateCabinetState();
 }
 
 // Вход
 function handleLogin() {
-    const user = document.getElementById('loginUser').value.trim();
-    const pass = document.getElementById('loginPass').value.trim();
+    let u = document.getElementById('logUser').value.trim();
+    let p = document.getElementById('logPass').value.trim();
+    let saved = localStorage.getItem('vex_u_' + u);
+    if (!saved || saved !== p) { alert('Неверный логин или пароль!'); return; }
 
-    const savedPass = localStorage.getItem('vex_user_' + user);
-    if (!savedPass || savedPass !== pass) {
-        alert('Неверный логин или пароль!');
-        return;
-    }
-
-    localStorage.setItem('vex_logged_user', user);
-    checkAuthStatus();
+    localStorage.setItem('vex_current_user', u);
+    updateCabinetState();
 }
 
 // Выход
 function handleLogout() {
-    localStorage.removeItem('vex_logged_user');
-    checkAuthStatus();
-    switchForm('login');
+    localStorage.removeItem('vex_current_user');
+    updateCabinetState();
+    switchModal('login');
 }
 
-// Проверка состояния авторизации для отображения нужного блока в модалке
-function checkAuthStatus() {
-    const loggedUser = localStorage.getItem('vex_logged_user');
-    
-    const loginCont = document.getElementById('loginFormContainer');
-    const regCont = document.getElementById('registerFormContainer');
-    const cabCont = document.getElementById('cabinetContainer');
+// Состояние интерфейса кабинета
+function updateCabinetState() {
+    let user = localStorage.getItem('vex_current_user');
+    let logF = document.getElementById('loginForm');
+    let regF = document.getElementById('registerForm');
+    let cabV = document.getElementById('cabinetView');
 
-    if (loggedUser) {
-        loginCont.style.display = 'none';
-        regCont.style.display = 'none';
-        cabCont.classList.add('active');
+    if (user) {
+        logF.style.display = 'none';
+        regF.style.display = 'none';
+        cabV.classList.add('active');
+        document.getElementById('cabName').innerText = user;
 
-        document.getElementById('cabUsername').innerText = loggedUser;
-        
-        // Загружаем ключи пользователя
-        let userKeys = JSON.parse(localStorage.getItem('vex_keys_' + loggedUser)) || [];
-        let keysHtml = '';
-        
-        if (userKeys.length === 0) {
-            keysHtml = '<div style="color:var(--muted); font-size:12px; text-align:center; padding:10px;">У вас пока нет ключей.</div>';
+        let keys = JSON.parse(localStorage.getItem('vex_keys_' + user)) || [];
+        let html = '';
+        if (keys.length === 0) {
+            html = '<div style="color:var(--muted); font-size:12px; text-align:center; padding:10px;">У вас пока нет ключей.</div>';
         } else {
-            userKeys.forEach(k => {
-                keysHtml += `<div class="key-row"><b>[${k.product} - ${k.duration}]</b><br>${k.key}</div>`;
+            keys.forEach(k => {
+                html += `<div class="key-item"><b>${k.title}</b><br>${k.key}</div>`;
             });
         }
-        document.getElementById('cabKeysList').innerHTML = keysHtml;
+        document.getElementById('cabKeys').innerHTML = html;
     } else {
-        cabCont.classList.remove('active');
-        loginCont.style.display = 'block';
-        regCont.style.display = 'none';
+        cabV.classList.remove('active');
+        logF.style.display = 'block';
+        regF.style.display = 'none';
     }
 }
 
-// Инициализация дефолтных атрибутов цен на продукты при загрузке
+// Инициализация дефолтных цен карточек
 window.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.product').forEach(card => {
-        card.setAttribute('data-days', '30');
-        card.setAttribute('data-price', card.querySelector('.dynamic-price').innerText);
+    document.querySelectorAll('.product-card').forEach(card => {
+        if(card.querySelector('.dynamic-price')) {
+            card.setAttribute('data-days', '30');
+            card.setAttribute('data-price', card.querySelector('.dynamic-price').innerText);
+        }
     });
 });
 </script>
