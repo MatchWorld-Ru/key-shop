@@ -366,6 +366,70 @@ section {
     box-shadow: 0 0 25px rgba(243, 186, 79, 0.4);
 }
 
+/* SUPPORT SECTION */
+.support-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+}
+
+.support-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    transition: 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.support-card:hover {
+    border-color: var(--border-hover);
+    transform: translateY(-4px);
+}
+
+.support-icon {
+    font-size: 36px;
+    margin-bottom: 15px;
+}
+
+.support-card h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #fff;
+}
+
+.support-card p {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+.support-btn {
+    display: inline-block;
+    background: rgba(243,186,79,0.1);
+    border: 1px solid var(--border);
+    color: var(--gold-light);
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.3s;
+    width: 100%;
+}
+
+.support-btn:hover {
+    background: var(--gold);
+    color: #000;
+    border-color: var(--gold);
+}
+
 /* RULES */
 .rules-container {
     background: var(--card-bg);
@@ -624,6 +688,7 @@ footer {
     <div class="nav-links">
         <a href="#shop">Магазин</a>
         <a href="#hwid">HWID Сброс</a>
+        <a href="#support">Поддержка</a>
         <a href="#rules">Правила</a>
     </div>
     <button class="account-btn" onclick="openAccountModal()">Личный кабинет</button>
@@ -711,6 +776,37 @@ footer {
                 <span class="price-val">200 ₽</span>
             </div>
             <button class="buy-btn" onclick="buyHwidReset()">Купить сброс HWID</button>
+        </div>
+    </div>
+</section>
+
+<!-- SUPPORT SECTION (НОВЫЙ БЛОК ПОДДЕРЖКИ ИГРОКОВ) -->
+<section id="support">
+    <h2 class="section-title">Поддержка игроков</h2>
+    <p class="section-desc">Возникли вопросы по установке, запуску лаунчера или оплате? Мы на связи 24/7.</p>
+
+    <div class="support-grid">
+        <div class="support-card">
+            <div class="support-icon">💬</div>
+            <div>
+                <h3>Telegram Поддержка</h3>
+                <p>Быстрый ответ оператора, помощь с багами и решение любых вопросов по софту.</p>
+            </div>
+            <a href="https://t.me/your_support_username" target="_blank" class="support-btn">Написать в Telegram</a>
+        </div>
+
+        <div class="support-card">
+            <div class="support-icon">🎮</div>
+            <h3>Discord Сообщество</h3>
+            <p>Общайтесь с другими игроками, следите за обновлениями и делитесь фидбеком.</p>
+            <a href="https://discord.gg/your_invite" target="_blank" class="support-btn">Войти в Discord</a>
+        </div>
+
+        <div class="support-card">
+            <div class="support-icon">⚙️</div>
+            <h3>FAQ / Инструкции</h3>
+            <p>Подробные гайды по первому запуску лаунчера, обходу ошибок и настройке модов.</p>
+            <a href="#rules" class="support-btn">Смотреть правила</a>
         </div>
     </div>
 </section>
@@ -896,11 +992,9 @@ function buyProduct(btn, productName) {
     }
 
     if (confirm(`Купить "${productName}" (${durationName}) за ${price} ₽ с баланса аккаунта?`)) {
-        // Списываем баланс
         currentBalance -= price;
         localStorage.setItem('vex_wallet_' + user, currentBalance);
 
-        // Выдаем ключ
         const fakeKey = 'VEX-' + Math.random().toString(36).substring(2,6).toUpperCase() + '-' + Math.random().toString(36).substring(2,6).toUpperCase() + '-' + Math.random().toString(36).substring(2,6).toUpperCase();
         saveUserKey(user, `[${productName} - ${durationName}]`, fakeKey);
 
@@ -1024,67 +1118,62 @@ function handleRegister() {
 
     localStorage.setItem('vex_u_' + u, p);
     localStorage.setItem('vex_current_user', u);
-    localStorage.setItem('vex_wallet_' + u, '0');
-    alert('Регистрация успешна!');
+    alert('Регистрация прошла успешно!');
     updateCabinetState();
 }
 
 function handleLogin() {
     let u = document.getElementById('logUser').value.trim();
     let p = document.getElementById('logPass').value.trim();
-    let saved = localStorage.getItem('vex_u_' + u);
-    if (!saved || saved !== p) { alert('Неверный логин или пароль!'); return; }
+    if (!u || !p) { alert('Заполните все поля!'); return; }
+    
+    let savedPass = localStorage.getItem('vex_u_' + u);
+    if (!savedPass || savedPass !== p) { alert('Неверный логин или пароль!'); return; }
 
     localStorage.setItem('vex_current_user', u);
+    alert('Успешный вход!');
     updateCabinetState();
 }
 
 function handleLogout() {
     localStorage.removeItem('vex_current_user');
     updateCabinetState();
-    switchModal('login');
 }
 
+// Обновление состояния интерфейса кабинета
 function updateCabinetState() {
     let user = localStorage.getItem('vex_current_user');
-    let logF = document.getElementById('loginForm');
-    let regF = document.getElementById('registerForm');
-    let cabV = document.getElementById('cabinetView');
+    let loginForm = document.getElementById('loginForm');
+    let regForm = document.getElementById('registerForm');
+    let cabView = document.getElementById('cabinetView');
 
     if (user) {
-        logF.style.display = 'none';
-        regF.style.display = 'none';
-        cabV.classList.add('active');
-        document.getElementById('cabName').innerText = user;
+        loginForm.style.display = 'none';
+        regForm.style.display = 'none';
+        cabView.classList.add('active');
 
+        document.getElementById('cabName').innerText = user;
+        
         let balance = localStorage.getItem('vex_wallet_' + user) || '0';
         document.getElementById('walletBalance').innerText = balance + ' ₽';
 
         let keys = JSON.parse(localStorage.getItem('vex_keys_' + user)) || [];
-        let html = '';
+        let keysContainer = document.getElementById('cabKeys');
+        
         if (keys.length === 0) {
-            html = '<div style="color:var(--muted); font-size:12px; text-align:center; padding:15px;">Список ключей пуст.</div>';
+            keysContainer.innerHTML = '<div style="color:var(--muted); font-size:12px; text-align:center; padding:15px;">Список ключей пуст.</div>';
         } else {
+            keysContainer.innerHTML = '';
             keys.forEach(k => {
-                html += `<div class="key-item"><b>${k.title}</b><br>${k.key}</div>`;
+                keysContainer.innerHTML += `<div class="key-item"><strong>${k.title}</strong><br>${k.key}</div>`;
             });
         }
-        document.getElementById('cabKeys').innerHTML = html;
     } else {
-        cabV.classList.remove('active');
-        logF.style.display = 'block';
-        regF.style.display = 'none';
+        cabView.classList.remove('active');
+        loginForm.style.display = 'block';
+        regForm.style.display = 'none';
     }
 }
-
-window.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.product-card').forEach(card => {
-        if(card.querySelector('.dynamic-price')) {
-            card.setAttribute('data-days', '30');
-            card.setAttribute('data-price', card.querySelector('.dynamic-price').innerText);
-        }
-    });
-});
 </script>
 
 </body>
