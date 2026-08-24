@@ -270,10 +270,22 @@ section {
     border-radius: 20px;
 }
 
+.version-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    color: var(--gold-light);
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
 .product-card h3 {
     font-size: 22px;
     font-weight: 700;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
 }
 
 .product-card p {
@@ -354,7 +366,7 @@ section {
     box-shadow: 0 0 25px rgba(243, 186, 79, 0.4);
 }
 
-/* RULES SECTION */
+/* RULES */
 .rules-container {
     background: var(--card-bg);
     border: 1px solid var(--border);
@@ -369,27 +381,9 @@ section {
     padding-bottom: 15px;
     border-bottom: 1px solid rgba(255,255,255,0.05);
 }
-
-.rule-item:last-child {
-    margin-bottom: 0;
-    padding-bottom: 0;
-    border-bottom: none;
-}
-
-.rule-item h4 {
-    font-size: 15px;
-    color: var(--gold-light);
-    margin-bottom: 6px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.rule-item p {
-    color: var(--muted);
-    font-size: 13px;
-    line-height: 1.5;
-}
+.rule-item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+.rule-item h4 { font-size: 15px; color: var(--gold-light); margin-bottom: 6px; }
+.rule-item p { color: var(--muted); font-size: 13px; line-height: 1.5; }
 
 /* MODALS */
 .modal {
@@ -404,137 +398,164 @@ section {
     padding: 20px;
 }
 
-.modal.active {
-    display: flex;
-}
+.modal.active { display: flex; }
 
 .modal-content {
     background: #0d0c0a;
     border: 1px solid var(--border);
-    border-radius: 24px;
+    border-radius: 28px;
     width: 100%;
-    max-width: 500px;
-    padding: 35px;
+    max-width: 560px;
+    padding: 40px;
     position: relative;
-    box-shadow: 0 25px 60px rgba(0,0,0,0.8);
-    max-height: 90vh;
+    box-shadow: 0 25px 70px rgba(0,0,0,0.85);
+    max-height: 92vh;
     overflow-y: auto;
 }
 
 .close-btn {
     position: absolute;
-    top: 20px;
-    right: 20px;
-    background: none;
-    border: none;
+    top: 22px;
+    right: 22px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
     color: var(--muted);
-    font-size: 26px;
-    cursor: pointer;
-}
-.close-btn:hover { color: var(--gold); }
-
-.modal-content h2 {
     font-size: 20px;
-    font-weight: 700;
-    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.2s;
 }
+.close-btn:hover { color: var(--gold); border-color: var(--gold); }
 
-.modal-content p {
-    color: var(--muted);
-    font-size: 13px;
-    margin-bottom: 20px;
-}
+.modal-content h2 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+.modal-content p { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
 
 .input-field {
     width: 100%;
     background: rgba(255,255,255,0.03);
     border: 1px solid var(--border);
-    padding: 13px 15px;
+    padding: 14px 16px;
     border-radius: 12px;
     color: #fff;
     font-size: 14px;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
     outline: none;
     transition: 0.3s;
 }
-
 .input-field:focus { border-color: var(--gold); }
 
 .auth-switch {
     text-align: center;
-    margin-top: 15px;
+    margin-top: 16px;
     font-size: 13px;
     color: var(--muted);
 }
-.auth-switch span {
-    color: var(--gold);
-    cursor: pointer;
-    font-weight: 600;
-}
+.auth-switch span { color: var(--gold); cursor: pointer; font-weight: 600; }
 
 /* КАБИНЕТ */
 .cabinet-panel { display: none; }
 .cabinet-panel.active { display: block; }
 
-.user-box {
-    background: rgba(255,255,255,0.02);
+.cab-header-card {
+    background: linear-gradient(135deg, rgba(243,186,79,0.08), rgba(255,255,255,0.01));
     border: 1px solid var(--border);
-    padding: 14px;
-    border-radius: 12px;
-    margin-bottom: 15px;
-    font-size: 13px;
+    padding: 20px;
+    border-radius: 16px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
-.user-box div { margin-bottom: 4px; color: var(--muted); }
-.user-box span { color: #fff; font-weight: 600; }
+
+.cab-user-info h3 { font-size: 16px; color: #fff; margin-bottom: 4px; }
+.cab-user-info p { font-size: 12px; color: #22c55e; font-weight: 600; margin: 0; }
 
 .cabinet-tabs {
     display: flex;
     gap: 8px;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+    background: rgba(0,0,0,0.3);
+    padding: 5px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
 }
 
 .cab-tab {
     flex: 1;
-    background: rgba(255,255,255,0.02);
-    border: 1px solid var(--border);
+    background: transparent;
+    border: none;
     color: var(--muted);
-    padding: 8px;
+    padding: 10px;
     border-radius: 8px;
     font-size: 12px;
     font-weight: 600;
     cursor: pointer;
     text-align: center;
-    transition: 0.2s;
+    transition: 0.25s;
 }
 
-.cab-tab.active, .cab-tab:hover {
-    border-color: var(--gold);
-    color: #fff;
-    background: rgba(243,186,79,0.1);
+.cab-tab.active {
+    background: var(--gold);
+    color: #111;
+    box-shadow: 0 4px 15px rgba(243,186,79,0.3);
 }
 
 .cab-section { display: none; }
 .cab-section.active { display: block; }
 
 .keys-list {
-    max-height: 130px;
+    max-height: 180px;
     overflow-y: auto;
     background: rgba(0,0,0,0.4);
     border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 10px;
-    margin-top: 6px;
+    border-radius: 12px;
+    padding: 12px;
+    margin-top: 8px;
 }
 
 .key-item {
     background: rgba(243,186,79,0.07);
     border-left: 3px solid var(--gold);
-    padding: 8px;
-    border-radius: 6px;
+    padding: 10px;
+    border-radius: 8px;
     font-family: monospace;
-    font-size: 11px;
-    margin-bottom: 6px;
+    font-size: 12px;
+    margin-bottom: 8px;
+    color: var(--gold-light);
 }
+
+.download-box {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+    padding: 16px;
+    border-radius: 14px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.download-info h4 { font-size: 14px; color: #fff; margin-bottom: 3px; }
+.download-info p { font-size: 12px; color: var(--muted); margin: 0; }
+
+.download-btn-mini {
+    background: linear-gradient(135deg, var(--gold-light), var(--gold));
+    color: #111;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 12px;
+    cursor: pointer;
+    transition: 0.2s;
+    text-decoration: none;
+}
+.download-btn-mini:hover { opacity: 0.9; box-shadow: 0 0 15px rgba(243,186,79,0.4); }
 
 /* FOOTER */
 footer {
@@ -581,15 +602,17 @@ footer {
 <!-- SHOP -->
 <section id="shop">
     <h2 class="section-title">Каталог софта</h2>
-    <p class="section-desc">Выберите подходящий продукт и срок доступа.</p>
+    <p class="section-desc">Выберите подходящий продукт и версию подписки.</p>
 
     <div class="products-grid">
-        <!-- Товар 1 -->
-        <div class="product-card" data-product="Vexqora Base Client">
+        <!-- Товар 1: Vexqora Client (Minecraft 1.21.4) -->
+        <div class="product-card" data-product="Vexqora Client">
             <div>
                 <span class="card-tag">STANDARD</span>
-                <h3>VEXQORA BASE</h3>
+                <div class="version-badge">Minecraft 1.21.4</div>
+                <h3>VEXQORA CLIENT</h3>
                 <p>Надежный софт с базовыми визуальными модулями и стабильной работой.</p>
+                
                 <div class="duration-selector">
                     <button class="dur-btn" onclick="selectDuration(this, 7, 250)">7 Дней<span>250 ₽</span></button>
                     <button class="dur-btn active" onclick="selectDuration(this, 30, 600)">30 Дней<span>600 ₽</span></button>
@@ -601,16 +624,18 @@ footer {
                     <span style="color:var(--muted); font-size:13px;">К оплате:</span>
                     <span class="price-val"><span class="dynamic-price">600</span> ₽</span>
                 </div>
-                <button class="buy-btn" onclick="buyProduct(this, 'Vexqora Base')">Купить ключ</button>
+                <button class="buy-btn" onclick="buyProduct(this, 'Vexqora Client')">Купить ключ</button>
             </div>
         </div>
 
-        <!-- Товар 2 -->
-        <div class="product-card featured" data-product="Vexqora Private Edition">
+        <!-- Товар 2: Vexqora Beta (Minecraft 1.21.1) -->
+        <div class="product-card featured" data-product="Vexqora Beta">
             <div>
-                <span class="card-tag" style="background:var(--gold); color:#000;">★ HIT</span>
-                <h3>PRIVATE EDITION</h3>
+                <span class="card-tag" style="background:var(--gold); color:#000;">★ BETA</span>
+                <div class="version-badge">Minecraft 1.21.1</div>
+                <h3>VEXQORA BETA</h3>
                 <p>Расширенный функционал обхода, уникальные визуальные темы и быстрые апдейты.</p>
+                
                 <div class="duration-selector">
                     <button class="dur-btn" onclick="selectDuration(this, 7, 450)">7 Дней<span>450 ₽</span></button>
                     <button class="dur-btn active" onclick="selectDuration(this, 30, 1100)">30 Дней<span>1100 ₽</span></button>
@@ -622,7 +647,7 @@ footer {
                     <span style="color:var(--muted); font-size:13px;">К оплате:</span>
                     <span class="price-val"><span class="dynamic-price">1100</span> ₽</span>
                 </div>
-                <button class="buy-btn" onclick="buyProduct(this, 'Private Edition')">Купить ключ</button>
+                <button class="buy-btn" onclick="buyProduct(this, 'Vexqora Beta')">Купить ключ</button>
             </div>
         </div>
     </div>
@@ -680,10 +705,10 @@ footer {
     <div>SECURE LICENSE & LAUNCHER PLATFORM</div>
 </footer>
 
-<!-- MODAL: ACCOUNT & CABINET -->
+<!-- MODAL: ACCOUNT & ADVANCED CABINET -->
 <div class="modal" id="accountModal">
     <div class="modal-content">
-        <button class="close-btn" onclick="closeAccountModal()">&times;</button>
+        <button class="close-btn" onclick="closeAccountModal()">×</button>
 
         <!-- Вход -->
         <div id="loginForm">
@@ -707,44 +732,54 @@ footer {
 
         <!-- Личный кабинет -->
         <div id="cabinetView" class="cabinet-panel">
-            <h2>Личный кабинет</h2>
-            <p>Панель управления вашими ключами и загрузками.</p>
-            
-            <div class="user-box">
-                <div>Пользователь: <span id="cabName">-</span></div>
-                <div>Статус: <span style="color:#22c55e;">Авторизован</span></div>
+            <div class="cab-header-card">
+                <div class="cab-user-info">
+                    <h3 id="cabName">Username</h3>
+                    <p>● Активный аккаунт</p>
+                </div>
+                <button class="buy-btn" style="width: auto; padding: 8px 16px; font-size: 11px; background: rgba(255,60,60,0.2); color: #ff7777; border: 1px solid rgba(255,60,60,0.4);" onclick="handleLogout()">Выйти</button>
             </div>
 
             <!-- Вкладки кабинета -->
             <div class="cabinet-tabs">
-                <div class="cab-tab active" onclick="switchCabTab('keys', this)">Мои ключи</div>
-                <div class="cab-tab" onclick="switchCabTab('download', this)">Скачать софт</div>
-                <div class="cab-tab" onclick="switchCabTab('activate', this)">Активация</div>
+                <button class="cab-tab active" onclick="switchCabTab('keys', this)">Мои ключи</button>
+                <button class="cab-tab" onclick="switchCabTab('download', this)">Скачать лаунчер</button>
+                <button class="cab-tab" onclick="switchCabTab('activate', this)">Активация</button>
             </div>
 
             <!-- Вкладка: Ключи -->
             <div id="tabKeys" class="cab-section active">
-                <p style="font-size:12px; margin-bottom:4px;">Ваши купленные ключи и тикеты:</p>
+                <p style="font-size:12px; margin-bottom:6px; color:var(--muted);">Ваши купленные ключи и HWID тикеты:</p>
                 <div class="keys-list" id="cabKeys">
-                    <div style="color:var(--muted); font-size:11px; text-align:center; padding:10px;">Список пуст.</div>
+                    <div style="color:var(--muted); font-size:12px; text-align:center; padding:15px;">Список ключей пуст.</div>
                 </div>
             </div>
 
             <!-- Вкладка: Скачать -->
             <div id="tabDownload" class="cab-section">
-                <p style="font-size:12px; margin-bottom:8px;">Загрузите официальный лаунчер Vexqora:</p>
-                <a href="#" onclick="alert('Скачивание Vexqora-Installer.exe началось!'); return false;" class="buy-btn" style="display:block; text-align:center; text-decoration:none; margin-bottom:8px; font-size:13px; padding:11px;">Скачать для Windows (.EXE)</a>
-                <a href="#" onclick="alert('Скачивание Vexqora-Launcher.jar началось!'); return false;" class="btn-secondary" style="display:block; text-align:center; text-decoration:none; font-size:13px; padding:11px;">Скачать универсальный (.JAR)</a>
+                <div class="download-box">
+                    <div class="download-info">
+                        <h4>Vexqora Installer (.EXE)</h4>
+                        <p>Для Windows (Рекомендуется)</p>
+                    </div>
+                    <a href="#" onclick="alert('Загрузка Vexqora-Setup.exe началась!'); return false;" class="download-btn-mini">Скачать</a>
+                </div>
+
+                <div class="download-box">
+                    <div class="download-info">
+                        <h4>Vexqora Universal (.JAR)</h4>
+                        <p>Кроссплатформенный архив</p>
+                    </div>
+                    <a href="#" onclick="alert('Загрузка Vexqora-Launcher.jar началась!'); return false;" class="download-btn-mini">Скачать</a>
+                </div>
             </div>
 
             <!-- Вкладка: Активация -->
             <div id="tabActivate" class="cab-section">
-                <p style="font-size:12px; margin-bottom:8px;">Введите лицензионный ключ:</p>
-                <input type="text" class="input-field" id="activateKeyInput" placeholder="VEX-XXXX-XXXX-XXXX" style="margin-bottom:8px; font-size:12px;">
-                <button class="buy-btn" onclick="activateUserKey()" style="font-size:13px; padding:11px;">Активировать ключ</button>
+                <p style="font-size:12px; margin-bottom:8px; color:var(--muted);">Введите ваш лицензионный ключ для привязки:</p>
+                <input type="text" class="input-field" id="activateKeyInput" placeholder="VEX-XXXX-XXXX-XXXX" style="margin-bottom:10px;">
+                <button class="buy-btn" onclick="activateUserKey()">Привязать ключ</button>
             </div>
-
-            <button class="buy-btn" style="margin-top:15px; background:rgba(255,60,60,0.15); color:#ff7777; border:1px solid rgba(255,60,60,0.3); font-size:12px; padding:10px;" onclick="handleLogout()">Выйти из аккаунта</button>
         </div>
 
     </div>
@@ -896,7 +931,7 @@ function updateCabinetState() {
         let keys = JSON.parse(localStorage.getItem('vex_keys_' + user)) || [];
         let html = '';
         if (keys.length === 0) {
-            html = '<div style="color:var(--muted); font-size:11px; text-align:center; padding:10px;">У вас пока нет ключей.</div>';
+            html = '<div style="color:var(--muted); font-size:12px; text-align:center; padding:15px;">Список ключей пуст.</div>';
         } else {
             keys.forEach(k => {
                 html += `<div class="key-item"><b>${k.title}</b><br>${k.key}</div>`;
