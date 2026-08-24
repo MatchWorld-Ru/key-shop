@@ -475,14 +475,28 @@ section {
 .cab-user-info h3 { font-size: 16px; color: #fff; margin-bottom: 4px; }
 .cab-user-info p { font-size: 12px; color: #22c55e; font-weight: 600; margin: 0; }
 
+.wallet-box {
+    background: rgba(0,0,0,0.4);
+    border: 1px solid var(--border);
+    padding: 14px 18px;
+    border-radius: 14px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.wallet-info span { font-size: 12px; color: var(--muted); display: block; }
+.wallet-info strong { font-size: 18px; color: var(--gold-light); }
+
 .cabinet-tabs {
     display: flex;
-    gap: 8px;
+    gap: 6px;
     margin-bottom: 20px;
     background: rgba(0,0,0,0.3);
     padding: 5px;
     border-radius: 12px;
     border: 1px solid var(--border);
+    overflow-x: auto;
 }
 
 .cab-tab {
@@ -490,13 +504,14 @@ section {
     background: transparent;
     border: none;
     color: var(--muted);
-    padding: 10px;
+    padding: 10px 8px;
     border-radius: 8px;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
     cursor: pointer;
     text-align: center;
     transition: 0.25s;
+    white-space: nowrap;
 }
 
 .cab-tab.active {
@@ -557,6 +572,31 @@ section {
 }
 .download-btn-mini:hover { opacity: 0.9; box-shadow: 0 0 15px rgba(243,186,79,0.4); }
 
+.payment-methods-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.pay-method-card {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+    padding: 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    transition: 0.2s;
+}
+.pay-method-card.active, .pay-method-card:hover {
+    border-color: var(--gold);
+    background: rgba(243,186,79,0.08);
+    color: var(--gold-light);
+}
+
 /* FOOTER */
 footer {
     padding: 40px 7%;
@@ -571,6 +611,7 @@ footer {
 @media(max-width: 768px) {
     .nav-links { display: none; }
     .hero h1 { font-size: 32px; }
+    .payment-methods-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -628,11 +669,11 @@ footer {
             </div>
         </div>
 
-        <!-- Товар 2: Vexqora Beta (Minecraft 1.21.1) -->
+        <!-- Товар 2: Vexqora Beta (Minecraft 1.21.11) -->
         <div class="product-card featured" data-product="Vexqora Beta">
             <div>
                 <span class="card-tag" style="background:var(--gold); color:#000;">★ BETA</span>
-                <div class="version-badge">Minecraft 1.21.1</div>
+                <div class="version-badge">Minecraft 1.21.11</div>
                 <h3>VEXQORA BETA</h3>
                 <p>Расширенный функционал обхода, уникальные визуальные темы и быстрые апдейты.</p>
                 
@@ -740,11 +781,21 @@ footer {
                 <button class="buy-btn" style="width: auto; padding: 8px 16px; font-size: 11px; background: rgba(255,60,60,0.2); color: #ff7777; border: 1px solid rgba(255,60,60,0.4);" onclick="handleLogout()">Выйти</button>
             </div>
 
+            <!-- Блок кошелька -->
+            <div class="wallet-box">
+                <div class="wallet-info">
+                    <span>Баланс кошелька</span>
+                    <strong id="walletBalance">0 ₽</strong>
+                </div>
+                <button class="download-btn-mini" onclick="switchCabTab('topup', document.querySelectorAll('.cab-tab')[3])">Пополнить</button>
+            </div>
+
             <!-- Вкладки кабинета -->
             <div class="cabinet-tabs">
                 <button class="cab-tab active" onclick="switchCabTab('keys', this)">Мои ключи</button>
-                <button class="cab-tab" onclick="switchCabTab('download', this)">Скачать лаунчер</button>
+                <button class="cab-tab" onclick="switchCabTab('download', this)">Скачать</button>
                 <button class="cab-tab" onclick="switchCabTab('activate', this)">Активация</button>
+                <button class="cab-tab" onclick="switchCabTab('topup', this)">Пополнение</button>
             </div>
 
             <!-- Вкладка: Ключи -->
@@ -780,12 +831,36 @@ footer {
                 <input type="text" class="input-field" id="activateKeyInput" placeholder="VEX-XXXX-XXXX-XXXX" style="margin-bottom:10px;">
                 <button class="buy-btn" onclick="activateUserKey()">Привязать ключ</button>
             </div>
+
+            <!-- Вкладка: Пополнение баланса -->
+            <div id="tabTopup" class="cab-section">
+                <p style="font-size:12px; margin-bottom:10px; color:var(--muted);">Выберите способ оплаты и пополните баланс (РФ, РК, Украина и др.):</p>
+                
+                <div class="payment-methods-grid">
+                    <div class="pay-method-card active" onclick="selectPayMethod(this, 'Kaspi QR / Bank (КЗ)')">🇰🇿 Kaspi / Банки КЗ</div>
+                    <div class="pay-method-card" onclick="selectPayMethod(this, 'Банковская карта РФ (МИР/Visa/MC)')">🇷🇺 Карты РФ (МИР)</div>
+                    <div class="pay-method-card" onclick="selectPayMethod(this, 'СБП (Система Быстрых Платежей)')">⚡ СБП РФ</div>
+                    <div class="pay-method-card" onclick="selectPayMethod(this, 'Карты Украины / Мира (Visa/MC)')">🇺🇦 Карты UA / Другие</div>
+                </div>
+
+                <input type="number" class="input-field" id="topupAmountInput" placeholder="Сумма пополнения в ₽" style="margin-bottom:10px;">
+                <button class="buy-btn" onclick="executeTopup()">Перейти к оплате</button>
+            </div>
         </div>
 
     </div>
 </div>
 
 <script>
+let selectedPaymentMethod = 'Kaspi QR / Bank (КЗ)';
+
+// Выбор метода оплаты
+function selectPayMethod(el, method) {
+    document.querySelectorAll('.pay-method-card').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    selectedPaymentMethod = method;
+}
+
 // Выбор срока подписки
 function selectDuration(btn, days, price) {
     const card = btn.closest('.product-card');
@@ -797,7 +872,7 @@ function selectDuration(btn, days, price) {
     card.querySelector('.dynamic-price').innerText = price;
 }
 
-// Покупка софта
+// Покупка софта (списание с баланса кошелька)
 function buyProduct(btn, productName) {
     let user = localStorage.getItem('vex_current_user');
     if (!user) {
@@ -808,15 +883,30 @@ function buyProduct(btn, productName) {
 
     const card = btn.closest('.product-card');
     const days = card.getAttribute('data-days') || '30';
-    const price = card.getAttribute('data-price') || '600';
+    const price = parseInt(card.getAttribute('data-price') || '600');
     const durationName = days === 'Lifetime' ? 'Навсегда' : days + ' дн.';
 
-    if (confirm(`Купить "${productName}" (${durationName}) за ${price} ₽?`)) {
+    let currentBalance = parseInt(localStorage.getItem('vex_wallet_' + user) || '0');
+
+    if (currentBalance < price) {
+        alert(`Недостаточно средств на балансе! Требуется: ${price} ₽, у вас: ${currentBalance} ₽. Пополните кошелек в личном кабинете.`);
+        openAccountModal();
+        switchCabTab('topup', document.querySelectorAll('.cab-tab')[3]);
+        return;
+    }
+
+    if (confirm(`Купить "${productName}" (${durationName}) за ${price} ₽ с баланса аккаунта?`)) {
+        // Списываем баланс
+        currentBalance -= price;
+        localStorage.setItem('vex_wallet_' + user, currentBalance);
+
+        // Выдаем ключ
         const fakeKey = 'VEX-' + Math.random().toString(36).substring(2,6).toUpperCase() + '-' + Math.random().toString(36).substring(2,6).toUpperCase() + '-' + Math.random().toString(36).substring(2,6).toUpperCase();
-        
         saveUserKey(user, `[${productName} - ${durationName}]`, fakeKey);
+
         alert('Оплата прошла успешно! Ключ добавлен в ваш личный кабинет в раздел "Мои ключи".');
         openAccountModal();
+        updateCabinetState();
     }
 }
 
@@ -829,11 +919,48 @@ function buyHwidReset() {
         return;
     }
 
-    if (confirm('Приобрести сброс HWID за 200 ₽?')) {
+    const price = 200;
+    let currentBalance = parseInt(localStorage.getItem('vex_wallet_' + user) || '0');
+
+    if (currentBalance < price) {
+        alert(`Недостаточно средств на балансе для покупки сброса HWID (${price} ₽). Пополните кошелек!`);
+        openAccountModal();
+        switchCabTab('topup', document.querySelectorAll('.cab-tab')[3]);
+        return;
+    }
+
+    if (confirm('Приобрести сброс HWID за 200 ₽ с баланса?')) {
+        currentBalance -= price;
+        localStorage.setItem('vex_wallet_' + user, currentBalance);
+
         const hwidTicket = 'HWID-RESET-' + Math.random().toString(36).substring(2,8).toUpperCase();
         saveUserKey(user, '[Сброс HWID тикет]', hwidTicket);
         alert('Тикет на сброс HWID успешно куплен!');
         openAccountModal();
+        updateCabinetState();
+    }
+}
+
+// Пополнение баланса
+function executeTopup() {
+    let user = localStorage.getItem('vex_current_user');
+    let amountInput = document.getElementById('topupAmountInput').value.trim();
+    let amount = parseInt(amountInput);
+
+    if (!amount || amount <= 0) {
+        alert('Введите корректную сумму пополнения!');
+        return;
+    }
+
+    if (confirm(`Подтверждаете пополнение баланса на ${amount} ₽ через способ: ${selectedPaymentMethod}?`)) {
+        let currentBalance = parseInt(localStorage.getItem('vex_wallet_' + user) || '0');
+        currentBalance += amount;
+        localStorage.setItem('vex_wallet_' + user, currentBalance);
+
+        document.getElementById('topupAmountInput').value = '';
+        alert(`Баланс успешно пополнен на ${amount} ₽!`);
+        updateCabinetState();
+        switchCabTab('keys', document.querySelectorAll('.cab-tab')[0]);
     }
 }
 
@@ -885,6 +1012,7 @@ function switchCabTab(tabName, el) {
     if (tabName === 'keys') document.getElementById('tabKeys').classList.add('active');
     if (tabName === 'download') document.getElementById('tabDownload').classList.add('active');
     if (tabName === 'activate') document.getElementById('tabActivate').classList.add('active');
+    if (tabName === 'topup') document.getElementById('tabTopup').classList.add('active');
 }
 
 // Регистрация / Вход / Выход
@@ -896,6 +1024,7 @@ function handleRegister() {
 
     localStorage.setItem('vex_u_' + u, p);
     localStorage.setItem('vex_current_user', u);
+    localStorage.setItem('vex_wallet_' + u, '0');
     alert('Регистрация успешна!');
     updateCabinetState();
 }
@@ -927,6 +1056,9 @@ function updateCabinetState() {
         regF.style.display = 'none';
         cabV.classList.add('active');
         document.getElementById('cabName').innerText = user;
+
+        let balance = localStorage.getItem('vex_wallet_' + user) || '0';
+        document.getElementById('walletBalance').innerText = balance + ' ₽';
 
         let keys = JSON.parse(localStorage.getItem('vex_keys_' + user)) || [];
         let html = '';
