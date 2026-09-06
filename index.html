@@ -3,728 +3,665 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AURELIA — Premium Store</title>
+    <title>Magick Storee — Маркетплейс</title>
+    <style>
+        :root {
+            --wb-purple: #cb11ab;
+            --wb-purple-hover: #b00d95;
+            --ozon-blue: #005bff;
+            --ozon-blue-hover: #0046cc;
+            --gold-gradient: linear-gradient(135deg, #f7efc5 0%, #d4af37 50%, #997a15 100%);
+            --bg-body: #f4f5f7;
+            --bg-card: #ffffff;
+            --text-main: #1f2022;
+            --text-secondary: #8a8d91;
+            --border-color: #e2e4e8;
+        }
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
 
-    <link rel="stylesheet" href="style.css">
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            min-height: 100vh;
+        }
+
+        /* Шапка */
+        header {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .header-top {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0.8rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+        }
+
+        .logo {
+            font-size: 1.7rem;
+            font-weight: 900;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .search-container {
+            flex: 1;
+            display: flex;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 0.75rem 1.2rem;
+            border: 2px solid var(--ozon-blue);
+            border-radius: 8px 0 0 8px;
+            outline: none;
+            font-size: 0.95rem;
+            background: #fafbfc;
+        }
+
+        .search-container button {
+            background: var(--ozon-blue);
+            color: white;
+            border: none;
+            padding: 0 1.5rem;
+            border-radius: 0 8px 8px 0;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .nav-icons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.75rem;
+            color: var(--text-main);
+            gap: 2px;
+        }
+
+        .gold-btn {
+            background: var(--gold-gradient);
+            color: #2b2200;
+            border: 1px solid #b59322;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(212, 175, 55, 0.3);
+        }
+
+        /* Основное поле */
+        main {
+            max-width: 1300px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .empty-catalog {
+            text-align: center;
+            padding: 4rem 1rem;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .product-card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+        }
+
+        .product-img-box {
+            background: #f8fafc;
+            height: 160px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin-bottom: 0.8rem;
+        }
+
+        .product-img-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-price {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 0.4rem;
+        }
+
+        .product-title {
+            font-size: 0.95rem;
+            color: #334155;
+            margin-bottom: 0.8rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .seller-info {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.8rem;
+        }
+
+        .wb-btn {
+            background: var(--wb-purple);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 0.6rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .wb-btn:hover { background: var(--wb-purple-hover); }
+
+        /* Модальные окна */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            width: 480px;
+            max-width: 95%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 2rem;
+            position: relative;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px; right: 20px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            color: #475569;
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 0.7rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            outline: none;
+            font-size: 0.95rem;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: var(--ozon-blue);
+        }
+
+        /* Стили авторизации */
+        .auth-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+        .auth-tab {
+            background: none; border: none; font-weight: bold; cursor: pointer; color: var(--text-secondary); font-size: 1rem;
+        }
+        .auth-tab.active { color: var(--ozon-blue); border-bottom: 2px solid var(--ozon-blue); padding-bottom: 4px; }
+
+        .social-login {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        .social-btn {
+            flex: 1; padding: 0.6rem; border: 1px solid var(--border-color); border-radius: 8px; background: white; cursor: pointer; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+        }
+    </style>
 </head>
-
 <body>
 
-<!-- BACKGROUND -->
-<div class="bg-glow glow-1"></div>
-<div class="bg-glow glow-2"></div>
-
-<!-- HEADER -->
-<header class="header">
-
-    <div class="logo">
-        <div class="logo-mark">A</div>
-        <div>
-            <strong>AURELIA</strong>
-            <span>PREMIUM STORE</span>
-        </div>
-    </div>
-
-    <nav class="navigation">
-        <a class="active" href="#home">Главная</a>
-        <a href="#catalog">Каталог</a>
-        <a href="#new">Новинки</a>
-        <a href="#sale">Акции</a>
-    </nav>
-
-    <div class="header-actions">
-
-        <button class="icon-btn" onclick="openSearch()">
-            ⌕
-        </button>
-
-        <button class="icon-btn" onclick="toggleFavorite()">
-            ♡
-            <span class="counter">2</span>
-        </button>
-
-        <button class="icon-btn" onclick="openCart()">
-            🛒
-            <span class="counter cart-counter">3</span>
-        </button>
-
-        <button class="profile-btn" onclick="openProfile()">
-            <div class="avatar">JD</div>
-            <span>Мой профиль</span>
-        </button>
-
-    </div>
-</header>
-
-
-<!-- SEARCH -->
-<div class="search-overlay" id="searchOverlay">
-
-    <div class="search-window">
-
-        <button class="close" onclick="closeSearch()">×</button>
-
-        <span class="small-title">ПОИСК ПО МАГАЗИНУ</span>
-
-        <h2>Что будем искать?</h2>
-
-        <div class="big-search">
-            <span>⌕</span>
-            <input id="searchInput" type="text" placeholder="Название товара, категория...">
-            <button>Найти</button>
-        </div>
-
-        <div class="popular">
-            <span>Популярное:</span>
-            <button>Наушники</button>
-            <button>Клавиатуры</button>
-            <button>Мониторы</button>
-            <button>Аксессуары</button>
-        </div>
-
-    </div>
-
-</div>
-
-
-<!-- HOME -->
-<main id="home">
-
-    <section class="hero">
-
-        <div class="hero-content">
-
-            <div class="badge">
-                <span></span>
-                НОВАЯ КОЛЛЕКЦИЯ 2026
+    <!-- Шапка -->
+    <header>
+        <div class="header-top">
+            <div class="logo" onclick="location.reload()">Magick Storee</div>
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Поиск товаров..." oninput="renderCatalog()">
+                <button>Найти</button>
             </div>
-
-            <h1>
-                Премиальные<br>
-                <em>товары</em> для тебя.
-            </h1>
-
-            <p>
-                Технологии, стиль и качество в одном месте.
-                Выбирай лучшее — получай удовольствие.
-            </p>
-
-            <div class="hero-buttons">
-                <button class="gold-btn" onclick="scrollCatalog()">
-                    Смотреть каталог
-                    <span>→</span>
-                </button>
-
-                <button class="outline-btn">
-                    Подробнее
+            <div class="nav-icons">
+                <button class="gold-btn" onclick="openAuthOrProfile()">👤 Личный кабинет</button>
+                <button class="nav-btn" onclick="openCartModal()">
+                    <span style="font-size: 1.2rem;">🛒</span>
+                    <span>Корзина</span>
                 </button>
             </div>
+        </div>
+    </header>
 
-            <div class="advantages">
+    <!-- Главная страница -->
+    <main>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h2 id="catalogTitle">Каталог товаров</h2>
+            <button class="gold-btn" onclick="openSellModal()" id="sellBtnTop" style="display:none;">+ Продать товар</button>
+        </div>
+        <div id="catalogContainer"></div>
+    </main>
 
-                <div>
-                    <strong>24/7</strong>
-                    <span>Поддержка</span>
+    <!-- МОДАЛКА: Авторизация / Регистрация (Google / Телефон) -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('authModal')">&times;</span>
+            <h2>Вход в Magick Storee</h2>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1.5rem;">Используйте номер телефона или Google аккаунт, как на Ozon и WB</p>
+            
+            <div class="form-group">
+                <label>Номер телефона или Email</label>
+                <input type="text" id="authInput" placeholder="+7 (999) 000-00-00">
+            </div>
+            <button class="wb-btn" style="padding: 0.8rem; margin-bottom: 1rem;" onclick="proceedAuth()">Продолжить</button>
+            
+            <div style="text-align: center; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">или войдите через соцсети</div>
+            <div class="social-login">
+                <button class="social-btn" onclick="socialAuth('Google')">🌐 Google</button>
+                <button class="social-btn" onclick="socialAuth('Яндекс')"> Yandex</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- МОДАЛКА: Личный кабинет -->
+    <div class="modal" id="profileModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('profileModal')">&times;</span>
+            <div style="background: var(--gold-gradient); margin: -2rem -2rem 1.5rem -2rem; padding: 2rem; border-radius: 16px 16px 0 0; color: #2b2200;">
+                <h3 id="profileName" style="font-size: 1.3rem;">Пользователь</h3>
+                <p id="profilePhone" style="font-size: 0.9rem; opacity: 0.85;"></p>
+                <div style="margin-top: 1rem; font-weight: bold;">База кошелька: <span id="walletBalance">0 ₽</span></div>
+            </div>
+
+            <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+                <button class="wb-btn" onclick="openSellModal()">📦 Выставить товар на продажу</button>
+            </div>
+
+            <h4>Мои выставленные товары:</h4>
+            <div id="myProductsList" style="margin-top: 0.8rem; max-height: 150px; overflow-y: auto; font-size: 0.9rem; color: var(--text-secondary);">
+                У вас пока нет товаров на продажу.
+            </div>
+
+            <button style="background: none; border: none; color: #ef4444; font-weight: bold; cursor: pointer; margin-top: 2rem;" onclick="logout()">Выйти из аккаунта</button>
+        </div>
+    </div>
+
+    <!-- МОДАЛКА: Продать товар (Загрузка картинки, цены, куда деньги) -->
+    <div class="modal" id="sellModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('sellModal')">&times;</span>
+            <h2>Создать объявление / Товар</h2>
+            <form onsubmit="handleCreateProduct(event)" style="margin-top: 1rem;">
+                <div class="form-group">
+                    <label>Название товара</label>
+                    <input type="text" id="newTitle" required placeholder="Например: Магический амулет">
                 </div>
-
-                <div>
-                    <strong>1–2 дня</strong>
-                    <span>Доставка</span>
+                <div class="form-group">
+                    <label>Цена (₽)</label>
+                    <input type="number" id="newPrice" required placeholder="1500">
                 </div>
-
-                <div>
-                    <strong>100%</strong>
-                    <span>Оригинал</span>
+                <div class="form-group">
+                    <label>Ссылка на картинку (URL) или файл</label>
+                    <input type="text" id="newImage" required placeholder="https://imgur.com/... или любая ссылка на фото">
                 </div>
-
-            </div>
-
-        </div>
-
-        <div class="hero-product">
-
-            <div class="product-glow"></div>
-
-            <div class="floating-card card-top">
-                <span>★</span>
-                <div>
-                    <strong>4.9</strong>
-                    <small>рейтинг</small>
+                <div class="form-group">
+                    <label>Описание</label>
+                    <textarea id="newDesc" rows="3" required placeholder="Опишите состояние и свойства товара..."></textarea>
                 </div>
-            </div>
-
-            <div class="product-orb">
-                <div class="orb-ring"></div>
-                <div class="product-symbol">A</div>
-            </div>
-
-            <div class="floating-card card-bottom">
-                <small>Покупателей</small>
-                <strong>12 480+</strong>
-            </div>
-
+                <div class="form-group">
+                    <label>Куда переводить деньги после продажи?</label>
+                    <select id="newPayout">
+                        <option value="Кошелек магазина Magick Storee">В кошелек магазина (быстро)</option>
+                        <option value="Банковская карта (Мир / Visa)">На номер банковской карты</option>
+                    </select>
+                </div>
+                <button class="wb-btn" type="submit" style="padding: 0.8rem;">Опубликовать товар</button>
+            </form>
         </div>
+    </div>
 
-    </section>
-
-
-    <!-- CATEGORIES -->
-    <section class="section">
-
-        <div class="section-head">
-            <div>
-                <span class="small-title">КАТЕГОРИИ</span>
-                <h2>Выбирай своё</h2>
-            </div>
-
-            <button class="view-all">Все категории →</button>
+    <!-- МОДАЛКА: Карточка товара (Количество шт, Отзывы, Комменты) -->
+    <div class="modal" id="productModal">
+        <div class="modal-content" id="productModalContent">
+            <!-- Заполняется динамически -->
         </div>
+    </div>
 
-        <div class="categories">
-
-            <div class="category active">
-                <div class="category-icon">✦</div>
-                <strong>Техника</strong>
-                <span>248 товаров</span>
+    <!-- МОДАЛКА: Корзина -->
+    <div class="modal" id="cartModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('cartModal')">&times;</span>
+            <h2>Ваша корзина</h2>
+            <div id="cartItemsContainer" style="margin: 1rem 0; max-height: 250px; overflow-y: auto;"></div>
+            <div style="font-weight: bold; font-size: 1.2rem; display: flex; justify-content: space-between; margin-top: 1rem;">
+                <span>Итого:</span>
+                <span id="cartTotalPrice">0 ₽</span>
             </div>
-
-            <div class="category">
-                <div class="category-icon">⌨</div>
-                <strong>Гаджеты</strong>
-                <span>184 товара</span>
-            </div>
-
-            <div class="category">
-                <div class="category-icon">◈</div>
-                <strong>Аксессуары</strong>
-                <span>392 товара</span>
-            </div>
-
-            <div class="category">
-                <div class="category-icon">◉</div>
-                <strong>Для дома</strong>
-                <span>215 товаров</span>
-            </div>
-
-            <div class="category">
-                <div class="category-icon">◆</div>
-                <strong>Премиум</strong>
-                <span>76 товаров</span>
-            </div>
-
+            <button class="wb-btn" style="margin-top: 1.5rem; padding: 0.8rem;" onclick="checkoutCart()">Оформить заказ</button>
         </div>
+    </div>
 
-    </section>
+    <script>
+        // Данные приложения
+        let currentUser = JSON.parse(localStorage.getItem('magick_user')) || null;
+        let products = JSON.parse(localStorage.getItem('magick_products')) || [];
+        let cart = [];
 
+        function saveToStorage() {
+            localStorage.setItem('magick_products', JSON.stringify(products));
+            localStorage.setItem('magick_user', JSON.stringify(currentUser));
+        }
 
-    <!-- CATALOG -->
-    <section class="section catalog-section" id="catalog">
+        // Управление модальными окнами
+        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-        <div class="section-head">
+        function openAuthOrProfile() {
+            if (!currentUser) {
+                openModal('authModal');
+            } else {
+                updateProfileModal();
+                openModal('profileModal');
+            }
+        }
 
-            <div>
-                <span class="small-title">ТОП ТОВАРЫ</span>
-                <h2>Популярное сейчас</h2>
-            </div>
+        // Авторизация
+        function proceedAuth() {
+            let val = document.getElementById('authInput').value.trim();
+            if (!val) return alert('Введите номер или email');
+            currentUser = { name: "Маг " + val.slice(-4), phone: val, balance: 5400 };
+            saveToStorage();
+            closeModal('authModal');
+            document.getElementById('sellBtnTop').style.display = 'block';
+            alert('Успешный вход!');
+        }
 
-            <div class="filters">
-                <button class="filter active">Все</button>
-                <button class="filter">Новинки</button>
-                <button class="filter">Хиты</button>
-                <button class="filter">Скидки</button>
-            </div>
+        function socialAuth(provider) {
+            currentUser = { name: "Google User", phone: "Auth via " + provider, balance: 10000 };
+            saveToStorage();
+            closeModal('authModal');
+            document.getElementById('sellBtnTop').style.display = 'block';
+            alert('Успешный вход через ' + provider + '!');
+        }
 
-        </div>
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('magick_user');
+            closeModal('profileModal');
+            document.getElementById('sellBtnTop').style.display = 'none';
+            alert('Вы вышли из аккаунта');
+        }
 
+        function updateProfileModal() {
+            if (!currentUser) return;
+            document.getElementById('profileName').innerText = currentUser.name;
+            document.getElementById('profilePhone').innerText = currentUser.phone;
+            document.getElementById('walletBalance').innerText = currentUser.balance + ' ₽';
+            
+            let myItems = products.filter(p => p.seller === currentUser.phone);
+            let listHTML = myItems.length ? myItems.map(i => `<div>• ${i.title} (${i.price} ₽)</div>`).join('') : 'У вас нет активных товаров.';
+            document.getElementById('myProductsList').innerHTML = listHTML;
+        }
 
-        <div class="products">
+        // Создание товара пользователем
+        function openSellModal() {
+            if (!currentUser) {
+                alert('Сначала войдите в личный кабинет!');
+                openAuthOrProfile();
+                return;
+            }
+            openModal('sellModal');
+        }
 
-            <!-- PRODUCT 1 -->
-            <article class="product">
+        function handleCreateProduct(e) {
+            e.preventDefault();
+            let newProd = {
+                id: Date.now(),
+                title: document.getElementById('newTitle').value,
+                price: Number(document.getElementById('newPrice').value),
+                image: document.getElementById('newImage').value,
+                desc: document.getElementById('newDesc').value,
+                payout: document.getElementById('newPayout').value,
+                seller: currentUser.phone,
+                reviews: []
+            };
 
-                <div class="product-image">
-                    <div class="product-badge">ХИТ</div>
+            products.push(newProd);
+            saveToStorage();
+            closeModal('sellModal');
+            renderCatalog();
+            alert('Товар успешно выставлен на маркетплейс!');
+        }
 
-                    <button class="heart">♡</button>
+        // Рендер каталога
+        function renderCatalog() {
+            let query = document.getElementById('searchInput').value.toLowerCase();
+            let container = document.getElementById('catalogContainer');
+            
+            let filtered = products.filter(p => p.title.toLowerCase().includes(query));
 
-                    <div class="fake-product headphones">
-                        <div class="headband"></div>
-                        <div class="ear left"></div>
-                        <div class="ear right"></div>
+            if (filtered.length === 0) {
+                container.innerHTML = `<div class="empty-catalog">📦 На маркетплейсе пока нет товаров. Нажмите «Продать товар» в личном кабинете, чтобы добавить первый товар!</div>`;
+                return;
+            }
+
+            let html = '<div class="products-grid">';
+            filtered.forEach(p => {
+                html += `
+                    <div class="product-card" onclick="openProductDetail(${p.id})">
+                        <div class="product-img-box"><img src="${p.image}" alt="фото" onerror="this.src='https://via.placeholder.com/200?text=Magick+Storee'"></div>
+                        <div class="product-price">${p.price.toLocaleString()} ₽</div>
+                        <div class="product-title">${p.title}</div>
+                        <div class="seller-info">Выплата: ${p.payout.includes('карты') ? 'На карту' : 'В кошелек'}</div>
+                        <button class="wb-btn" onclick="event.stopPropagation(); addToCart(${p.id})">В корзину</button>
                     </div>
+                `;
+            });
+            html += '</div>';
+            container.innerHTML = html;
+        }
 
+        // Карточка товара с выбором количества (шт), отзывами и комментариями
+        function openProductDetail(id) {
+            let p = products.find(item => item.id === id);
+            if (!p) return;
+
+            let reviewsHTML = p.reviews.length ? p.reviews.map(r => `<div style="background:#f8fafc; padding:0.5rem; border-radius:6px; margin-top:0.4rem; font-size:0.85rem;">⭐ ${r.rating}/5 — ${r.text}</div>`).join('') : '<p style="font-size:0.85rem; color:var(--text-secondary);">Отзывов пока нет.</p>';
+
+            let content = `
+                <span class="close-btn" onclick="closeModal('productModal')">&times;</span>
+                <img src="${p.image}" style="width:100%; height:220px; object-fit:cover; border-radius:8px; margin-bottom:1rem;" onerror="this.src='https://via.placeholder.com/300?text=Magick'">
+                <h2>${p.title}</h2>
+                <div style="font-size:1.5rem; font-weight:800; color:var(--ozon-blue); margin: 0.5rem 0;">${p.price.toLocaleString()} ₽</div>
+                <p style="color: #475569; font-size: 0.95rem; margin-bottom: 1rem;">${p.desc}</p>
+                
+                <div class="form-group">
+                    <label>Количество (шт):</label>
+                    <input type="number" id="detailQty" value="1" min="1" max="99" style="width: 100px;">
                 </div>
 
-                <div class="product-info">
+                <button class="wb-btn" style="padding: 0.8rem; margin-bottom: 1.5rem;" onclick="addQuantityToCart(${p.id})">Добавить в корзину</button>
 
-                    <span class="product-category">AUDIO</span>
+                <hr style="border:0; border-top:1px solid var(--border-color); margin-bottom:1rem;">
+                
+                <h4>Отзывы и оценки</h4>
+                <div style="max-height: 120px; overflow-y:auto; margin-bottom:1rem;">${reviewsHTML}</div>
 
-                    <h3>Premium Headphones X1</h3>
+                <div class="form-group">
+                    <label>Оставить отзыв:</label>
+                    <select id="reviewRating" style="margin-bottom:0.4rem;">
+                        <option value="5">⭐⭐⭐⭐⭐ (5/5)</option>
+                        <option value="4">⭐⭐⭐⭐ (4/5)</option>
+                        <option value="3">⭐⭐⭐ (3/5)</option>
+                        <option value="2">⭐⭐ (2/5)</option>
+                        <option value="1">⭐ (1/5)</option>
+                    </select>
+                    <input type="text" id="reviewText" placeholder="Ваш комментарий..." style="margin-bottom:0.4rem;">
+                    <button class="wb-btn" style="background:#0f172a; padding:0.5rem;" onclick="submitReview(${p.id})">Отправить отзыв</button>
+                </div>
+            `;
 
-                    <div class="rating">
-                        ★★★★★
-                        <span>4.9 · 128 отзывов</span>
-                    </div>
+            document.getElementById('productModalContent').innerHTML = content;
+            openModal('productModal');
+        }
 
-                    <div class="price-row">
+        // Работа с корзиной
+        function addToCart(id) {
+            let p = products.find(item => item.id === id);
+            let existing = cart.find(item => item.id === id);
+            if (existing) {
+                existing.qty += 1;
+            } else {
+                cart.push({ ...p, qty: 1 });
+            }
+            alert(`Товар добавлен в корзину!`);
+        }
+
+        function addQuantityToCart(id) {
+            let qty = Number(document.getElementById('detailQty').value) || 1;
+            let p = products.find(item => item.id === id);
+            let existing = cart.find(item => item.id === id);
+            if (existing) {
+                existing.qty += qty;
+            } else {
+                cart.push({ ...p, qty: qty });
+            }
+            closeModal('productModal');
+            alert(`Добавлено в корзину (${qty} шт.)`);
+        }
+
+        function openCartModal() {
+            let container = document.getElementById('cartItemsContainer');
+            let total = 0;
+
+            if (cart.length === 0) {
+                container.innerHTML = '<p style="color:var(--text-secondary);">Ваша корзина пуста.</p>';
+                document.getElementById('cartTotalPrice').innerText = '0 ₽';
+                openModal('cartModal');
+                return;
+            }
+
+            let html = '';
+            cart.forEach((item, index) => {
+                let sum = item.price * item.qty;
+                total += sum;
+                html += `
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.8rem; border-bottom:1px solid var(--border-color); padding-bottom:0.5rem;">
                         <div>
-                            <strong>24 990 ₸</strong>
-                            <del>31 990 ₸</del>
+                            <div style="font-weight:600; font-size:0.9rem;">${item.title}</div>
+                            <div style="font-size:0.8rem; color:var(--text-secondary);">${item.price} ₽ × ${item.qty} шт.</div>
                         </div>
-
-                        <button class="add-btn" onclick="addToCart()">
-                            +
-                        </button>
+                        <div style="font-weight:bold;">${sum.toLocaleString()} ₽</div>
+                        <button onclick="removeFromCart(${index})" style="background:none; border:none; color:#ef4444; cursor:pointer;">✕</button>
                     </div>
-
-                </div>
-
-            </article>
-
-
-            <!-- PRODUCT 2 -->
-            <article class="product">
-
-                <div class="product-image">
-
-                    <div class="product-badge new">NEW</div>
-
-                    <button class="heart">♡</button>
-
-                    <div class="fake-product keyboard">
-                        <div class="keys">
-                            <i></i><i></i><i></i><i></i><i></i>
-                            <i></i><i></i><i></i><i></i><i></i>
-                            <i></i><i></i><i></i><i></i><i></i>
-                            <i></i><i></i><i></i><i></i><i></i>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="product-info">
-
-                    <span class="product-category">GAMING</span>
-
-                    <h3>Mechanical Keyboard K87</h3>
-
-                    <div class="rating">
-                        ★★★★★
-                        <span>4.8 · 94 отзыва</span>
-                    </div>
-
-                    <div class="price-row">
-
-                        <div>
-                            <strong>18 490 ₸</strong>
-                            <del>22 990 ₸</del>
-                        </div>
-
-                        <button class="add-btn" onclick="addToCart()">
-                            +
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </article>
-
-
-            <!-- PRODUCT 3 -->
-            <article class="product">
-
-                <div class="product-image">
-
-                    <button class="heart">♡</button>
-
-                    <div class="fake-product watch">
-                        <div class="watch-screen">10:28</div>
-                        <div class="watch-band"></div>
-                    </div>
-
-                </div>
-
-                <div class="product-info">
-
-                    <span class="product-category">SMART</span>
-
-                    <h3>Smart Watch Ultra</h3>
-
-                    <div class="rating">
-                        ★★★★★
-                        <span>4.9 · 231 отзыв</span>
-                    </div>
-
-                    <div class="price-row">
-
-                        <div>
-                            <strong>32 990 ₸</strong>
-                            <del>39 990 ₸</del>
-                        </div>
-
-                        <button class="add-btn" onclick="addToCart()">
-                            +
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </article>
-
-
-            <!-- PRODUCT 4 -->
-            <article class="product">
-
-                <div class="product-image">
-
-                    <div class="product-badge">−25%</div>
-
-                    <button class="heart">♡</button>
-
-                    <div class="fake-product mouse">
-                        <div class="mouse-wheel"></div>
-                    </div>
-
-                </div>
-
-                <div class="product-info">
-
-                    <span class="product-category">GAMING</span>
-
-                    <h3>Wireless Mouse Pro</h3>
-
-                    <div class="rating">
-                        ★★★★★
-                        <span>4.7 · 76 отзывов</span>
-                    </div>
-
-                    <div class="price-row">
-
-                        <div>
-                            <strong>11 990 ₸</strong>
-                            <del>15 990 ₸</del>
-                        </div>
-
-                        <button class="add-btn" onclick="addToCart()">
-                            +
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </article>
-
-        </div>
-
-    </section>
-
-
-    <!-- PREMIUM BANNER -->
-    <section class="premium-banner">
-
-        <div>
-
-            <span class="small-title">AURELIA PREMIUM</span>
-
-            <h2>
-                Больше возможностей.<br>
-                Больше преимуществ.
-            </h2>
-
-            <p>
-                Эксклюзивные цены, ранний доступ к новинкам
-                и бесплатная доставка.
-            </p>
-
-            <button class="gold-btn">
-                Узнать больше →
-            </button>
-
-        </div>
-
-        <div class="premium-symbol">
-            A
-        </div>
-
-    </section>
-
-</main>
-
-
-<!-- CART -->
-<div class="side-overlay" id="cartOverlay" onclick="closeCart()"></div>
-
-<aside class="cart-panel" id="cartPanel">
-
-    <div class="panel-head">
-
-        <div>
-            <span class="small-title">ВАША ПОКУПКА</span>
-            <h2>Корзина</h2>
-        </div>
-
-        <button class="close" onclick="closeCart()">×</button>
-
-    </div>
-
-    <div class="cart-items">
-
-        <div class="cart-item">
-
-            <div class="cart-product-icon">A</div>
-
-            <div class="cart-item-info">
-                <strong>Premium Headphones X1</strong>
-                <span>Чёрный · 1 шт.</span>
-
-                <div class="quantity">
-                    <button>−</button>
-                    <b>1</b>
-                    <button>+</button>
-                </div>
-            </div>
-
-            <strong>24 990 ₸</strong>
-
-        </div>
-
-
-        <div class="cart-item">
-
-            <div class="cart-product-icon">K</div>
-
-            <div class="cart-item-info">
-                <strong>Mechanical Keyboard K87</strong>
-                <span>Black · 1 шт.</span>
-
-                <div class="quantity">
-                    <button>−</button>
-                    <b>1</b>
-                    <button>+</button>
-                </div>
-            </div>
-
-            <strong>18 490 ₸</strong>
-
-        </div>
-
-    </div>
-
-
-    <div class="cart-bottom">
-
-        <div class="promo">
-            <input placeholder="Промокод">
-            <button>Применить</button>
-        </div>
-
-        <div class="total">
-            <span>Итого</span>
-            <strong>43 480 ₸</strong>
-        </div>
-
-        <button class="checkout">
-            Перейти к оформлению
-            <span>→</span>
-        </button>
-
-        <small>Безопасная оплата · Гарантия возврата</small>
-
-    </div>
-
-</aside>
-
-
-<!-- PROFILE -->
-<div class="profile-overlay" id="profileOverlay">
-
-    <div class="profile-modal">
-
-        <button class="close" onclick="closeProfile()">×</button>
-
-        <div class="profile-header">
-
-            <div class="big-avatar">JD</div>
-
-            <div>
-                <span class="small-title">ЛИЧНЫЙ КАБИНЕТ</span>
-                <h2>Добро пожаловать 👋</h2>
-                <p>Управляйте заказами и настройками аккаунта</p>
-            </div>
-
-        </div>
-
-
-        <div class="profile-grid">
-
-            <button class="profile-card active">
-                <span>⌂</span>
-                <div>
-                    <strong>Обзор</strong>
-                    <small>Главная страница</small>
-                </div>
-            </button>
-
-            <button class="profile-card">
-                <span>▣</span>
-                <div>
-                    <strong>Мои заказы</strong>
-                    <small>3 активных</small>
-                </div>
-            </button>
-
-            <button class="profile-card">
-                <span>♡</span>
-                <div>
-                    <strong>Избранное</strong>
-                    <small>12 товаров</small>
-                </div>
-            </button>
-
-            <button class="profile-card">
-                <span>◉</span>
-                <div>
-                    <strong>Мои данные</strong>
-                    <small>Профиль и адреса</small>
-                </div>
-            </button>
-
-            <button class="profile-card">
-                <span>◈</span>
-                <div>
-                    <strong>Бонусы</strong>
-                    <small>1 250 бонусов</small>
-                </div>
-            </button>
-
-            <button class="profile-card">
-                <span>⚙</span>
-                <div>
-                    <strong>Настройки</strong>
-                    <small>Аккаунт и безопасность</small>
-                </div>
-            </button>
-
-        </div>
-
-
-        <div class="account-status">
-
-            <div class="status-icon">✦</div>
-
-            <div>
-                <strong>AURELIA PREMIUM</strong>
-                <span>Ваш статус активен до 12.09.2027</span>
-            </div>
-
-            <button>Управлять</button>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<!-- FOOTER -->
-<footer>
-
-    <div class="footer-logo">
-        <div class="logo-mark">A</div>
-        <strong>AURELIA</strong>
-    </div>
-
-    <div class="footer-links">
-        <a>О магазине</a>
-        <a>Доставка</a>
-        <a>Оплата</a>
-        <a>Гарантия</a>
-        <a>Контакты</a>
-    </div>
-
-    <div class="copyright">
-        © 2026 AURELIA
-    </div>
-
-</footer>
-
-
-<script>
-
-function openCart() {
-    document.getElementById("cartPanel").classList.add("open");
-    document.getElementById("cartOverlay").classList.add("open");
-}
-
-function closeCart() {
-    document.getElementById("cartPanel").classList.remove("open");
-    document.getElementById("cartOverlay").classList.remove("open");
-}
-
-function openProfile() {
-    document.getElementById("profileOverlay").classList.add("open");
-}
-
-function closeProfile() {
-    document.getElementById("profileOverlay").classList.remove("open");
-}
-
-function openSearch() {
-    document.getElementById("searchOverlay").classList.add("open");
-
-    setTimeout(() => {
-        document.getElementById("searchInput").focus();
-    }, 200);
-}
-
-function closeSearch() {
-    document.getElementById("searchOverlay").classList.remove("open");
-}
-
-function addToCart() {
-
-    const counter = document.querySelector(".cart-counter");
-
-    let value = parseInt(counter.textContent);
-
-    counter.textContent = value + 1;
-
-    counter.classList.add("pulse");
-
-    setTimeout(() => {
-        counter.classList.remove("pulse");
-    }, 400);
-
-}
-
-function toggleFavorite() {
-    alert("Избранное открыто");
-}
-
-function scrollCatalog() {
-    document.getElementById("catalog").scrollIntoView({
-        behavior: "smooth"
-    });
-}
-
-document.addEventListener("keydown", function(e) {
-
-    if(e.key === "Escape") {
-        closeCart();
-        closeProfile();
-        closeSearch();
-    }
-
-});
-
-</script>
-
+                `;
+            });
+
+            container.innerHTML = html;
+            document.getElementById('cartTotalPrice').innerText = total.toLocaleString() + ' ₽';
+            openModal('cartModal');
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            openCartModal();
+        }
+
+        function checkoutCart() {
+            if (cart.length === 0) return alert('Корзина пуста');
+            alert('Заказ успешно оформлен! Оплата прошла.');
+            cart = [];
+            closeModal('cartModal');
+        }
+
+        function submitReview(productId) {
+            let p = products.find(item => item.id === productId);
+            let rating = document.getElementById('reviewRating').value;
+            let text = document.getElementById('reviewText').value;
+            if (!text) return alert('Введите текст отзыва');
+
+            p.reviews.push({ rating, text });
+            saveToStorage();
+            openProductDetail(productId);
+            alert('Спасибо за ваш отзыв!');
+        }
+
+        // Инициализация при старте
+        if (currentUser) {
+            document.getElementById('sellBtnTop').style.display = 'block';
+        }
+        renderCatalog();
+    </script>
 </body>
 </html>
