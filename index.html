@@ -1,554 +1,172 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Астрал Маркет — Авторизация Google</title>
-    <style>
-        :root {
-            --primary: #1a73e8;
-            --primary-hover: #1557b0;
-            --bg-body: #f4f5f9;
-            --surface: #ffffff;
-            --text-main: #202124;
-            --text-muted: #5f6368;
-            --border: #dadce0;
-            --danger: #d93025;
-            --radius: 8px;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            padding-bottom: 70px;
-        }
-
-        /* Шапка */
-        header {
-            background: var(--surface);
-            border-bottom: 1px solid var(--border);
-            padding: 1rem 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header-title {
-            font-size: 1.15rem;
-            font-weight: 700;
-        }
-
-        .user-mini-badge {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            cursor: pointer;
-            background: #f1f3f4;
-            padding: 6px 12px;
-            border-radius: 20px;
-        }
-
-        main {
-            max-width: 600px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 1rem;
-            flex: 1;
-        }
-
-        .profile-card {
-            background: var(--surface);
-            border-radius: var(--radius);
-            padding: 1.2rem;
-            border: 1px solid var(--border);
-            margin-bottom: 1rem;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-        }
-
-        .profile-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 1rem;
-        }
-
-        .avatar-stub {
-            width: 50px;
-            height: 50px;
-            background: var(--primary);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
-            font-size: 1.2rem;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-        }
-
-        .stat-box {
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 8px 4px;
-            text-align: center;
-            border: 1px solid var(--border);
-        }
-
-        .stat-value {
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: var(--text-main);
-            margin-bottom: 2px;
-        }
-
-        .stat-label {
-            font-size: 0.65rem;
-            color: var(--text-muted);
-            line-height: 1.1;
-        }
-
-        .menu-list {
-            background: var(--surface);
-            border-radius: var(--radius);
-            border: 1px solid var(--border);
-            overflow: hidden;
-            margin-bottom: 1rem;
-        }
-
-        .menu-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 1rem 1.2rem;
-            cursor: pointer;
-            background: var(--surface);
-            width: 100%;
-            text-align: left;
-            font-size: 0.95rem;
-            font-weight: 500;
-            color: var(--text-main);
-            border: none;
-            border-bottom: 1px solid var(--border);
-            transition: background 0.15s;
-        }
-        .menu-item:last-child { border-bottom: none; }
-        .menu-item:hover { background: #f8f9fa; }
-
-        .menu-item-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .menu-arrow { color: var(--text-muted); font-size: 0.9rem; }
-
-        /* Нижний таббар */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0; left: 0; width: 100%;
-            background: var(--surface);
-            border-top: 1px solid var(--border);
-            display: flex;
-            justify-content: space-around;
-            padding: 8px 0;
-            z-index: 100;
-        }
-
-        .nav-tab {
-            background: none;
-            border: none;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            cursor: pointer;
-            color: var(--text-muted);
-            font-size: 0.7rem;
-            font-weight: 500;
-            flex: 1;
-        }
-        .nav-tab.active { color: var(--primary); font-weight: 700; }
-        .nav-tab span.icon { font-size: 1.25rem; }
-
-        .view-section { display: none; }
-        .view-section.active { display: block; }
-
-        /* Модальные окна */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(2px);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-        .modal-content {
-            background: var(--surface);
-            border-radius: 12px;
-            width: 420px;
-            max-width: 92%;
-            padding: 2.5rem 2rem 2rem 2rem;
-            position: relative;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.15);
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        .close-modal {
-            position: absolute;
-            top: 15px; right: 15px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            background: #f1f3f4;
-            width: 32px; height: 32px;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            color: var(--text-muted);
-            transition: 0.2s;
-            z-index: 10;
-        }
-        .close-modal:hover { background: #dadce0; color: var(--text-main); }
-
-        /* Стили Google формы */
-        .google-logo {
-            font-size: 1.6rem;
-            font-weight: 500;
-            letter-spacing: -0.5px;
-            margin-bottom: 0.5px;
-        }
-        .google-logo span:nth-child(1) { color: #4285F4; }
-        .google-logo span:nth-child(2) { color: #EA4335; }
-        .google-logo span:nth-child(3) { color: #FBBC05; }
-        .google-logo span:nth-child(4) { color: #4285F4; }
-        .google-logo span:nth-child(5) { color: #34A853; }
-        .google-logo span:nth-child(6) { color: #EA4335; }
-
-        .form-group { margin-bottom: 1.2rem; }
-        .form-group input {
-            width: 100%; padding: 0.9rem; border: 1px solid var(--border); border-radius: var(--radius); font-size: 1rem; outline: none; transition: 0.2s;
-        }
-        .form-group input:focus { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(26,115,232,0.2); }
-
-        .btn-main {
-            background: var(--primary); color: white; border: none; width: 100%; padding: 0.85rem; border-radius: var(--radius); font-weight: 600; cursor: pointer; font-size: 0.95rem; transition: 0.2s;
-        }
-        .btn-main:hover { background: var(--primary-hover); }
-
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 1rem;
-        }
-        .item-card {
-            background: var(--surface);
-            border-radius: var(--radius);
-            border: 1px solid var(--border);
-            padding: 0.8rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-        .item-card img { width: 100%; height: 120px; object-fit: cover; border-radius: 6px; background: #eee; margin-bottom: 0.5rem; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VeoAI — AI Video Studio</title>
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-    <!-- Шапка -->
-    <header>
-        <div class="header-title" id="headerTitle">Профиль продавца</div>
-        <div class="user-mini-badge" onclick="openModal('settingsModal')">
-            <span id="headerUserEmail">Аккаунт не выбран</span>
-            <span>⚙️</span>
-        </div>
-    </header>
+<header class="navbar">
+  <div class="logo">Veo<span>AI</span></div>
 
-    <!-- Содержимое вкладок -->
-    <main>
-        
-        <!-- Вкладка: Профиль -->
-        <div id="view-profile" class="view-section active">
-            <div class="profile-card">
-                <div class="profile-info">
-                    <div class="avatar-stub" id="userAvatarLetter">А</div>
-                    <div>
-                        <div style="font-weight: 700; font-size: 1.05rem;" id="userNameDisplay">ИП Астрал Маркет</div>
-                        <div style="font-size: 0.8rem; color: var(--text-muted);" id="userEmailDisplay">Не авторизован через Google</div>
-                    </div>
-                </div>
+  <nav>
+    <a href="#create">Создать</a>
+    <a href="#features">Возможности</a>
+    <a href="#pricing">Тарифы</a>
+  </nav>
 
-                <div class="stats-grid">
-                    <div class="stat-box"><div class="stat-value">4.9</div><div class="stat-label">Рейтинг</div></div>
-                    <div class="stat-box"><div class="stat-value">1 420</div><div class="stat-label">Отзывов</div></div>
-                    <div class="stat-box"><div class="stat-value">12 480</div><div class="stat-label">Продано</div></div>
-                    <div class="stat-box"><div class="stat-value">2 года</div><div class="stat-label">На Астрал</div></div>
-                </div>
-            </div>
+  <button class="login">Войти</button>
+</header>
 
-            <div class="menu-list">
-                <button class="menu-item" onclick="switchTab('catalog')">
-                    <div class="menu-item-left"><span>📦</span> Мои товары</div>
-                    <span class="menu-arrow">›</span>
-                </button>
-                <button class="menu-item" onclick="openModal('financeModal')">
-                    <div class="menu-item-left"><span>💰</span> Финансовые отчеты и Баланс</div>
-                    <span class="menu-arrow">›</span>
-                </button>
-                <button class="menu-item" onclick="openModal('supportModal')">
-                    <div class="menu-item-left"><span>❓</span> Помощь и поддержка</div>
-                    <span class="menu-arrow">›</span>
-                </button>
-            </div>
-        </div>
+<section class="hero">
+  <div class="badge">✦ AI VIDEO GENERATOR</div>
 
-        <!-- Вкладка: Товары -->
-        <div id="view-catalog" class="view-section">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                <h2 style="font-size: 1.2rem; font-weight: 700;">Мои товары</h2>
-                <button class="btn-main" style="width: auto; padding: 0.5rem 1rem;" onclick="openModal('addProdModal')">+ Добавить</button>
-            </div>
-            <div id="sellerProductsGrid" class="product-grid"></div>
-        </div>
+  <h1>
+    Твоя идея.<br>
+    <span>Готовое видео.</span>
+  </h1>
 
-        <!-- Вкладка: Витрина -->
-        <div id="view-marketplace" class="view-section">
-            <h2 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem;">Витрина Астрал Маркет</h2>
-            <div id="marketProductsGrid" class="product-grid"></div>
-        </div>
+  <p>
+    Опиши сцену — искусственный интеллект превратит её
+    в видео.
+  </p>
 
-    </main>
+  <a href="#create" class="main-button">
+    Создать видео
+  </a>
+</section>
 
-    <!-- Нижний таббар -->
-    <nav class="bottom-nav">
-        <button class="nav-tab active" onclick="switchTab('profile', this)">
-            <span class="icon">👤</span> Профиль
-        </button>
-        <button class="nav-tab" onclick="switchTab('catalog', this)">
-            <span class="icon">📦</span> Товары
-        </button>
-        <button class="nav-tab" onclick="switchTab('marketplace', this)">
-            <span class="icon">🛒</span> Витрина
-        </button>
-        <button class="nav-tab" onclick="openModal('settingsModal')">
-            <span class="icon">⚙️</span> Аккаунт
-        </button>
-    </nav>
+<section id="create" class="creator">
 
-    <!-- МОДАЛЬНОЕ ОКНО: АВТОРИЗАЦИЯ GOOGLE -->
-    <div class="modal" id="googleLoginModal" style="display: flex;">
-        <div class="modal-content" style="text-align: center;">
-            <div class="google-logo" style="margin-bottom: 10px;">
-                <span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span>
-            </div>
-            <h3 style="font-size: 1.3rem; font-weight: 500; margin-bottom: 5px;">Вход в аккаунт</h3>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem;">Используйте свой аккаунт Google для входа в Астрал Маркет</p>
-            
-            <form onsubmit="handleGoogleLogin(event)">
-                <div class="form-group">
-                    <input type="email" id="googleEmailInput" required placeholder="Эл. почта или телефон">
-                </div>
-                <div class="form-group">
-                    <input type="password" id="googlePassInput" required placeholder="Введите пароль">
-                </div>
-                <button class="btn-main" type="submit" style="margin-bottom: 1rem;">Далее</button>
-            </form>
-            <div style="font-size: 0.75rem; color: var(--text-muted);">Создается защищенное локальное соединение</div>
-        </div>
+  <div class="creator-top">
+    <div>
+      <h2>Создание видео</h2>
+      <p>Опиши, что хочешь увидеть</p>
     </div>
 
-    <!-- МОДАЛЬНОЕ ОКНО: НАСТРОЙКИ / ВЫХОД -->
-    <div class="modal" id="settingsModal">
-        <div class="modal-content">
-            <div class="close-modal" onclick="closeModal('settingsModal')">✕</div>
-            <h3 style="margin-bottom: 1rem;">Управление аккаунтом</h3>
-            <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin-bottom: 1.2rem; border: 1px solid var(--border);">
-                <div style="font-size: 0.75rem; color: var(--text-muted);">Текущая сессия Google:</div>
-                <div style="font-weight: 600; font-size: 0.95rem; margin-top: 2px;" id="activeGoogleAccountText">user@gmail.com</div>
-            </div>
-            <button style="background: none; border: 1px solid var(--danger); color: var(--danger); font-weight: 600; cursor: pointer; width: 100%; padding: 0.75rem; border-radius: var(--radius); transition: 0.2s;" onclick="logoutAccount()">Сменить аккаунт / Выйти</button>
-        </div>
+    <div class="credits">
+      ⚡ <span id="credits">10</span> кредитов
+    </div>
+  </div>
+
+  <textarea
+    id="prompt"
+    placeholder="Например: футуристический город ночью, неоновые здания, дождь, камера медленно летит между небоскрёбами..."
+  ></textarea>
+
+  <div class="options">
+
+    <div>
+      <label>Формат</label>
+      <select id="ratio">
+        <option value="16:9">16:9 — YouTube</option>
+        <option value="9:16">9:16 — TikTok / Reels</option>
+        <option value="1:1">1:1 — Square</option>
+      </select>
     </div>
 
-    <!-- МОДАЛЬНОЕ ОКНО: ФИНАНСЫ -->
-    <div class="modal" id="financeModal">
-        <div class="modal-content">
-            <div class="close-modal" onclick="closeModal('financeModal')">✕</div>
-            <h2>Финансовый баланс</h2>
-            <div style="background: #1f2022; color: white; padding: 1.5rem; border-radius: 12px; margin: 1rem 0;">
-                <div style="font-size: 0.8rem; opacity: 0.8;">Доступно к выводу</div>
-                <div style="font-size: 2rem; font-weight: 900; margin: 0.3rem 0 1rem 0;" id="sellerBalanceView">348 900 ₽</div>
-                <button class="btn-main" style="background: #00a046;" onclick="withdrawMoney()">Вывести средства</button>
-            </div>
-        </div>
+    <div>
+      <label>Качество</label>
+      <select id="quality">
+        <option>Standard</option>
+        <option>High</option>
+      </select>
     </div>
 
-    <!-- МОДАЛЬНОЕ ОКНО: ДОБАВИТЬ ТОВАР -->
-    <div class="modal" id="addProdModal">
-        <div class="modal-content">
-            <div class="close-modal" onclick="closeModal('addProdModal')">✕</div>
-            <h3 style="margin-bottom: 1rem;">Новый товар</h3>
-            <form onsubmit="handleCreateProduct(event)">
-                <div class="form-group"><input type="text" id="newTitle" required placeholder="Название товара"></div>
-                <div class="form-group"><input type="number" id="newPrice" required placeholder="Цена в рублях"></div>
-                <div class="form-group"><input type="url" id="newImg" required placeholder="Ссылка на фото (URL)"></div>
-                <button class="btn-main" type="submit">Опубликовать</button>
-            </form>
-        </div>
+    <div>
+      <label>Длительность</label>
+      <select id="duration">
+        <option value="5">5 секунд</option>
+        <option value="10">10 секунд</option>
+        <option value="15">15 секунд</option>
+      </select>
     </div>
 
-    <div class="modal" id="supportModal"><div class="modal-content"><div class="close-modal" onclick="closeModal('supportModal')">✕</div><h2>Поддержка</h2><p style="margin-top:1rem; color:var(--text-muted);">Служба заботы о продавцах доступна круглосуточно.</p></div></div>
+  </div>
 
-    <script>
-        let sellerData = JSON.parse(localStorage.getItem('astral_seller')) || {
-            email: "",
-            balance: 348900,
-            products: [
-                { id: 1, title: "Игровой ПК Astral Core i7", price: 79990, image: "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=300" },
-                { id: 2, title: "Механическая клавиатура RGB", price: 6490, image: "https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?w=300" }
-            ]
-        };
+  <button id="generate" class="generate">
+    ✦ Сгенерировать
+  </button>
 
-        // Проверяем авторизацию при старте
-        window.onload = function() {
-            if (!sellerData.email) {
-                document.getElementById('googleLoginModal').style.display = 'flex';
-            } else {
-                updateAccountUI();
-            }
-            renderSellerProducts();
-        }
+  <div id="status"></div>
 
-        function handleGoogleLogin(e) {
-            e.preventDefault();
-            let email = document.getElementById('googleEmailInput').value.trim();
-            if (!email.includes('@')) email += '@gmail.com';
-            
-            sellerData.email = email;
-            localStorage.setItem('astral_seller', JSON.stringify(sellerData));
-            
-            document.getElementById('googleLoginModal').style.display = 'none';
-            updateAccountUI();
-        }
+  <div id="result" class="result hidden">
+    <div class="result-title">Видео готово</div>
 
-        function updateAccountUI() {
-            if (!sellerData.email) return;
-            document.getElementById('headerUserEmail').innerText = sellerData.email.split('@')[0];
-            document.getElementById('userEmailDisplay').innerText = sellerData.email;
-            document.getElementById('userNameDisplay').innerText = "ИП " + sellerData.email.split('@')[0];
-            document.getElementById('userAvatarLetter').innerText = sellerData.email.charAt(0).toUpperCase();
-            document.getElementById('activeGoogleAccountText').innerText = sellerData.email;
-        }
+    <video id="video" controls></video>
 
-        function saveSeller() {
-            localStorage.setItem('astral_seller', JSON.stringify(sellerData));
-        }
+    <a id="download" class="download">
+      Скачать видео
+    </a>
+  </div>
 
-        function switchTab(tabId, el) {
-            document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
-            let targetView = document.getElementById('view-' + tabId);
-            if (targetView) targetView.classList.add('active');
+</section>
 
-            if(el) {
-                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-                el.classList.add('active');
-            }
+<section id="features" class="section">
 
-            let titles = { 'profile': 'Профиль продавца', 'catalog': 'Мои товары', 'marketplace': 'Витрина Маркетплейс' };
-            document.getElementById('headerTitle').innerText = titles[tabId] || 'Кабинет';
-            
-            if(tabId === 'catalog') renderSellerProducts();
-            if(tabId === 'marketplace') renderMarketplaceProducts();
-        }
+  <h2>Один сервис — всё для видео</h2>
 
-        function openModal(id) {
-            let m = document.getElementById(id);
-            if(m) m.style.display = 'flex';
-        }
+  <div class="cards">
 
-        function closeModal(id) {
-            let m = document.getElementById(id);
-            if(m) m.style.display = 'none';
-        }
+    <div class="card">
+      <div class="icon">🎬</div>
+      <h3>Text → Video</h3>
+      <p>
+        Напиши описание сцены и получи видео.
+      </p>
+    </div>
 
-        window.onclick = function(event) {
-            if (event.target.classList.contains('modal') && event.target.id !== 'googleLoginModal') {
-                event.target.style.display = "none";
-            }
-        }
+    <div class="card">
+      <div class="icon">🖼️</div>
+      <h3>Image → Video</h3>
+      <p>
+        Загрузи изображение и оживи его.
+      </p>
+    </div>
 
-        function renderSellerProducts() {
-            let container = document.getElementById('sellerProductsGrid');
-            if (!container) return;
-            container.innerHTML = sellerData.products.map(p => `
-                <div class="item-card">
-                    <img src="${p.image}" onerror="this.src='https://via.placeholder.com/150'">
-                    <div style="font-weight:600; font-size:0.9rem; margin-bottom:0.3rem;">${p.title}</div>
-                    <div style="font-weight:700; color:var(--primary);">${p.price.toLocaleString()} ₽</div>
-                </div>
-            `).join('');
-        }
+    <div class="card">
+      <div class="icon">🎙️</div>
+      <h3>AI Voice</h3>
+      <p>
+        Добавляй AI-озвучку к своим роликам.
+      </p>
+    </div>
 
-        function renderMarketplaceProducts() {
-            let container = document.getElementById('marketProductsGrid');
-            if (!container) return;
-            container.innerHTML = sellerData.products.p.map ? '' : sellerData.products.map(p => `
-                <div class="item-card">
-                    <img src="${p.image}" onerror="this.src='https://via.placeholder.com/150'">
-                    <div style="font-weight:600; font-size:0.9rem; margin-bottom:0.3rem;">${p.title}</div>
-                    <div style="font-weight:700; margin-bottom:0.5rem;">${p.price.toLocaleString()} ₽</div>
-                    <button class="btn-main" style="padding: 0.4rem; font-size:0.8rem;" onclick="alert('Добавлено в корзину!')">В корзину</button>
-                </div>
-            `).join('');
-        }
+    <div class="card">
+      <div class="icon">✨</div>
+      <h3>AI Effects</h3>
+      <p>
+        Создавай красивые визуальные эффекты.
+      </p>
+    </div>
 
-        function handleCreateProduct(e) {
-            e.preventDefault();
-            let newProd = {
-                id: Date.now(),
-                title: document.getElementById('newTitle').value,
-                price: Number(document.getElementById('newPrice').value),
-                image: document.getElementById('newImg').value
-            };
-            sellerData.products.push(newProd);
-            saveSeller();
-            closeModal('addProdModal');
-            renderSellerProducts();
-            alert('Товар опубликован!');
-        }
+  </div>
 
-        function withdrawMoney() {
-            let sum = Number(prompt('Сумма для вывода (₽):', '50000'));
-            if (!sum || sum > sellerData.balance) return alert('Ошибка суммы!');
-            sellerData.balance -= sum;
-            saveSeller();
-            document.getElementById('sellerBalanceView').innerText = sellerData.balance.toLocaleString() + ' ₽';
-            alert(`Успешно выведено ${sum.toLocaleString()} ₽`);
-        }
+</section>
 
-        function logoutAccount() {
-            localStorage.removeItem('astral_seller');
-            location.reload();
-        }
-    </script>
+<section id="pricing" class="section pricing">
+
+  <h2>Простые тарифы</h2>
+
+  <div class="price-card">
+    <h3>Free</h3>
+    <div class="price">0 ₸</div>
+    <p>10 кредитов</p>
+    <p>Базовое качество</p>
+    <button>Начать бесплатно</button>
+  </div>
+
+</section>
+
+<footer>
+  <div class="logo">Veo<span>AI</span></div>
+  <p>AI Video Studio © 2026</p>
+</footer>
+
+<script src="script.js"></script>
+
 </body>
 </html>
