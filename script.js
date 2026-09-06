@@ -1,3 +1,6 @@
+"use strict";
+
+
 /* =========================
    ELEMENTS
 ========================= */
@@ -8,7 +11,7 @@ const generateButton =
 const promptInput =
     document.getElementById("prompt");
 
-const status =
+const statusElement =
     document.getElementById("status");
 
 const creditsElement =
@@ -32,37 +35,32 @@ const loginButton =
 const loginModal =
     document.getElementById("loginModal");
 
+const closeLoginButton =
+    document.getElementById("closeLogin");
+
+const googleButton =
+    document.getElementById("googleButton");
+
+const emailLoginButton =
+    document.getElementById("emailLoginButton");
+
+const registerButton =
+    document.getElementById("registerButton");
+
+const logoutButton =
+    document.getElementById("logoutButton");
+
+const emailInput =
+    document.getElementById("email");
+
+const passwordInput =
+    document.getElementById("password");
+
 const accountSection =
     document.getElementById("account");
 
 const historyContainer =
     document.getElementById("history");
-
-
-/* =========================
-   USER DATA
-========================= */
-
-let user =
-    JSON.parse(
-        localStorage.getItem("veoUser")
-    ) || null;
-
-
-let credits =
-    Number(
-        localStorage.getItem("veoCredits")
-    );
-
-if (Number.isNaN(credits)) {
-    credits = 1;
-}
-
-
-let history =
-    JSON.parse(
-        localStorage.getItem("veoHistory")
-    ) || [];
 
 
 /* =========================
@@ -98,8 +96,127 @@ const plans = {
 };
 
 
+const qualityRank = {
+
+    basic: 1,
+
+    hd: 2,
+
+    fullhd: 3,
+
+    "4k": 4
+
+};
+
+
 /* =========================
-   CREDITS
+   STORAGE
+========================= */
+
+function loadUser() {
+
+    try {
+
+        return JSON.parse(
+            localStorage.getItem(
+                "veoUser"
+            )
+        ) || null;
+
+    } catch {
+
+        return null;
+
+    }
+
+}
+
+
+function loadHistory() {
+
+    try {
+
+        return JSON.parse(
+            localStorage.getItem(
+                "veoHistory"
+            )
+        ) || [];
+
+    } catch {
+
+        return [];
+
+    }
+
+}
+
+
+let user = loadUser();
+
+let credits =
+    Number(
+        localStorage.getItem(
+            "veoCredits"
+        )
+    );
+
+if (
+    !Number.isFinite(credits) ||
+    credits < 0
+) {
+    credits = 1;
+}
+
+
+let history =
+    loadHistory();
+
+
+/* =========================
+   SAVE
+========================= */
+
+function saveUser() {
+
+    if (!user) {
+
+        localStorage.removeItem(
+            "veoUser"
+        );
+
+        return;
+    }
+
+    localStorage.setItem(
+        "veoUser",
+        JSON.stringify(user)
+    );
+
+}
+
+
+function saveCredits() {
+
+    localStorage.setItem(
+        "veoCredits",
+        String(credits)
+    );
+
+}
+
+
+function saveHistory() {
+
+    localStorage.setItem(
+        "veoHistory",
+        JSON.stringify(history)
+    );
+
+}
+
+
+/* =========================
+   UI
 ========================= */
 
 function updateCredits() {
@@ -117,21 +234,17 @@ function updateCredits() {
         );
 
     if (accountCredits) {
+
         accountCredits.textContent =
             credits;
+
     }
 
 
-    localStorage.setItem(
-        "veoCredits",
-        credits
-    );
+    saveCredits();
+
 }
 
-
-/* =========================
-   ACCOUNT
-========================= */
 
 function updateAccount() {
 
@@ -145,6 +258,7 @@ function updateAccount() {
             "Войти";
 
         return;
+
     }
 
 
@@ -172,42 +286,32 @@ function updateAccount() {
 
 
     loginButton.textContent =
-        user.name;
+        "Мой аккаунт";
 
 
     updateCredits();
+
 }
 
 
 /* =========================
-   LOGIN BUTTON
+   MODAL
 ========================= */
 
-loginButton.addEventListener(
-    "click",
-    () => {
+function openLogin() {
 
-        if (user) {
+    loginModal.classList.remove(
+        "hidden"
+    );
 
-            accountSection.scrollIntoView({
-                behavior: "smooth"
-            });
+    setTimeout(() => {
 
-        } else {
+        emailInput.focus();
 
-            loginModal.classList.remove(
-                "hidden"
-            );
+    }, 50);
 
-        }
+}
 
-    }
-);
-
-
-/* =========================
-   CLOSE LOGIN
-========================= */
 
 function closeLogin() {
 
@@ -218,231 +322,521 @@ function closeLogin() {
 }
 
 
+loginButton.addEventListener(
+    "click",
+    () => {
+
+        if (!user) {
+
+            openLogin();
+
+            return;
+
+        }
+
+
+        accountSection.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+
+    }
+);
+
+
+closeLoginButton.addEventListener(
+    "click",
+    closeLogin
+);
+
+
+loginModal.addEventListener(
+    "click",
+    event => {
+
+        if (
+            event.target ===
+            loginModal
+        ) {
+
+            closeLogin();
+
+        }
+
+    }
+);
+
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key === "Escape" &&
+            !loginModal.classList.contains(
+                "hidden"
+            )
+        ) {
+
+            closeLogin();
+
+        }
+
+    }
+);
+
+
 /* =========================
-   GOOGLE LOGIN
+   GOOGLE DEMO
 ========================= */
 
-function loginGoogle() {
+googleButton.addEventListener(
+    "click",
+    () => {
 
-    /*
-        ДЕМО-ВХОД.
+        user = {
 
-        Настоящий Google OAuth
-        подключается через backend.
-    */
+            name: "Google User",
 
-    user = {
-        name: "Demo User",
-        email: "demo@example.com",
-        plan: "Free"
-    };
+            email:
+                "google@example.com",
 
+            plan: "Free"
 
-    localStorage.setItem(
-        "veoUser",
-        JSON.stringify(user)
-    );
+        };
 
 
-    closeLogin();
-
-    updateAccount();
+        credits = 1;
 
 
-    alert(
-        "Демо-вход выполнен."
-    );
-}
+        saveUser();
+
+        saveCredits();
+
+        updateAccount();
+
+        closeLogin();
+
+
+        showStatus(
+            "✓ Вы вошли через Google."
+        );
+
+    }
+);
 
 
 /* =========================
    EMAIL LOGIN
 ========================= */
 
-function loginEmail() {
+function loginWithEmail() {
 
     const email =
-        document.getElementById(
-            "email"
-        ).value.trim();
-
+        emailInput.value.trim();
 
     const password =
-        document.getElementById(
-            "password"
-        ).value.trim();
+        passwordInput.value.trim();
 
 
-    if (!email || !password) {
+    if (!email) {
 
-        alert(
-            "Введите email и пароль."
+        showStatus(
+            "⚠️ Введите email.",
+            true
         );
 
+        emailInput.focus();
+
         return;
+
     }
 
 
-    if (!email.includes("@")) {
+    if (
+        !email.includes("@") ||
+        !email.includes(".")
+    ) {
 
-        alert(
-            "Введите корректный email."
+        showStatus(
+            "⚠️ Введите корректный email.",
+            true
         );
 
+        emailInput.focus();
+
         return;
+
     }
 
 
-    user = {
+    if (password.length < 4) {
 
-        name:
-            email.split("@")[0],
+        showStatus(
+            "⚠️ Пароль должен содержать минимум 4 символа.",
+            true
+        );
 
-        email:
-            email,
+        passwordInput.focus();
 
-        plan:
-            "Free"
+        return;
 
-    };
-
-
-    localStorage.setItem(
-        "veoUser",
-        JSON.stringify(user)
-    );
+    }
 
 
-    closeLogin();
+    const existingUser =
+        loadUser();
+
+
+    if (
+        existingUser &&
+        existingUser.email === email
+    ) {
+
+        user = existingUser;
+
+    } else {
+
+        user = {
+
+            name:
+                email
+                    .split("@")[0],
+
+            email: email,
+
+            plan: "Free"
+
+        };
+
+
+        credits = 1;
+
+        saveCredits();
+
+    }
+
+
+    saveUser();
 
     updateAccount();
 
+    closeLogin();
+
+
+    showStatus(
+        "✓ Вход выполнен."
+    );
+
 }
+
+
+emailLoginButton.addEventListener(
+    "click",
+    loginWithEmail
+);
+
+
+passwordInput.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key === "Enter"
+        ) {
+
+            loginWithEmail();
+
+        }
+
+    }
+);
 
 
 /* =========================
    REGISTER
 ========================= */
 
-function registerEmail() {
+registerButton.addEventListener(
+    "click",
+    () => {
 
-    const email =
-        document.getElementById(
-            "email"
-        ).value.trim();
+        const email =
+            emailInput.value.trim();
 
-
-    const password =
-        document.getElementById(
-            "password"
-        ).value.trim();
+        const password =
+            passwordInput.value.trim();
 
 
-    if (!email || !password) {
+        if (!email || !password) {
 
-        alert(
-            "Введите email и пароль для регистрации."
+            showStatus(
+                "⚠️ Заполните email и пароль.",
+                true
+            );
+
+            return;
+
+        }
+
+
+        if (!email.includes("@")) {
+
+            showStatus(
+                "⚠️ Введите корректный email.",
+                true
+            );
+
+            return;
+
+        }
+
+
+        if (password.length < 4) {
+
+            showStatus(
+                "⚠️ Пароль должен содержать минимум 4 символа.",
+                true
+            );
+
+            return;
+
+        }
+
+
+        user = {
+
+            name:
+                email
+                    .split("@")[0],
+
+            email: email,
+
+            plan: "Free"
+
+        };
+
+
+        credits = 1;
+
+
+        saveUser();
+
+        saveCredits();
+
+        updateAccount();
+
+        closeLogin();
+
+
+        showStatus(
+            "✓ Аккаунт создан."
         );
 
-        return;
     }
-
-
-    loginEmail();
-
-}
+);
 
 
 /* =========================
    LOGOUT
 ========================= */
 
-function logout() {
+logoutButton.addEventListener(
+    "click",
+    () => {
 
-    user = null;
+        user = null;
+
+        localStorage.removeItem(
+            "veoUser"
+        );
+
+        updateAccount();
 
 
-    localStorage.removeItem(
-        "veoUser"
-    );
+        showStatus(
+            "Вы вышли из аккаунта."
+        );
 
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
 
-    updateAccount();
-
-
-    alert(
-        "Вы вышли из аккаунта."
-    );
-
-}
+    }
+);
 
 
 /* =========================
-   PLAN SELECTION
+   PLANS
 ========================= */
 
+document
+    .querySelectorAll(
+        "[data-plan-button]"
+    )
+    .forEach(button => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                const plan =
+                    button.dataset.planButton;
+
+                selectPlan(plan);
+
+            }
+        );
+
+    });
+
+
 function selectPlan(plan) {
-
-    if (!user) {
-
-        loginModal.classList.remove(
-            "hidden"
-        );
-
-        alert(
-            "Сначала войдите в аккаунт."
-        );
-
-        return;
-    }
-
 
     if (!plans[plan]) {
         return;
     }
 
 
-    if (plan === "Free") {
+    if (!user) {
 
-        alert(
-            "У вас уже выбран бесплатный тариф."
+        openLogin();
+
+        showStatus(
+            "⚠️ Сначала войдите в аккаунт."
         );
 
         return;
+
     }
 
 
-    const confirmPayment =
-        confirm(
-            `Вы выбрали тариф ${plan}.\n\nОплату подключим следующим этапом.`
+    if (plan === "Free") {
+
+        user.plan = "Free";
+
+        credits =
+            plans.Free.credits;
+
+        saveUser();
+
+        saveCredits();
+
+        updateAccount();
+
+        updateSelectedPlan();
+
+        showStatus(
+            "✓ Бесплатный тариф активирован."
         );
 
-
-    if (!confirmPayment) {
         return;
+
     }
 
 
     /*
-        Здесь позже можно сделать:
-
-        POST /api/payment
-
-        После успешной оплаты:
-
-        user.plan = plan
-        credits = plans[plan].credits
+        Пока оплата демонстрационная.
+        После подключения backend
+        здесь будет платёжная система.
     */
 
-    alert(
-        `Тариф ${plan} выбран.`
+    const confirmed =
+        window.confirm(
+            `Вы выбираете тариф ${plan}.\n\nСейчас это демо-режим. Активировать тариф?`
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    user.plan = plan;
+
+    credits =
+        plans[plan].credits;
+
+
+    saveUser();
+
+    saveCredits();
+
+    updateAccount();
+
+    updateSelectedPlan();
+
+
+    showStatus(
+        `✓ Тариф ${plan} активирован в демо-режиме.`
     );
 
 }
 
 
+function updateSelectedPlan() {
+
+    document
+        .querySelectorAll(
+            ".price-card"
+        )
+        .forEach(card => {
+
+            card.classList.remove(
+                "selected"
+            );
+
+
+            if (
+                user &&
+                card.dataset.plan ===
+                user.plan
+            ) {
+
+                card.classList.add(
+                    "selected"
+                );
+
+            }
+
+        });
+
+
+    document
+        .querySelectorAll(
+            "[data-plan-button]"
+        )
+        .forEach(button => {
+
+            const plan =
+                button.dataset.planButton;
+
+
+            if (
+                user &&
+                plan === user.plan
+            ) {
+
+                button.textContent =
+                    "✓ Активен";
+
+            } else {
+
+                button.textContent =
+                    plan === "Free"
+                        ? "Выбрать"
+                        : `Выбрать ${plan}`;
+
+            }
+
+        });
+
+}
+
+
 /* =========================
-   GENERATION
+   GENERATOR
 ========================= */
 
 generateButton.addEventListener(
@@ -477,46 +871,44 @@ async function generateVideo() {
         );
 
 
-    /* PROMPT */
-
     if (!prompt) {
 
-        status.textContent =
-            "⚠️ Напиши описание видео.";
+        showStatus(
+            "⚠️ Напишите описание видео.",
+            true
+        );
 
         promptInput.focus();
 
         return;
+
     }
 
-
-    /* LOGIN */
 
     if (!user) {
 
-        status.textContent =
-            "⚠️ Войдите в аккаунт.";
-
-        loginModal.classList.remove(
-            "hidden"
+        showStatus(
+            "⚠️ Войдите в аккаунт."
         );
 
+        openLogin();
+
         return;
+
     }
 
-
-    /* CREDITS */
 
     if (credits <= 0) {
 
-        status.textContent =
-            "❌ У вас закончились генерации.";
+        showStatus(
+            "❌ У вас закончились кредиты.",
+            true
+        );
 
         return;
+
     }
 
-
-    /* PLAN LIMIT */
 
     const currentPlan =
         plans[user.plan || "Free"];
@@ -527,21 +919,14 @@ async function generateVideo() {
         currentPlan.maxSeconds
     ) {
 
-        status.textContent =
-            `❌ Тариф ${user.plan || "Free"} позволяет создавать видео максимум ${currentPlan.maxSeconds} секунд.`;
+        showStatus(
+            `❌ Тариф ${user.plan} позволяет видео максимум ${currentPlan.maxSeconds} секунд.`,
+            true
+        );
 
         return;
+
     }
-
-
-    /* QUALITY LIMIT */
-
-    const qualityRank = {
-        basic: 1,
-        hd: 2,
-        fullhd: 3,
-        "4k": 4
-    };
 
 
     if (
@@ -549,14 +934,15 @@ async function generateVideo() {
         qualityRank[currentPlan.quality]
     ) {
 
-        status.textContent =
-            `❌ Качество ${quality.toUpperCase()} недоступно на тарифе ${user.plan || "Free"}.`;
+        showStatus(
+            `❌ Качество ${quality.toUpperCase()} недоступно на тарифе ${user.plan}.`,
+            true
+        );
 
         return;
+
     }
 
-
-    /* START */
 
     generateButton.disabled =
         true;
@@ -565,8 +951,9 @@ async function generateVideo() {
         "⏳ Генерируем...";
 
 
-    status.textContent =
-        "AI создаёт ваше видео...";
+    showStatus(
+        "AI создаёт ваше видео..."
+    );
 
 
     result.classList.add(
@@ -575,58 +962,38 @@ async function generateVideo() {
 
 
     /*
-        ДЕМО.
+        ЗДЕСЬ ПОЗЖЕ БУДЕТ REAL API:
 
-        Здесь позже будет:
+        fetch("/api/generate", {
+            method: "POST",
+            headers: {
+                "Content-Type":
+                    "application/json"
+            },
+            body: JSON.stringify({
+                prompt,
+                ratio,
+                quality,
+                duration
+            })
+        });
 
-        POST /api/generate
-
-        Например:
-
-        const response = await fetch(
-            "/api/generate",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type":
-                        "application/json"
-                },
-                body: JSON.stringify({
-                    prompt,
-                    ratio,
-                    quality,
-                    duration
-                })
-            }
-        );
-
-        const data =
-            await response.json();
-
-        video.src =
-            data.videoUrl;
+        API KEY НЕЛЬЗЯ хранить
+        в этом JS-файле.
     */
 
 
-    await new Promise(
-        resolve =>
-            setTimeout(
-                resolve,
-                3000
-            )
-    );
+    await wait(3000);
 
-
-    /* REMOVE CREDIT */
 
     credits--;
+
+    saveCredits();
 
     updateCredits();
 
 
-    /* SAVE HISTORY */
-
-    const historyItem = {
+    const item = {
 
         prompt: prompt,
 
@@ -637,34 +1004,37 @@ async function generateVideo() {
         duration: duration,
 
         date:
-            new Date().toLocaleString(
-                "ru-RU"
-            )
+            new Date()
+                .toLocaleString(
+                    "ru-RU"
+                )
 
     };
 
 
-    history.unshift(
-        historyItem
-    );
+    history.unshift(item);
 
 
-    localStorage.setItem(
-        "veoHistory",
-        JSON.stringify(history)
-    );
+    if (history.length > 20) {
 
+        history =
+            history.slice(0, 20);
+
+    }
+
+
+    saveHistory();
 
     renderHistory();
 
 
-    status.textContent =
-        "⚠️ Интерфейс готов. Теперь можно подключать настоящий AI API.";
+    showStatus(
+        "✓ Генерация завершена в демо-режиме. Подключи AI API для получения настоящего видео."
+    );
 
 
     generateButton.disabled =
         false;
-
 
     generateButton.textContent =
         "✦ Сгенерировать видео";
@@ -687,38 +1057,87 @@ function renderHistory() {
         `;
 
         return;
+
     }
 
 
     historyContainer.innerHTML =
-        history.map(
-            item => `
+        history
+            .map(item => {
 
-                <div class="history-item">
+                return `
+                    <div class="history-item">
 
-                    <b>
-                        ${escapeHtml(item.prompt)}
-                    </b>
+                        <b>
+                            ${escapeHtml(
+                                item.prompt
+                            )}
+                        </b>
 
-                    <small>
-                        ${item.date}
-                        • ${item.ratio}
-                        • ${item.duration} сек.
-                    </small>
+                        <small>
+                            ${escapeHtml(
+                                item.date
+                            )}
+                            •
+                            ${escapeHtml(
+                                item.ratio
+                            )}
+                            •
+                            ${item.duration}
+                            сек.
+                            •
+                            ${escapeHtml(
+                                item.quality
+                            )}
+                        </small>
 
-                </div>
+                    </div>
+                `;
 
-            `
-        ).join("");
+            })
+            .join("");
 
 }
 
 
 /* =========================
-   HTML SECURITY
+   STATUS
 ========================= */
 
-function escapeHtml(text) {
+function showStatus(
+    message,
+    error = false
+) {
+
+    statusElement.textContent =
+        message;
+
+    statusElement.style.color =
+        error
+            ? "#d87861"
+            : "#b8b4aa";
+
+}
+
+
+/* =========================
+   HELPERS
+========================= */
+
+function wait(ms) {
+
+    return new Promise(
+        resolve =>
+            setTimeout(
+                resolve,
+                ms
+            )
+    );
+
+}
+
+
+function escapeHtml(value) {
 
     const div =
         document.createElement(
@@ -726,55 +1145,11 @@ function escapeHtml(text) {
         );
 
     div.textContent =
-        text;
+        String(value);
 
     return div.innerHTML;
 
 }
-
-
-/* =========================
-   CLOSE MODAL BY BACKGROUND
-========================= */
-
-loginModal.addEventListener(
-    "click",
-    event => {
-
-        if (
-            event.target ===
-            loginModal
-        ) {
-
-            closeLogin();
-
-        }
-
-    }
-);
-
-
-/* =========================
-   ESCAPE KEY
-========================= */
-
-document.addEventListener(
-    "keydown",
-    event => {
-
-        if (
-            event.key === "Escape" &&
-            !loginModal.classList.contains(
-                "hidden"
-            )
-        ) {
-
-            closeLogin();
-
-        }
-
-    }
-);
 
 
 /* =========================
@@ -784,5 +1159,7 @@ document.addEventListener(
 updateCredits();
 
 updateAccount();
+
+updateSelectedPlan();
 
 renderHistory();
