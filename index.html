@@ -3,20 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Астрал Маркет — Кабинет продавца</title>
+    <title>Астрал Маркет — Авторизация Google</title>
     <style>
         :root {
-            --primary: #cb11ab;
-            --primary-hover: #b00d95;
-            --secondary: #005bff;
+            --primary: #1a73e8;
+            --primary-hover: #1557b0;
             --bg-body: #f4f5f9;
             --surface: #ffffff;
-            --text-main: #1f2022;
-            --text-muted: #8a8d91;
-            --border: #e2e4e8;
-            --success: #00a046;
-            --danger: #f53b57;
-            --radius: 12px;
+            --text-main: #202124;
+            --text-muted: #5f6368;
+            --border: #dadce0;
+            --danger: #d93025;
+            --radius: 8px;
         }
 
         * {
@@ -32,7 +30,7 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            padding-bottom: 70px; /* место под нижний таббар */
+            padding-bottom: 70px;
         }
 
         /* Шапка */
@@ -49,21 +47,23 @@
         }
 
         .header-title {
-            font-size: 1.25rem;
-            font-weight: 800;
+            font-size: 1.15rem;
+            font-weight: 700;
         }
 
-        .settings-icon {
-            font-size: 1.3rem;
-            cursor: pointer;
-            background: none;
-            border: none;
+        .user-mini-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
             color: var(--text-muted);
-            transition: color 0.2s;
+            cursor: pointer;
+            background: #f1f3f4;
+            padding: 6px 12px;
+            border-radius: 20px;
         }
-        .settings-icon:hover { color: var(--primary); }
 
-        /* Контент */
         main {
             max-width: 600px;
             width: 100%;
@@ -72,13 +72,13 @@
             flex: 1;
         }
 
-        /* Блок профиля / статистики */
         .profile-card {
             background: var(--surface);
             border-radius: var(--radius);
             padding: 1.2rem;
             border: 1px solid var(--border);
             margin-bottom: 1rem;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
         }
 
         .profile-info {
@@ -91,13 +91,13 @@
         .avatar-stub {
             width: 50px;
             height: 50px;
-            background: linear-gradient(135deg, #005bff 0%, #cb11ab 100%);
+            background: var(--primary);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-weight: 800;
+            font-weight: 700;
             font-size: 1.2rem;
         }
 
@@ -117,7 +117,7 @@
 
         .stat-value {
             font-size: 0.95rem;
-            font-weight: 800;
+            font-weight: 700;
             color: var(--text-main);
             margin-bottom: 2px;
         }
@@ -128,7 +128,6 @@
             line-height: 1.1;
         }
 
-        /* Меню списка (как в WB Seller) */
         .menu-list {
             background: var(--surface);
             border-radius: var(--radius);
@@ -142,29 +141,28 @@
             align-items: center;
             justify-content: space-between;
             padding: 1rem 1.2rem;
-            border-bottom: 1px solid var(--border);
             cursor: pointer;
             background: var(--surface);
-            border-left: none;
             width: 100%;
             text-align: left;
             font-size: 0.95rem;
-            font-weight: 600;
+            font-weight: 500;
             color: var(--text-main);
+            border: none;
+            border-bottom: 1px solid var(--border);
             transition: background 0.15s;
         }
         .menu-item:last-child { border-bottom: none; }
-        .menu-item:hover { background: #fafbfc; }
+        .menu-item:hover { background: #f8f9fa; }
 
         .menu-item-left {
             display: flex;
             align-items: center;
             gap: 12px;
         }
-        .menu-item-left span.icon { font-size: 1.2rem; }
         .menu-arrow { color: var(--text-muted); font-size: 0.9rem; }
 
-        /* Нижний таббар (как на скрине) */
+        /* Нижний таббар */
         .bottom-nav {
             position: fixed;
             bottom: 0; left: 0; width: 100%;
@@ -187,25 +185,11 @@
             color: var(--text-muted);
             font-size: 0.7rem;
             font-weight: 500;
-            position: relative;
             flex: 1;
         }
         .nav-tab.active { color: var(--primary); font-weight: 700; }
         .nav-tab span.icon { font-size: 1.25rem; }
 
-        .badge-dot {
-            position: absolute;
-            top: 2px; right: 32%;
-            background: var(--danger);
-            color: white;
-            font-size: 0.6rem;
-            width: 16px; height: 16px;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: 700;
-        }
-
-        /* Экраны (Views) */
         .view-section { display: none; }
         .view-section.active { display: block; }
 
@@ -214,47 +198,63 @@
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(4px);
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(2px);
             justify-content: center;
             align-items: center;
             z-index: 1000;
         }
         .modal-content {
             background: var(--surface);
-            border-radius: 16px;
-            width: 450px;
-            max-width: 90%;
-            padding: 2rem;
+            border-radius: 12px;
+            width: 420px;
+            max-width: 92%;
+            padding: 2.5rem 2rem 2rem 2rem;
             position: relative;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 24px rgba(0,0,0,0.15);
             max-height: 90vh;
             overflow-y: auto;
         }
         .close-modal {
             position: absolute;
             top: 15px; right: 15px;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             cursor: pointer;
-            background: #f0f2f5;
+            background: #f1f3f4;
             width: 32px; height: 32px;
             border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
             color: var(--text-muted);
+            transition: 0.2s;
+            z-index: 10;
         }
+        .close-modal:hover { background: #dadce0; color: var(--text-main); }
 
-        .form-group { margin-bottom: 1rem; }
-        .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.3rem; }
-        .form-group input, .form-group textarea, .form-group select {
-            width: 100%; padding: 0.8rem; border: 1px solid var(--border); border-radius: var(--radius); font-size: 0.95rem; outline: none; background: #fafbfc;
+        /* Стили Google формы */
+        .google-logo {
+            font-size: 1.6rem;
+            font-weight: 500;
+            letter-spacing: -0.5px;
+            margin-bottom: 0.5px;
         }
+        .google-logo span:nth-child(1) { color: #4285F4; }
+        .google-logo span:nth-child(2) { color: #EA4335; }
+        .google-logo span:nth-child(3) { color: #FBBC05; }
+        .google-logo span:nth-child(4) { color: #4285F4; }
+        .google-logo span:nth-child(5) { color: #34A853; }
+        .google-logo span:nth-child(6) { color: #EA4335; }
+
+        .form-group { margin-bottom: 1.2rem; }
+        .form-group input {
+            width: 100%; padding: 0.9rem; border: 1px solid var(--border); border-radius: var(--radius); font-size: 1rem; outline: none; transition: 0.2s;
+        }
+        .form-group input:focus { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(26,115,232,0.2); }
 
         .btn-main {
-            background: var(--primary); color: white; border: none; width: 100%; padding: 0.85rem; border-radius: var(--radius); font-weight: 600; cursor: pointer; transition: 0.2s;
+            background: var(--primary); color: white; border: none; width: 100%; padding: 0.85rem; border-radius: var(--radius); font-weight: 600; cursor: pointer; font-size: 0.95rem; transition: 0.2s;
         }
         .btn-main:hover { background: var(--primary-hover); }
 
-        /* Карточки товаров в каталоге */
         .product-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -269,218 +269,158 @@
             flex-direction: column;
             justify-content: space-between;
         }
-        .item-card img { width: 100%; height: 120px; object-fit: cover; border-radius: 8px; background: #eee; margin-bottom: 0.5rem; }
+        .item-card img { width: 100%; height: 120px; object-fit: cover; border-radius: 6px; background: #eee; margin-bottom: 0.5rem; }
     </style>
 </head>
 <body>
 
-    <!-- Шапка динамическая -->
+    <!-- Шапка -->
     <header>
-        <div class="header-title" id="headerTitle">Профиль</div>
-        <button class="settings-icon" onclick="openSettingsModal()">⚙️</button>
+        <div class="header-title" id="headerTitle">Профиль продавца</div>
+        <div class="user-mini-badge" onclick="openModal('settingsModal')">
+            <span id="headerUserEmail">Аккаунт не выбран</span>
+            <span>⚙️</span>
+        </div>
     </header>
 
-    <!-- Основное содержимое (Экраны) -->
+    <!-- Содержимое вкладок -->
     <main>
         
-        <!-- ЭКРАН 1: ПРОФИЛЬ ПРОДАВЦА (Аналог скриншота) -->
+        <!-- Вкладка: Профиль -->
         <div id="view-profile" class="view-section active">
-            
             <div class="profile-card">
                 <div class="profile-info">
-                    <div class="avatar-stub" id="userAvatarText">АМ</div>
+                    <div class="avatar-stub" id="userAvatarLetter">А</div>
                     <div>
-                        <div style="font-weight: 800; font-size: 1.1rem;" id="userNameView">ИП Астрал Маркет</div>
-                        <div style="font-size: 0.8rem; color: var(--text-muted);" id="userEmailView">ID: 8943210 • Проверенный продавец</div>
+                        <div style="font-weight: 700; font-size: 1.05rem;" id="userNameDisplay">ИП Астрал Маркет</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);" id="userEmailDisplay">Не авторизован через Google</div>
                     </div>
                 </div>
 
                 <div class="stats-grid">
-                    <div class="stat-box">
-                        <div class="stat-value">4.9</div>
-                        <div class="stat-label">Рейтинг</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-value" id="statReviews">1 420</div>
-                        <div class="stat-label">Отзывов</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-value" id="statSales">12 480</div>
-                        <div class="stat-label">Продано, шт</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-value">2 года</div>
-                        <div class="stat-label">На Астрал</div>
-                    </div>
+                    <div class="stat-box"><div class="stat-value">4.9</div><div class="stat-label">Рейтинг</div></div>
+                    <div class="stat-box"><div class="stat-value">1 420</div><div class="stat-label">Отзывов</div></div>
+                    <div class="stat-box"><div class="stat-value">12 480</div><div class="stat-label">Продано</div></div>
+                    <div class="stat-box"><div class="stat-value">2 года</div><div class="stat-label">На Астрал</div></div>
                 </div>
             </div>
 
             <div class="menu-list">
                 <button class="menu-item" onclick="switchTab('catalog')">
-                    <div class="menu-item-left"><span class="icon">📦</span> Мои товары</div>
-                    <span class="menu-arrow">›</span>
-                </button>
-                <button class="menu-item" onclick="openModal('analyticsModal')">
-                    <div class="menu-item-left"><span class="icon">📊</span> Аналитика продаж</div>
+                    <div class="menu-item-left"><span>📦</span> Мои товары</div>
                     <span class="menu-arrow">›</span>
                 </button>
                 <button class="menu-item" onclick="openModal('financeModal')">
-                    <div class="menu-item-left"><span class="icon">💰</span> Финансовые отчеты и Баланс</div>
-                    <span class="menu-arrow">›</span>
-                </button>
-                <button class="menu-item" onclick="openModal('suppliesModal')">
-                    <div class="menu-item-left"><span class="icon">🚚</span> Управление поставками</div>
-                    <span class="menu-arrow">›</span>
-                </button>
-                <button class="menu-item" onclick="openModal('clientsModal')">
-                    <div class="menu-item-left"><span class="icon">💬</span> Работа с клиентами (Отзывы)</div>
-                    <span class="menu-arrow">›</span>
-                </button>
-                <button class="menu-item" onclick="openModal('warehouseModal')">
-                    <div class="menu-item-left"><span class="icon">🏢</span> Очередь на склад</div>
+                    <div class="menu-item-left"><span>💰</span> Финансовые отчеты и Баланс</div>
                     <span class="menu-arrow">›</span>
                 </button>
                 <button class="menu-item" onclick="openModal('supportModal')">
-                    <div class="menu-item-left"><span class="icon">❓</span> Помощь и обратная связь</div>
+                    <div class="menu-item-left"><span>❓</span> Помощь и поддержка</div>
                     <span class="menu-arrow">›</span>
                 </button>
             </div>
         </div>
 
-        <!-- ЭКРАН 2: ТОВАРЫ / ПОСТАВКИ -->
+        <!-- Вкладка: Товары -->
         <div id="view-catalog" class="view-section">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                <h2 style="font-size: 1.3rem; font-weight: 800;">Мои товары</h2>
-                <button class="btn-main" style="width: auto; padding: 0.6rem 1rem;" onclick="openModal('addProdModal')">+ Добавить</button>
+                <h2 style="font-size: 1.2rem; font-weight: 700;">Мои товары</h2>
+                <button class="btn-main" style="width: auto; padding: 0.5rem 1rem;" onclick="openModal('addProdModal')">+ Добавить</button>
             </div>
             <div id="sellerProductsGrid" class="product-grid"></div>
         </div>
 
-        <!-- ЭКРАН 3: МАРКЕТПЛЕЙС (Витрина покупок) -->
+        <!-- Вкладка: Витрина -->
         <div id="view-marketplace" class="view-section">
-            <h2 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 1rem;">Витрина Астрал Маркет</h2>
+            <h2 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem;">Витрина Астрал Маркет</h2>
             <div id="marketProductsGrid" class="product-grid"></div>
-        </div>
-
-        <!-- ЭКРАН 4: ЦЕНЫ И СКИДКИ -->
-        <div id="view-prices" class="view-section">
-            <h2 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 1rem;">Календарь акций и цен</h2>
-            <div style="background:var(--surface); border:1px solid var(--border); padding:1.2rem; border-radius:var(--radius);">
-                <p style="font-weight:600; margin-bottom:0.5rem;">🔥 Промо-акция "Черная Пятница Астрал"</p>
-                <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">Участвуйте в распродаже для получения до +300% к охватам.</p>
-                <button class="btn-main" onclick="alert('Вы успешно зарегистрировались в акции!')">Участвовать</button>
-            </div>
         </div>
 
     </main>
 
-    <!-- НИЖНЯЯ ПАНЕЛЬ НАВИГАЦИИ (ТАББАР КАК НА СКРИНЕ) -->
+    <!-- Нижний таббар -->
     <nav class="bottom-nav">
         <button class="nav-tab active" onclick="switchTab('profile', this)">
             <span class="icon">👤</span> Профиль
         </button>
         <button class="nav-tab" onclick="switchTab('catalog', this)">
-            <span class="icon">📦</span> Поставки
+            <span class="icon">📦</span> Товары
         </button>
         <button class="nav-tab" onclick="switchTab('marketplace', this)">
-            <span class="icon">🛒</span>
-            <span class="badge-dot" id="cartBadge">3</span> Маркетплейс
+            <span class="icon">🛒</span> Витрина
         </button>
-        <button class="nav-tab" onclick="switchTab('prices', this)">
-            <span class="icon">🏷️</span> Цены
-        </button>
-        <button class="nav-tab" onclick="switchTab('profile', this); openSettingsModal();">
-            <span class="icon">⚙️</span> Настройки
+        <button class="nav-tab" onclick="openModal('settingsModal')">
+            <span class="icon">⚙️</span> Аккаунт
         </button>
     </nav>
 
-    <!-- МОДАЛКА: Настройки (Вход, Выход, Компания) -->
-    <div class="modal" id="settingsModal">
-        <div class="modal-content">
-            <div class="close-modal" onclick="closeModal('settingsModal')">&times;</div>
-            <h3 style="margin-bottom: 1.2rem;">Настройки кабинета</h3>
-            <div class="menu-list" style="margin-bottom: 1.2rem;">
-                <button class="menu-item" onclick="alert('Вход через Google / Авторизация активна')">
-                    <div class="menu-item-left"><span class="icon">🔑</span> Вход и авторизация</div>
-                    <span class="menu-arrow">›</span>
-                </button>
-                <button class="menu-item" onclick="alert('ИП Астрал Маркет (ИНН 770123456789)')">
-                    <div class="menu-item-left"><span class="icon">🏢</span> Мои компании</div>
-                    <span class="menu-arrow">›</span>
-                </button>
+    <!-- МОДАЛЬНОЕ ОКНО: АВТОРИЗАЦИЯ GOOGLE -->
+    <div class="modal" id="googleLoginModal" style="display: flex;">
+        <div class="modal-content" style="text-align: center;">
+            <div class="google-logo" style="margin-bottom: 10px;">
+                <span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span>
             </div>
-            <button style="background: none; border: none; color: var(--danger); font-weight: 700; cursor: pointer; width: 100%; text-align: center; padding: 0.5rem;" onclick="logoutAccount()">Выйти из профиля</button>
+            <h3 style="font-size: 1.3rem; font-weight: 500; margin-bottom: 5px;">Вход в аккаунт</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem;">Используйте свой аккаунт Google для входа в Астрал Маркет</p>
+            
+            <form onsubmit="handleGoogleLogin(event)">
+                <div class="form-group">
+                    <input type="email" id="googleEmailInput" required placeholder="Эл. почта или телефон">
+                </div>
+                <div class="form-group">
+                    <input type="password" id="googlePassInput" required placeholder="Введите пароль">
+                </div>
+                <button class="btn-main" type="submit" style="margin-bottom: 1rem;">Далее</button>
+            </form>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">Создается защищенное локальное соединение</div>
         </div>
     </div>
 
-    <!-- МОДАЛКА: Финансы и баланс -->
+    <!-- МОДАЛЬНОЕ ОКНО: НАСТРОЙКИ / ВЫХОД -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <div class="close-modal" onclick="closeModal('settingsModal')">✕</div>
+            <h3 style="margin-bottom: 1rem;">Управление аккаунтом</h3>
+            <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin-bottom: 1.2rem; border: 1px solid var(--border);">
+                <div style="font-size: 0.75rem; color: var(--text-muted);">Текущая сессия Google:</div>
+                <div style="font-weight: 600; font-size: 0.95rem; margin-top: 2px;" id="activeGoogleAccountText">user@gmail.com</div>
+            </div>
+            <button style="background: none; border: 1px solid var(--danger); color: var(--danger); font-weight: 600; cursor: pointer; width: 100%; padding: 0.75rem; border-radius: var(--radius); transition: 0.2s;" onclick="logoutAccount()">Сменить аккаунт / Выйти</button>
+        </div>
+    </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО: ФИНАНСЫ -->
     <div class="modal" id="financeModal">
         <div class="modal-content">
-            <div class="close-modal" onclick="closeModal('financeModal')">&times;</div>
+            <div class="close-modal" onclick="closeModal('financeModal')">✕</div>
             <h2>Финансовый баланс</h2>
             <div style="background: #1f2022; color: white; padding: 1.5rem; border-radius: 12px; margin: 1rem 0;">
                 <div style="font-size: 0.8rem; opacity: 0.8;">Доступно к выводу</div>
                 <div style="font-size: 2rem; font-weight: 900; margin: 0.3rem 0 1rem 0;" id="sellerBalanceView">348 900 ₽</div>
-                <div style="display: flex; gap: 10px;">
-                    <button class="btn-main" style="background: var(--success);" onclick="withdrawMoney()">Вывести</button>
-                    <button class="btn-main" style="background: var(--secondary);" onclick="topupMoney()">Пополнить</button>
-                </div>
-            </div>
-            <p style="font-size: 0.85rem; color: var(--text-muted);">Выплаты производятся автоматически по вторникам на расчетный счет.</p>
-        </div>
-    </div>
-
-    <!-- МОДАЛКА: Аналитика -->
-    <div class="modal" id="analyticsModal">
-        <div class="modal-content">
-            <div class="close-modal" onclick="closeModal('analyticsModal')">&times;</div>
-            <h2>Аналитика за 30 дней</h2>
-            <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 10px;">
-                <div style="background:#f8f9fa; padding:1rem; border-radius:8px; border:1px solid var(--border);">
-                    <div style="font-size:0.8rem; color:var(--text-muted);">Выручка</div>
-                    <div style="font-size:1.4rem; font-weight:800; color:var(--success);">2 150 400 ₽</div>
-                </div>
-                <div style="background:#f8f9fa; padding:1rem; border-radius:8px; border:1px solid var(--border);">
-                    <div style="font-size:0.8rem; color:var(--text-muted);">Заказов оформлено</div>
-                    <div style="font-size:1.4rem; font-weight:800;">1 245 шт.</div>
-                </div>
+                <button class="btn-main" style="background: #00a046;" onclick="withdrawMoney()">Вывести средства</button>
             </div>
         </div>
     </div>
 
-    <!-- МОДАЛКА: Добавить товар -->
+    <!-- МОДАЛЬНОЕ ОКНО: ДОБАВИТЬ ТОВАР -->
     <div class="modal" id="addProdModal">
         <div class="modal-content">
-            <div class="close-modal" onclick="closeModal('addProdModal')">&times;</div>
+            <div class="close-modal" onclick="closeModal('addProdModal')">✕</div>
             <h3 style="margin-bottom: 1rem;">Новый товар</h3>
             <form onsubmit="handleCreateProduct(event)">
-                <div class="form-group">
-                    <label>Название</label>
-                    <input type="text" id="newTitle" required placeholder="Например: Игровая клавиатура Astral Pro">
-                </div>
-                <div class="form-group">
-                    <label>Цена (₽)</label>
-                    <input type="number" id="newPrice" required placeholder="4900">
-                </div>
-                <div class="form-group">
-                    <label>URL Фотографии</label>
-                    <input type="url" id="newImg" required placeholder="https://images.unsplash.com/...">
-                </div>
+                <div class="form-group"><input type="text" id="newTitle" required placeholder="Название товара"></div>
+                <div class="form-group"><input type="number" id="newPrice" required placeholder="Цена в рублях"></div>
+                <div class="form-group"><input type="url" id="newImg" required placeholder="Ссылка на фото (URL)"></div>
                 <button class="btn-main" type="submit">Опубликовать</button>
             </form>
         </div>
     </div>
 
-    <!-- Остальные пустые модалки для заглушек меню -->
-    <div class="modal" id="suppliesModal"><div class="modal-content"><div class="close-modal" onclick="closeModal('suppliesModal')">&times;</div><h2>Управление поставками</h2><p style="margin-top:1rem; color:var(--text-muted);">Активных поставок на склады Астрал: 4 шт.</p></div></div>
-    <div class="modal" id="clientsModal"><div class="modal-content"><div class="close-modal" onclick="closeModal('clientsModal')">&times;</div><h2>Работа с клиентами</h2><p style="margin-top:1rem; color:var(--text-muted);">Все отзывы обработаны, рейтинг 4.9⭐.</p></div></div>
-    <div class="modal" id="warehouseModal"><div class="modal-content"><div class="close-modal" onclick="closeModal('warehouseModal')">&times;</div><h2>Очередь на склад</h2><p style="margin-top:1rem; color:var(--text-muted);">Слот разгрузки #42 забронирован на завтра в 14:00.</p></div></div>
-    <div class="modal" id="supportModal"><div class="modal-content"><div class="close-modal" onclick="closeModal('supportModal')">&times;</div><h2>Поддержка Астрал</h2><p style="margin-top:1rem; color:var(--text-muted);">Напишите вашему персональному менеджеру в Telegram: @AstralSupport_Bot</p></div></div>
+    <div class="modal" id="supportModal"><div class="modal-content"><div class="close-modal" onclick="closeModal('supportModal')">✕</div><h2>Поддержка</h2><p style="margin-top:1rem; color:var(--text-muted);">Служба заботы о продавцах доступна круглосуточно.</p></div></div>
 
     <script>
-        // Данные продавца
         let sellerData = JSON.parse(localStorage.getItem('astral_seller')) || {
-            name: "ИП Астрал Маркет",
+            email: "",
             balance: 348900,
             products: [
                 { id: 1, title: "Игровой ПК Astral Core i7", price: 79990, image: "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=300" },
@@ -488,61 +428,99 @@
             ]
         };
 
+        // Проверяем авторизацию при старте
+        window.onload = function() {
+            if (!sellerData.email) {
+                document.getElementById('googleLoginModal').style.display = 'flex';
+            } else {
+                updateAccountUI();
+            }
+            renderSellerProducts();
+        }
+
+        function handleGoogleLogin(e) {
+            e.preventDefault();
+            let email = document.getElementById('googleEmailInput').value.trim();
+            if (!email.includes('@')) email += '@gmail.com';
+            
+            sellerData.email = email;
+            localStorage.setItem('astral_seller', JSON.stringify(sellerData));
+            
+            document.getElementById('googleLoginModal').style.display = 'none';
+            updateAccountUI();
+        }
+
+        function updateAccountUI() {
+            if (!sellerData.email) return;
+            document.getElementById('headerUserEmail').innerText = sellerData.email.split('@')[0];
+            document.getElementById('userEmailDisplay').innerText = sellerData.email;
+            document.getElementById('userNameDisplay').innerText = "ИП " + sellerData.email.split('@')[0];
+            document.getElementById('userAvatarLetter').innerText = sellerData.email.charAt(0).toUpperCase();
+            document.getElementById('activeGoogleAccountText').innerText = sellerData.email;
+        }
+
         function saveSeller() {
             localStorage.setItem('astral_seller', JSON.stringify(sellerData));
         }
 
-        // Переключение вкладок таббара
         function switchTab(tabId, el) {
             document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
-            document.getElementById('view-' + tabId).classList.add('active');
+            let targetView = document.getElementById('view-' + tabId);
+            if (targetView) targetView.classList.add('active');
 
             if(el) {
                 document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
                 el.classList.add('active');
             }
 
-            let titles = { 'profile': 'Профиль', 'catalog': 'Поставки и товары', 'marketplace': 'Витрина Маркетплейс', 'prices': 'Цены и акции' };
+            let titles = { 'profile': 'Профиль продавца', 'catalog': 'Мои товары', 'marketplace': 'Витрина Маркетплейс' };
             document.getElementById('headerTitle').innerText = titles[tabId] || 'Кабинет';
             
             if(tabId === 'catalog') renderSellerProducts();
             if(tabId === 'marketplace') renderMarketplaceProducts();
         }
 
-        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-        function openSettingsModal() { openModal('settingsModal'); }
+        function openModal(id) {
+            let m = document.getElementById(id);
+            if(m) m.style.display = 'flex';
+        }
 
-        // Рендер товаров продавца
+        function closeModal(id) {
+            let m = document.getElementById(id);
+            if(m) m.style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal') && event.target.id !== 'googleLoginModal') {
+                event.target.style.display = "none";
+            }
+        }
+
         function renderSellerProducts() {
             let container = document.getElementById('sellerProductsGrid');
-            if (sellerData.products.length === 0) {
-                container.innerHTML = '<p style="grid-column: span 2; color: var(--text-muted); text-align: center;">Нет добавленных товаров</p>';
-                return;
-            }
+            if (!container) return;
             container.innerHTML = sellerData.products.map(p => `
                 <div class="item-card">
                     <img src="${p.image}" onerror="this.src='https://via.placeholder.com/150'">
-                    <div style="font-weight:700; font-size:0.9rem; margin-bottom:0.3rem;">${p.title}</div>
-                    <div style="font-weight:900; color:var(--primary);">${p.price.toLocaleString()} ₽</div>
+                    <div style="font-weight:600; font-size:0.9rem; margin-bottom:0.3rem;">${p.title}</div>
+                    <div style="font-weight:700; color:var(--primary);">${p.price.toLocaleString()} ₽</div>
                 </div>
             `).join('');
         }
 
-        // Рендер витрины маркетплейса
         function renderMarketplaceProducts() {
             let container = document.getElementById('marketProductsGrid');
-            container.innerHTML = sellerData.products.map(p => `
+            if (!container) return;
+            container.innerHTML = sellerData.products.p.map ? '' : sellerData.products.map(p => `
                 <div class="item-card">
                     <img src="${p.image}" onerror="this.src='https://via.placeholder.com/150'">
-                    <div style="font-weight:700; font-size:0.9rem; margin-bottom:0.3rem;">${p.title}</div>
-                    <div style="font-weight:900; margin-bottom:0.5rem;">${p.price.toLocaleString()} ₽</div>
-                    <button class="btn-main" style="padding: 0.4rem; font-size:0.8rem;" onclick="alert('Товар добавлен в корзину маркетплейса!')">В корзину</button>
+                    <div style="font-weight:600; font-size:0.9rem; margin-bottom:0.3rem;">${p.title}</div>
+                    <div style="font-weight:700; margin-bottom:0.5rem;">${p.price.toLocaleString()} ₽</div>
+                    <button class="btn-main" style="padding: 0.4rem; font-size:0.8rem;" onclick="alert('Добавлено в корзину!')">В корзину</button>
                 </div>
             `).join('');
         }
 
-        // Создание товара
         function handleCreateProduct(e) {
             e.preventDefault();
             let newProd = {
@@ -555,36 +533,22 @@
             saveSeller();
             closeModal('addProdModal');
             renderSellerProducts();
-            alert('Товар успешно отправлен на модерацию и в каталог!');
+            alert('Товар опубликован!');
         }
 
-        // Финансы операции
         function withdrawMoney() {
-            let sum = prompt('Введите сумму для вывода на расчетный счет (₽):', '50000');
-            if (!sum) return;
-            sum = Number(sum);
-            if (sum > sellerData.balance) return alert('Недостаточно средств на балансе!');
+            let sum = Number(prompt('Сумма для вывода (₽):', '50000'));
+            if (!sum || sum > sellerData.balance) return alert('Ошибка суммы!');
             sellerData.balance -= sum;
             saveSeller();
             document.getElementById('sellerBalanceView').innerText = sellerData.balance.toLocaleString() + ' ₽';
-            alert(`Успешно выведено ${sum.toLocaleString()} ₽ на ваш банк.`);
-        }
-
-        function topupMoney() {
-            sellerData.balance += 50000;
-            saveSeller();
-            document.getElementById('sellerBalanceView').innerText = sellerData.balance.toLocaleString() + ' ₽';
-            alert('Баланс рекламного счета пополнен на 50 000 ₽!');
+            alert(`Успешно выведено ${sum.toLocaleString()} ₽`);
         }
 
         function logoutAccount() {
             localStorage.removeItem('astral_seller');
-            alert('Вы вышли из системы. Перезагрузка...');
             location.reload();
         }
-
-        // Инициализация
-        renderSellerProducts();
     </script>
 </body>
 </html>
