@@ -1,663 +1,788 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+/* =========================
+   ELEMENTS
+========================= */
 
-    <title>VeoAI — AI Video Studio</title>
+const generateButton =
+    document.getElementById("generateButton");
 
-    <link rel="stylesheet" href="style.css">
-</head>
+const promptInput =
+    document.getElementById("prompt");
 
-<body>
+const status =
+    document.getElementById("status");
 
-<header class="navbar">
+const creditsElement =
+    document.getElementById("credits");
 
-    <a class="logo" href="#">
-        Veo<span>AI</span>
-    </a>
+const navCredits =
+    document.getElementById("navCredits");
 
-    <nav>
-        <a href="#create">Создать</a>
-        <a href="#features">Возможности</a>
-        <a href="#pricing">Тарифы</a>
-    </nav>
+const result =
+    document.getElementById("result");
 
-    <div class="nav-right">
-        <span id="navCredits">⚡ 1</span>
+const video =
+    document.getElementById("video");
 
-        <button class="login-btn" id="loginButton">
-            Войти
-        </button>
-    </div>
+const download =
+    document.getElementById("download");
 
-</header>
+const loginButton =
+    document.getElementById("loginButton");
 
+const loginModal =
+    document.getElementById("loginModal");
 
-<main>
+const accountSection =
+    document.getElementById("account");
 
-    <!-- HERO -->
+const historyContainer =
+    document.getElementById("history");
 
-    <section class="hero">
 
-        <div class="badge">
-            ✦ AI VIDEO GENERATOR
-        </div>
+/* =========================
+   USER DATA
+========================= */
 
-        <h1>
-            Создай видео<br>
-            <span>с помощью ИИ</span>
-        </h1>
+let user =
+    JSON.parse(
+        localStorage.getItem("veoUser")
+    ) || null;
 
-        <p>
-            Опиши свою идею — VeoAI превратит её
-            в готовое видео.
-        </p>
 
-        <a href="#create" class="main-button">
-            Создать видео →
-        </a>
+let credits =
+    Number(
+        localStorage.getItem("veoCredits")
+    );
 
-    </section>
+if (Number.isNaN(credits)) {
+    credits = 1;
+}
 
 
-    <!-- GENERATOR -->
+let history =
+    JSON.parse(
+        localStorage.getItem("veoHistory")
+    ) || [];
 
-    <section id="create" class="creator">
 
-        <div class="creator-header">
+/* =========================
+   PLANS
+========================= */
 
-            <div>
-                <h2>Создание видео</h2>
+const plans = {
 
-                <p>
-                    Опиши сцену, которую хочешь получить
-                </p>
-            </div>
+    Free: {
+        credits: 1,
+        maxSeconds: 10,
+        quality: "basic"
+    },
 
-            <div class="credit-box">
-                ⚡ <span id="credits">1</span> кредит
-            </div>
+    Basic: {
+        credits: 10,
+        maxSeconds: 30,
+        quality: "hd"
+    },
 
-        </div>
+    Pro: {
+        credits: 50,
+        maxSeconds: 60,
+        quality: "fullhd"
+    },
 
+    Ultra: {
+        credits: 150,
+        maxSeconds: 120,
+        quality: "4k"
+    }
 
-        <textarea
-            id="prompt"
-            placeholder="Например: футуристический город ночью, неоновые здания, сильный дождь, камера летит между небоскрёбами, cinematic..."
-        ></textarea>
+};
 
 
-        <div class="options">
+/* =========================
+   CREDITS
+========================= */
 
-            <div class="option">
+function updateCredits() {
 
-                <label for="ratio">
-                    Формат
-                </label>
+    creditsElement.textContent =
+        credits;
 
-                <select id="ratio">
+    navCredits.textContent =
+        `⚡ ${credits}`;
 
-                    <option value="16:9">
-                        16:9 — YouTube
-                    </option>
 
-                    <option value="9:16">
-                        9:16 — TikTok / Reels
-                    </option>
+    const accountCredits =
+        document.getElementById(
+            "accountCredits"
+        );
 
-                    <option value="1:1">
-                        1:1 — Square
-                    </option>
+    if (accountCredits) {
+        accountCredits.textContent =
+            credits;
+    }
 
-                </select>
 
-            </div>
+    localStorage.setItem(
+        "veoCredits",
+        credits
+    );
+}
 
 
-            <div class="option">
+/* =========================
+   ACCOUNT
+========================= */
 
-                <label for="quality">
-                    Качество
-                </label>
+function updateAccount() {
 
-                <select id="quality">
+    if (!user) {
 
-                    <option value="basic">
-                        Basic
-                    </option>
+        accountSection.classList.add(
+            "hidden"
+        );
 
-                    <option value="hd">
-                        HD
-                    </option>
+        loginButton.textContent =
+            "Войти";
 
-                    <option value="fullhd">
-                        Full HD
-                    </option>
+        return;
+    }
 
-                    <option value="4k">
-                        4K
-                    </option>
 
-                </select>
+    accountSection.classList.remove(
+        "hidden"
+    );
 
-            </div>
 
+    document.getElementById(
+        "userName"
+    ).textContent =
+        user.name;
 
-            <div class="option">
 
-                <label for="duration">
-                    Длительность
-                </label>
+    document.getElementById(
+        "userEmail"
+    ).textContent =
+        user.email;
 
-                <select id="duration">
 
-                    <option value="10">
-                        10 секунд
-                    </option>
+    document.getElementById(
+        "accountPlan"
+    ).textContent =
+        user.plan || "Free";
 
-                    <option value="30">
-                        30 секунд
-                    </option>
 
-                    <option value="60">
-                        60 секунд
-                    </option>
+    loginButton.textContent =
+        user.name;
 
-                    <option value="120">
-                        120 секунд
-                    </option>
 
-                </select>
+    updateCredits();
+}
 
-            </div>
 
-        </div>
+/* =========================
+   LOGIN BUTTON
+========================= */
 
+loginButton.addEventListener(
+    "click",
+    () => {
 
-        <button
-            id="generateButton"
-            class="generate-button"
-        >
-            ✦ Сгенерировать видео
-        </button>
+        if (user) {
 
+            accountSection.scrollIntoView({
+                behavior: "smooth"
+            });
 
-        <div id="status"></div>
+        } else {
 
+            loginModal.classList.remove(
+                "hidden"
+            );
 
-        <div id="result" class="result hidden">
+        }
 
-            <h3>
-                Ваше видео готово
-            </h3>
+    }
+);
 
-            <video
-                id="video"
-                controls
-            ></video>
 
-            <a
-                id="download"
-                class="download"
-                download
-            >
-                Скачать видео
-            </a>
+/* =========================
+   CLOSE LOGIN
+========================= */
 
-        </div>
+function closeLogin() {
 
-    </section>
+    loginModal.classList.add(
+        "hidden"
+    );
 
+}
 
-    <!-- FEATURES -->
 
-    <section id="features" class="section">
+/* =========================
+   GOOGLE LOGIN
+========================= */
 
-        <div class="section-label">
-            ВОЗМОЖНОСТИ
-        </div>
+function loginGoogle() {
 
-        <h2>
-            Всё необходимое<br>
-            для создания видео
-        </h2>
+    /*
+        ДЕМО-ВХОД.
 
+        Настоящий Google OAuth
+        подключается через backend.
+    */
 
-        <div class="cards">
+    user = {
+        name: "Demo User",
+        email: "demo@example.com",
+        plan: "Free"
+    };
 
-            <div class="card">
 
-                <div class="card-icon">
-                    🎬
-                </div>
+    localStorage.setItem(
+        "veoUser",
+        JSON.stringify(user)
+    );
 
-                <h3>
-                    Text → Video
-                </h3>
 
-                <p>
-                    Напиши описание и получи
-                    полностью сгенерированное видео.
-                </p>
+    closeLogin();
 
-            </div>
+    updateAccount();
 
 
-            <div class="card">
+    alert(
+        "Демо-вход выполнен."
+    );
+}
 
-                <div class="card-icon">
-                    🖼️
-                </div>
 
-                <h3>
-                    Image → Video
-                </h3>
+/* =========================
+   EMAIL LOGIN
+========================= */
 
-                <p>
-                    Загрузи изображение
-                    и преврати его в видео.
-                </p>
+function loginEmail() {
 
-            </div>
+    const email =
+        document.getElementById(
+            "email"
+        ).value.trim();
 
 
-            <div class="card">
+    const password =
+        document.getElementById(
+            "password"
+        ).value.trim();
 
-                <div class="card-icon">
-                    🎙️
-                </div>
 
-                <h3>
-                    AI Voice
-                </h3>
+    if (!email || !password) {
 
-                <p>
-                    Добавляй искусственную
-                    озвучку к своим роликам.
-                </p>
+        alert(
+            "Введите email и пароль."
+        );
 
-            </div>
+        return;
+    }
 
 
-            <div class="card">
+    if (!email.includes("@")) {
 
-                <div class="card-icon">
-                    ✨
-                </div>
+        alert(
+            "Введите корректный email."
+        );
 
-                <h3>
-                    AI Effects
-                </h3>
+        return;
+    }
 
-                <p>
-                    Создавай кинематографические
-                    эффекты автоматически.
-                </p>
 
-            </div>
+    user = {
 
-        </div>
+        name:
+            email.split("@")[0],
 
-    </section>
+        email:
+            email,
 
+        plan:
+            "Free"
 
-    <!-- PRICING -->
+    };
 
-    <section id="pricing" class="section pricing-section">
 
-        <div class="section-label">
-            ТАРИФЫ
-        </div>
+    localStorage.setItem(
+        "veoUser",
+        JSON.stringify(user)
+    );
 
-        <h2>
-            Выбери свой тариф
-        </h2>
 
-        <p class="section-description">
-            Начни бесплатно и переходи на более мощный тариф,
-            когда понадобится больше генераций.
-        </p>
+    closeLogin();
 
+    updateAccount();
 
-        <div class="pricing-grid">
+}
 
 
-            <!-- FREE -->
+/* =========================
+   REGISTER
+========================= */
 
-            <div class="price-card">
+function registerEmail() {
 
-                <div class="plan-name">
-                    Бесплатный
-                </div>
+    const email =
+        document.getElementById(
+            "email"
+        ).value.trim();
 
-                <div class="price">
-                    0 ₸
-                    <small>/месяц</small>
-                </div>
 
-                <p class="plan-description">
-                    Для знакомства с VeoAI
-                </p>
+    const password =
+        document.getElementById(
+            "password"
+        ).value.trim();
 
-                <ul>
-                    <li>✓ 1 видео в месяц</li>
-                    <li>✓ Максимум 10 секунд</li>
-                    <li>✓ Базовое качество</li>
-                    <li>✓ История созданных видео</li>
-                    <li>✓ Личный кабинет</li>
-                    <li>✓ Регистрация / вход</li>
-                </ul>
 
-                <button
-                    class="plan-button secondary"
-                    onclick="selectPlan('Free')"
-                >
-                    Текущий тариф
-                </button>
+    if (!email || !password) {
 
-            </div>
+        alert(
+            "Введите email и пароль для регистрации."
+        );
 
+        return;
+    }
 
-            <!-- BASIC -->
 
-            <div class="price-card">
+    loginEmail();
 
-                <div class="plan-name">
-                    Basic
-                </div>
+}
 
-                <div class="price">
-                    2 990 ₸
-                    <small>/месяц</small>
-                </div>
 
-                <p class="plan-description">
-                    Для начинающих
-                </p>
+/* =========================
+   LOGOUT
+========================= */
 
-                <ul>
-                    <li>✓ 10 видео в месяц</li>
-                    <li>✓ До 30 секунд</li>
-                    <li>✓ HD качество</li>
-                    <li>✓ История видео</li>
-                    <li>✓ Личный кабинет</li>
-                </ul>
+function logout() {
 
-                <button
-                    class="plan-button"
-                    onclick="selectPlan('Basic')"
-                >
-                    Выбрать Basic
-                </button>
+    user = null;
 
-            </div>
 
+    localStorage.removeItem(
+        "veoUser"
+    );
 
-            <!-- PRO -->
 
-            <div class="price-card popular">
+    updateAccount();
 
-                <div class="popular-label">
-                    ПОПУЛЯРНЫЙ
-                </div>
 
-                <div class="plan-name">
-                    Pro
-                </div>
+    alert(
+        "Вы вышли из аккаунта."
+    );
 
-                <div class="price">
-                    7 990 ₸
-                    <small>/месяц</small>
-                </div>
+}
 
-                <p class="plan-description">
-                    Для активных создателей
-                </p>
 
-                <ul>
-                    <li>✓ 50 видео в месяц</li>
-                    <li>✓ До 60 секунд</li>
-                    <li>✓ Full HD</li>
-                    <li>✓ Приоритетная генерация</li>
-                    <li>✓ История видео</li>
-                    <li>✓ Личный кабинет</li>
-                </ul>
+/* =========================
+   PLAN SELECTION
+========================= */
 
-                <button
-                    class="plan-button"
-                    onclick="selectPlan('Pro')"
-                >
-                    Выбрать Pro
-                </button>
+function selectPlan(plan) {
 
-            </div>
+    if (!user) {
 
+        loginModal.classList.remove(
+            "hidden"
+        );
 
-            <!-- ULTRA -->
+        alert(
+            "Сначала войдите в аккаунт."
+        );
 
-            <div class="price-card">
+        return;
+    }
 
-                <div class="plan-name">
-                    Ultra
-                </div>
 
-                <div class="price">
-                    19 990 ₸
-                    <small>/месяц</small>
-                </div>
+    if (!plans[plan]) {
+        return;
+    }
 
-                <p class="plan-description">
-                    Максимальные возможности
-                </p>
 
-                <ul>
-                    <li>✓ 150 видео в месяц</li>
-                    <li>✓ До 120 секунд</li>
-                    <li>✓ 4K качество</li>
-                    <li>✓ Высокий приоритет</li>
-                    <li>✓ История видео</li>
-                    <li>✓ Личный кабинет</li>
-                </ul>
+    if (plan === "Free") {
 
-                <button
-                    class="plan-button"
-                    onclick="selectPlan('Ultra')"
-                >
-                    Выбрать Ultra
-                </button>
+        alert(
+            "У вас уже выбран бесплатный тариф."
+        );
 
-            </div>
+        return;
+    }
 
-        </div>
 
-    </section>
+    const confirmPayment =
+        confirm(
+            `Вы выбрали тариф ${plan}.\n\nОплату подключим следующим этапом.`
+        );
 
 
-    <!-- ACCOUNT -->
+    if (!confirmPayment) {
+        return;
+    }
 
-    <section
-        id="account"
-        class="account-section hidden"
-    >
 
-        <div class="account-card">
+    /*
+        Здесь позже можно сделать:
 
-            <div class="account-avatar">
-                👤
-            </div>
+        POST /api/payment
 
-            <div class="account-info">
+        После успешной оплаты:
 
-                <h2 id="userName">
-                    Гость
-                </h2>
+        user.plan = plan
+        credits = plans[plan].credits
+    */
 
-                <p id="userEmail">
-                    Войдите в аккаунт
-                </p>
+    alert(
+        `Тариф ${plan} выбран.`
+    );
 
-            </div>
+}
 
 
-            <div class="account-stats">
+/* =========================
+   GENERATION
+========================= */
 
-                <div>
+generateButton.addEventListener(
+    "click",
+    generateVideo
+);
 
-                    <b id="accountPlan">
-                        Free
-                    </b>
 
-                    <span>
-                        Тариф
-                    </span>
+async function generateVideo() {
 
-                </div>
+    const prompt =
+        promptInput.value.trim();
 
 
-                <div>
+    const ratio =
+        document.getElementById(
+            "ratio"
+        ).value;
 
-                    <b id="accountCredits">
-                        1
-                    </b>
 
-                    <span>
-                        Генераций
-                    </span>
+    const quality =
+        document.getElementById(
+            "quality"
+        ).value;
 
-                </div>
 
-            </div>
+    const duration =
+        Number(
+            document.getElementById(
+                "duration"
+            ).value
+        );
 
 
-            <button
-                class="logout"
-                onclick="logout()"
-            >
-                Выйти
-            </button>
+    /* PROMPT */
 
-        </div>
+    if (!prompt) {
 
-    </section>
+        status.textContent =
+            "⚠️ Напиши описание видео.";
 
+        promptInput.focus();
 
-    <!-- HISTORY -->
+        return;
+    }
 
-    <section class="history-section">
 
-        <div class="section-label">
-            ИСТОРИЯ
-        </div>
+    /* LOGIN */
 
-        <h2>
-            Ваши видео
-        </h2>
+    if (!user) {
 
-        <div
-            id="history"
-            class="history"
-        >
+        status.textContent =
+            "⚠️ Войдите в аккаунт.";
+
+        loginModal.classList.remove(
+            "hidden"
+        );
+
+        return;
+    }
+
+
+    /* CREDITS */
+
+    if (credits <= 0) {
+
+        status.textContent =
+            "❌ У вас закончились генерации.";
+
+        return;
+    }
+
+
+    /* PLAN LIMIT */
+
+    const currentPlan =
+        plans[user.plan || "Free"];
+
+
+    if (
+        duration >
+        currentPlan.maxSeconds
+    ) {
+
+        status.textContent =
+            `❌ Тариф ${user.plan || "Free"} позволяет создавать видео максимум ${currentPlan.maxSeconds} секунд.`;
+
+        return;
+    }
+
+
+    /* QUALITY LIMIT */
+
+    const qualityRank = {
+        basic: 1,
+        hd: 2,
+        fullhd: 3,
+        "4k": 4
+    };
+
+
+    if (
+        qualityRank[quality] >
+        qualityRank[currentPlan.quality]
+    ) {
+
+        status.textContent =
+            `❌ Качество ${quality.toUpperCase()} недоступно на тарифе ${user.plan || "Free"}.`;
+
+        return;
+    }
+
+
+    /* START */
+
+    generateButton.disabled =
+        true;
+
+    generateButton.textContent =
+        "⏳ Генерируем...";
+
+
+    status.textContent =
+        "AI создаёт ваше видео...";
+
+
+    result.classList.add(
+        "hidden"
+    );
+
+
+    /*
+        ДЕМО.
+
+        Здесь позже будет:
+
+        POST /api/generate
+
+        Например:
+
+        const response = await fetch(
+            "/api/generate",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+                body: JSON.stringify({
+                    prompt,
+                    ratio,
+                    quality,
+                    duration
+                })
+            }
+        );
+
+        const data =
+            await response.json();
+
+        video.src =
+            data.videoUrl;
+    */
+
+
+    await new Promise(
+        resolve =>
+            setTimeout(
+                resolve,
+                3000
+            )
+    );
+
+
+    /* REMOVE CREDIT */
+
+    credits--;
+
+    updateCredits();
+
+
+    /* SAVE HISTORY */
+
+    const historyItem = {
+
+        prompt: prompt,
+
+        ratio: ratio,
+
+        quality: quality,
+
+        duration: duration,
+
+        date:
+            new Date().toLocaleString(
+                "ru-RU"
+            )
+
+    };
+
+
+    history.unshift(
+        historyItem
+    );
+
+
+    localStorage.setItem(
+        "veoHistory",
+        JSON.stringify(history)
+    );
+
+
+    renderHistory();
+
+
+    status.textContent =
+        "⚠️ Интерфейс готов. Теперь можно подключать настоящий AI API.";
+
+
+    generateButton.disabled =
+        false;
+
+
+    generateButton.textContent =
+        "✦ Сгенерировать видео";
+
+}
+
+
+/* =========================
+   HISTORY
+========================= */
+
+function renderHistory() {
+
+    if (!history.length) {
+
+        historyContainer.innerHTML = `
             <div class="empty-history">
                 Здесь появятся созданные вами видео.
             </div>
-        </div>
+        `;
 
-    </section>
-
-</main>
-
-
-<!-- FOOTER -->
-
-<footer>
-
-    <div class="logo">
-        Veo<span>AI</span>
-    </div>
-
-    <p>
-        AI Video Studio © 2026
-    </p>
-
-</footer>
+        return;
+    }
 
 
-<!-- LOGIN MODAL -->
+    historyContainer.innerHTML =
+        history.map(
+            item => `
 
-<div
-    id="loginModal"
-    class="modal hidden"
->
+                <div class="history-item">
 
-    <div class="modal-box">
+                    <b>
+                        ${escapeHtml(item.prompt)}
+                    </b>
 
-        <button
-            class="close"
-            onclick="closeLogin()"
-        >
-            ×
-        </button>
+                    <small>
+                        ${item.date}
+                        • ${item.ratio}
+                        • ${item.duration} сек.
+                    </small>
 
-        <h2>
-            Добро пожаловать
-        </h2>
+                </div>
 
-        <p>
-            Войдите в VeoAI
-        </p>
+            `
+        ).join("");
 
-
-        <button
-            class="google-button"
-            onclick="loginGoogle()"
-        >
-            G&nbsp;&nbsp; Продолжить через Google
-        </button>
+}
 
 
-        <div class="or">
-            или
-        </div>
+/* =========================
+   HTML SECURITY
+========================= */
+
+function escapeHtml(text) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+    div.textContent =
+        text;
+
+    return div.innerHTML;
+
+}
 
 
-        <input
-            id="email"
-            type="email"
-            placeholder="Email"
-        >
+/* =========================
+   CLOSE MODAL BY BACKGROUND
+========================= */
 
-        <input
-            id="password"
-            type="password"
-            placeholder="Пароль"
-        >
+loginModal.addEventListener(
+    "click",
+    event => {
 
+        if (
+            event.target ===
+            loginModal
+        ) {
 
-        <button
-            class="login-submit"
-            onclick="loginEmail()"
-        >
-            Войти
-        </button>
+            closeLogin();
 
+        }
 
-        <p class="register-text">
-
-            Нет аккаунта?
-
-            <button onclick="registerEmail()">
-                Зарегистрироваться
-            </button>
-
-        </p>
-
-    </div>
-
-</div>
+    }
+);
 
 
-<script src="script.js"></script>
+/* =========================
+   ESCAPE KEY
+========================= */
 
-</body>
-</html>
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key === "Escape" &&
+            !loginModal.classList.contains(
+                "hidden"
+            )
+        ) {
+
+            closeLogin();
+
+        }
+
+    }
+);
+
+
+/* =========================
+   INITIALIZATION
+========================= */
+
+updateCredits();
+
+updateAccount();
+
+renderHistory();
