@@ -1,1192 +1,323 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VEXQORA — Premium Software & HWID Control</title>
-
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syncopate:wght@700&display=swap');
-
-:root {
-    --bg: #040404;
-    --card-bg: rgba(15, 14, 11, 0.85);
-    --gold: #f3ba4f;
-    --gold-light: #ffeaae;
-    --gold-dark: #997120;
-    --text: #f3f3f3;
-    --muted: #8a857b;
-    --border: rgba(243, 186, 79, 0.22);
-    --border-hover: rgba(243, 186, 79, 0.6);
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
-body {
-    background-color: var(--bg);
-    color: var(--text);
-    overflow-x: hidden;
-    background-image: 
-        radial-gradient(circle at 10% 10%, rgba(243, 186, 79, 0.07), transparent 25%),
-        radial-gradient(circle at 90% 90%, rgba(243, 186, 79, 0.04), transparent 25%);
-}
-
-::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-track { background: #080808; }
-::-webkit-scrollbar-thumb { background: linear-gradient(var(--gold-light), var(--gold-dark)); border-radius: 10px; }
-
-/* NAV */
-nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 85px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 7%;
-    background: rgba(4, 4, 4, 0.85);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border);
-    z-index: 1000;
-}
-
-.logo {
-    font-family: 'Syncopate', sans-serif;
-    font-size: 22px;
-    font-weight: 700;
-    letter-spacing: 3px;
-    color: #fff;
-}
-
-.logo span {
-    color: var(--gold);
-    text-shadow: 0 0 20px rgba(243, 186, 79, 0.4);
-}
-
-.nav-links {
-    display: flex;
-    gap: 30px;
-}
-
-.nav-links a {
-    color: var(--muted);
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 500;
-    transition: 0.3s;
-}
-
-.nav-links a:hover {
-    color: var(--gold-light);
-}
-
-.account-btn {
-    background: linear-gradient(135deg, rgba(243,186,79,0.1), rgba(243,186,79,0.02));
-    border: 1px solid var(--border);
-    color: var(--gold-light);
-    padding: 12px 24px;
-    border-radius: 12px;
-    font-weight: 600;
-    font-size: 14px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.account-btn:hover {
-    background: var(--gold);
-    color: #000;
-    box-shadow: 0 0 30px rgba(243, 186, 79, 0.3);
-    border-color: var(--gold);
-}
-
-/* HERO */
-.hero {
-    min-height: 90vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 140px 20px 60px;
-}
-
-.hero-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 18px;
-    background: rgba(243, 186, 79, 0.05);
-    border: 1px solid var(--border);
-    border-radius: 50px;
-    color: var(--gold-light);
-    font-size: 12px;
-    font-weight: 600;
-    margin-bottom: 25px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.hero-badge .dot {
-    width: 6px;
-    height: 6px;
-    background: #22c55e;
-    border-radius: 50%;
-    box-shadow: 0 0 10px #22c55e;
-}
-
-.hero h1 {
-    font-size: clamp(38px, 6vw, 75px);
-    font-weight: 800;
-    line-height: 1.1;
-    max-width: 900px;
-    margin-bottom: 20px;
-    letter-spacing: -1px;
-}
-
-.hero h1 span {
-    background: linear-gradient(135deg, var(--gold-light), var(--gold), var(--gold-dark));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.hero p {
-    color: var(--muted);
-    font-size: 16px;
-    max-width: 580px;
-    line-height: 1.6;
-    margin-bottom: 35px;
-}
-
-.hero-btns {
-    display: flex;
-    gap: 15px;
-}
-
-.btn-primary {
-    background: linear-gradient(135deg, var(--gold-light), var(--gold));
-    color: #111;
-    padding: 15px 30px;
-    border-radius: 14px;
-    font-weight: 700;
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
-    box-shadow: 0 10px 40px rgba(243, 186, 79, 0.2);
-    transition: 0.3s;
-}
-
-.btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 15px 50px rgba(243, 186, 79, 0.4);
-}
-
-.btn-secondary {
-    background: rgba(255,255,255,0.02);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 15px 30px;
-    border-radius: 14px;
-    font-weight: 600;
-    text-decoration: none;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.btn-secondary:hover {
-    border-color: var(--gold);
-    background: rgba(243,186,79,0.05);
-}
-
-/* SECTIONS */
-section {
-    padding: 90px 7%;
-}
-
-.section-title {
-    font-size: 28px;
-    font-weight: 800;
-    margin-bottom: 8px;
-    font-family: 'Syncopate', sans-serif;
-    letter-spacing: 1px;
-}
-
-.section-desc {
-    color: var(--muted);
-    font-size: 14px;
-    margin-bottom: 45px;
-}
-
-.products-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 30px;
-}
-
-.product-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 24px;
-    padding: 35px;
-    position: relative;
-    backdrop-filter: blur(10px);
-    transition: 0.35s;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.product-card:hover {
-    border-color: var(--border-hover);
-    transform: translateY(-6px);
-    box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 30px rgba(243,186,79,0.08);
-}
-
-.product-card.featured {
-    border-color: var(--gold);
-    background: linear-gradient(145deg, rgba(243,186,79,0.05), rgba(15,14,11,0.9));
-}
-
-.card-tag {
-    position: absolute;
-    top: 25px;
-    right: 25px;
-    background: rgba(243,186,79,0.1);
-    color: var(--gold-light);
-    border: 1px solid var(--border);
-    padding: 5px 12px;
-    font-size: 11px;
-    font-weight: 700;
-    border-radius: 20px;
-}
-
-.version-badge {
-    display: inline-block;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.08);
-    padding: 4px 10px;
-    border-radius: 6px;
-    font-size: 11px;
-    color: var(--gold-light);
-    font-weight: 600;
-    margin-bottom: 12px;
-}
-
-.product-card h3 {
-    font-size: 22px;
-    font-weight: 700;
-    margin-bottom: 8px;
-}
-
-.product-card p {
-    color: var(--muted);
-    font-size: 13px;
-    line-height: 1.6;
-    margin-bottom: 25px;
-}
-
-.duration-selector {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    margin-bottom: 25px;
-}
-
-.dur-btn {
-    background: rgba(0,0,0,0.3);
-    border: 1px solid var(--border);
-    color: var(--muted);
-    padding: 10px 5px;
-    border-radius: 10px;
-    font-size: 11px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.25s;
-    text-align: center;
-}
-
-.dur-btn span {
-    display: block;
-    color: var(--gold-light);
-    font-size: 13px;
-    font-weight: 700;
-    margin-top: 3px;
-}
-
-.dur-btn.active, .dur-btn:hover {
-    border-color: var(--gold);
-    background: rgba(243,186,79,0.12);
-    color: #fff;
-}
-
-.card-footer {
-    border-top: 1px solid rgba(255,255,255,0.05);
-    padding-top: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.price-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.price-val {
-    font-size: 24px;
-    font-weight: 800;
-    color: var(--gold-light);
-}
-
-.buy-btn {
-    width: 100%;
-    background: linear-gradient(135deg, var(--gold-light), var(--gold));
-    color: #111;
-    padding: 14px;
-    border-radius: 12px;
-    font-weight: 700;
-    border: none;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.buy-btn:hover {
-    opacity: 0.9;
-    box-shadow: 0 0 25px rgba(243, 186, 79, 0.4);
-}
-
-/* SUPPORT SECTION */
-.support-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 25px;
-    margin-top: 20px;
-}
-
-.support-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 30px;
-    text-align: center;
-    transition: 0.3s;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.support-card:hover {
-    border-color: var(--border-hover);
-    transform: translateY(-4px);
-}
-
-.support-icon {
-    font-size: 36px;
-    margin-bottom: 15px;
-}
-
-.support-card h3 {
-    font-size: 18px;
-    margin-bottom: 10px;
-    color: #fff;
-}
-
-.support-card p {
-    color: var(--muted);
-    font-size: 13px;
-    line-height: 1.5;
-    margin-bottom: 20px;
-}
-
-.support-btn {
-    display: inline-block;
-    background: rgba(243,186,79,0.1);
-    border: 1px solid var(--border);
-    color: var(--gold-light);
-    padding: 10px 20px;
-    border-radius: 10px;
-    font-size: 13px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: 0.3s;
-    width: 100%;
-}
-
-.support-btn:hover {
-    background: var(--gold);
-    color: #000;
-    border-color: var(--gold);
-}
-
-/* RULES */
-.rules-container {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 35px;
-    max-width: 900px;
-    margin: 0 auto;
-}
-
-.rule-item {
-    margin-bottom: 22px;
-    padding-bottom: 18px;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-}
-.rule-item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
-.rule-item h4 { font-size: 15px; color: var(--gold-light); margin-bottom: 6px; font-weight: 700; }
-.rule-item p { color: var(--muted); font-size: 13px; line-height: 1.6; }
-
-/* MODALS */
-.modal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.85);
-    backdrop-filter: blur(15px);
-    z-index: 2000;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-}
-
-.modal.active { display: flex; }
-
-.modal-content {
-    background: #0d0c0a;
-    border: 1px solid var(--border);
-    border-radius: 28px;
-    width: 100%;
-    max-width: 560px;
-    padding: 40px;
-    position: relative;
-    box-shadow: 0 25px 70px rgba(0,0,0,0.85);
-    max-height: 92vh;
-    overflow-y: auto;
-}
-
-.close-btn {
-    position: absolute;
-    top: 22px;
-    right: 22px;
-    background: rgba(255,255,255,0.03);
-    border: 1px solid var(--border);
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    color: var(--muted);
-    font-size: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: 0.2s;
-}
-.close-btn:hover { color: var(--gold); border-color: var(--gold); }
-
-.modal-content h2 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
-.modal-content p { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
-
-.input-field {
-    width: 100%;
-    background: rgba(255,255,255,0.03);
-    border: 1px solid var(--border);
-    padding: 14px 16px;
-    border-radius: 12px;
-    color: #fff;
-    font-size: 14px;
-    margin-bottom: 14px;
-    outline: none;
-    transition: 0.3s;
-}
-.input-field:focus { border-color: var(--gold); }
-
-.auth-switch {
-    text-align: center;
-    margin-top: 16px;
-    font-size: 13px;
-    color: var(--muted);
-}
-.auth-switch span { color: var(--gold); cursor: pointer; font-weight: 600; }
-
-/* КАБИНЕТ */
-.cabinet-panel { display: none; }
-.cabinet-panel.active { display: block; }
-
-.cab-header-card {
-    background: linear-gradient(135deg, rgba(243,186,79,0.08), rgba(255,255,255,0.01));
-    border: 1px solid var(--border);
-    padding: 20px;
-    border-radius: 16px;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.cab-user-info h3 { font-size: 16px; color: #fff; margin-bottom: 4px; }
-.cab-user-info p { font-size: 12px; color: #22c55e; font-weight: 600; margin: 0; }
-
-.wallet-box {
-    background: rgba(0,0,0,0.4);
-    border: 1px solid var(--border);
-    padding: 14px 18px;
-    border-radius: 14px;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-.wallet-info span { font-size: 12px; color: var(--muted); display: block; }
-.wallet-info strong { font-size: 18px; color: var(--gold-light); }
-
-.cabinet-tabs {
-    display: flex;
-    gap: 6px;
-    margin-bottom: 20px;
-    background: rgba(0,0,0,0.3);
-    padding: 5px;
-    border-radius: 12px;
-    border: 1px solid var(--border);
-    overflow-x: auto;
-}
-
-.cab-tab {
-    flex: 1;
-    background: transparent;
-    border: none;
-    color: var(--muted);
-    padding: 10px 8px;
-    border-radius: 8px;
-    font-size: 11px;
-    font-weight: 600;
-    cursor: pointer;
-    text-align: center;
-    transition: 0.25s;
-    white-space: nowrap;
-}
-
-.cab-tab.active {
-    background: var(--gold);
-    color: #111;
-    box-shadow: 0 4px 15px rgba(243,186,79,0.3);
-}
-
-.cab-section { display: none; }
-.cab-section.active { display: block; }
-
-.keys-list {
-    max-height: 180px;
-    overflow-y: auto;
-    background: rgba(0,0,0,0.4);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 12px;
-    margin-top: 8px;
-}
-
-.key-item {
-    background: rgba(243,186,79,0.07);
-    border-left: 3px solid var(--gold);
-    padding: 10px;
-    border-radius: 8px;
-    font-family: monospace;
-    font-size: 12px;
-    margin-bottom: 8px;
-    color: var(--gold-light);
-}
-
-.download-box {
-    background: rgba(255,255,255,0.02);
-    border: 1px solid var(--border);
-    padding: 16px;
-    border-radius: 14px;
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.download-info h4 { font-size: 14px; color: #fff; margin-bottom: 3px; }
-.download-info p { font-size: 12px; color: var(--muted); margin: 0; }
-
-.download-btn-mini {
-    background: linear-gradient(135deg, var(--gold-light), var(--gold));
-    color: #111;
-    border: none;
-    padding: 10px 18px;
-    border-radius: 10px;
-    font-weight: 700;
-    font-size: 12px;
-    cursor: pointer;
-    transition: 0.2s;
-    text-decoration: none;
-}
-.download-btn-mini:hover { opacity: 0.9; box-shadow: 0 0 15px rgba(243,186,79,0.4); }
-
-.payment-methods-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    margin-bottom: 15px;
-}
-
-.pay-method-card {
-    background: rgba(255,255,255,0.02);
-    border: 1px solid var(--border);
-    padding: 12px;
-    border-radius: 10px;
-    cursor: pointer;
-    text-align: center;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--muted);
-    transition: 0.2s;
-}
-.pay-method-card.active, .pay-method-card:hover {
-    border-color: var(--gold);
-    background: rgba(243,186,79,0.08);
-    color: var(--gold-light);
-}
-
-/* FOOTER */
-footer {
-    padding: 40px 7%;
-    border-top: 1px solid rgba(255,255,255,0.05);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: var(--muted);
-    font-size: 12px;
-}
-
-@media(max-width: 768px) {
-    .nav-links { display: none; }
-    .hero h1 { font-size: 32px; }
-    .payment-methods-grid { grid-template-columns: 1fr; }
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magick Storee — Магический маркетплейс</title>
+    <style>
+        :root {
+            --primary: #6b21a8;
+            --primary-hover: #581c87;
+            --bg-color: #f3e8ff;
+            --text-color: #1f2937;
+            --white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        /* Шапка */
+        header {
+            background: var(--primary);
+            color: var(--white);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .search-bar {
+            flex: 0 1 400px;
+            display: flex;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px 0 0 4px;
+            outline: none;
+        }
+
+        .search-bar button {
+            background: #9333ea;
+            color: var(--white);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links button {
+            background: transparent;
+            border: 1px solid var(--white);
+            color: var(--white);
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .nav-links button:hover {
+            background: var(--white);
+            color: var(--primary);
+        }
+
+        /* Основной контент */
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        h2 {
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .product-card {
+            background: var(--white);
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        }
+
+        .product-img {
+            background: #e9d5ff;
+            height: 150px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .product-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-price {
+            font-size: 1.2rem;
+            color: var(--primary);
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .buy-btn {
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            padding: 0.6rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .buy-btn:hover {
+            background: var(--primary-hover);
+        }
+
+        /* Модальные окна (Корзина / Кабинет) */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 8px;
+            width: 400px;
+            max-width: 90%;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 10px; right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.5rem;
+        }
+    </style>
 </head>
-
 <body>
 
-<!-- NAVBAR -->
-<nav>
-    <div class="logo">VEXQORA<span>.</span></div>
-    <div class="nav-links">
-        <a href="#shop">Магазин</a>
-        <a href="#hwid">HWID Сброс</a>
-        <a href="#support">Поддержка</a>
-        <a href="#rules">Правила</a>
-    </div>
-    <button class="account-btn" onclick="openAccountModal()">Личный кабинет</button>
-</nav>
+    <header>
+        <div class="logo">🔮 Magick Storee</div>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Найти артефакт, зелье, гримуар..." oninput="searchProducts()">
+            <button>🔍</button>
+        </div>
+        <div class="nav-links">
+            <button onclick="openModal('cartModal')">Корзина (<span id="cartCount">0</span>)</button>
+            <button onclick="openModal('profileModal')">Личный кабинет</button>
+        </div>
+    </header>
 
-<!-- HERO -->
-<section class="hero">
-    <div class="hero-badge"><div class="dot"></div> Статус: Все продукты Undetected</div>
-    <h1>ЭЛИТНЫЙ СОФТ И <span>УМНАЯ ЗАЩИТА</span></h1>
-    <p>Мгновенная выдача лицензий, защищенный лаунчер, автоматическая привязка и сброс HWID.</p>
-    <div class="hero-btns">
-        <a href="#shop" class="btn-primary">Купить софт</a>
-        <button class="btn-secondary" onclick="openAccountModal()">Скачать лаунчер</button>
-    </div>
-</section>
-
-<!-- SHOP -->
-<section id="shop">
-    <h2 class="section-title">Каталог софта</h2>
-    <p class="section-desc">Выберите подходящий продукт и версию подписки.</p>
-
-    <div class="products-grid">
-        <!-- Товар 1: Vexqora Client (Minecraft 1.21.4) -->
-        <div class="product-card" data-product="Vexqora Client">
-            <div>
-                <span class="card-tag">STANDARD</span>
-                <div class="version-badge">Minecraft 1.21.4</div>
-                <h3>VEXQORA CLIENT</h3>
-                <p>Надежный софт с базовыми визуальными модулями и стабильной работой.</p>
-                
-                <div class="duration-selector">
-                    <button class="dur-btn" onclick="selectDuration(this, 7, 250)">7 Дней<span>250 ₽</span></button>
-                    <button class="dur-btn active" onclick="selectDuration(this, 30, 600)">30 Дней<span>600 ₽</span></button>
-                    <button class="dur-btn" onclick="selectDuration(this, 'Lifetime', 1500)">Навсегда<span>1500 ₽</span></button>
-                </div>
+    <main>
+        <h2>Популярные магические товары</h2>
+        <div class="products-grid" id="productsGrid">
+            <div class="product-card" data-name="Книга заклинаний">
+                <div class="product-img">📖</div>
+                <div class="product-title">Книга заклинаний древних</div>
+                <div class="product-price">2 499 ₽</div>
+                <button class="buy-btn" onclick="addToCart('Книга заклинаний древних', 2499)">В корзину</button>
             </div>
-            <div class="card-footer">
-                <div class="price-row">
-                    <span style="color:var(--muted); font-size:13px;">К оплате:</span>
-                    <span class="price-val"><span class="dynamic-price">600</span> ₽</span>
-                </div>
-                <button class="buy-btn" onclick="buyProduct(this, 'Vexqora Client')">Купить ключ</button>
+            <div class="product-card" data-name="Зелье бодрости">
+                <div class="product-img">🧪</div>
+                <div class="product-title">Зелье бесконечной бодрости</div>
+                <div class="product-price">899 ₽</div>
+                <button class="buy-btn" onclick="addToCart('Зелье бесконечной бодрости', 899)">В корзину</button>
+            </div>
+            <div class="product-card" data-name="Магический кристалл">
+                <div class="product-img">💎</div>
+                <div class="product-title">Кристалл чистой энергии</div>
+                <div class="product-price">5 199 ₽</div>
+                <button class="buy-btn" onclick="addToCart('Кристалл чистой энергии', 5199)">В корзину</button>
+            </div>
+            <div class="product-card" data-name="Метла для полетов">
+                <div class="product-img">🧹</div>
+                <div class="product-title">Метла гоночная «Nimbus-X»</div>
+                <div class="product-price">12 500 ₽</div>
+                <button class="buy-btn" onclick="addToCart('Метла гоночная «Nimbus-X»', 12500)">В корзину</button>
             </div>
         </div>
+    </main>
 
-        <!-- Товар 2: Vexqora Beta (Minecraft 1.21.11) -->
-        <div class="product-card featured" data-product="Vexqora Beta">
-            <div>
-                <span class="card-tag" style="background:var(--gold); color:#000;">★ BETA</span>
-                <div class="version-badge">Minecraft 1.21.11</div>
-                <h3>VEXQORA BETA</h3>
-                <p>Расширенный функционал обхода, уникальные визуальные темы и быстрые апдейты.</p>
-                
-                <div class="duration-selector">
-                    <button class="dur-btn" onclick="selectDuration(this, 7, 450)">7 Дней<span>450 ₽</span></button>
-                    <button class="dur-btn active" onclick="selectDuration(this, 30, 1100)">30 Дней<span>1100 ₽</span></button>
-                    <button class="dur-btn" onclick="selectDuration(this, 'Lifetime', 2800)">Навсегда<span>2800 ₽</span></button>
-                </div>
-            </div>
-            <div class="card-footer">
-                <div class="price-row">
-                    <span style="color:var(--muted); font-size:13px;">К оплате:</span>
-                    <span class="price-val"><span class="dynamic-price">1100</span> ₽</span>
-                </div>
-                <button class="buy-btn" onclick="buyProduct(this, 'Vexqora Beta')">Купить ключ</button>
-            </div>
+    <div class="modal" id="cartModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('cartModal')">&times;</span>
+            <h2>Ваша корзина</h2>
+            <div id="cartItemsList">Корзина пуста</div>
+            <hr style="margin: 1rem 0;">
+            <div id="cartTotal" style="font-weight: bold; margin-bottom: 1rem;">Итого: 0 ₽</div>
+            <button class="buy-btn" style="width: 100%;" onclick="alert('Заказ успешно оформлен!'); clearCart();">Оплатить картой</button>
         </div>
     </div>
-</section>
 
-<!-- HWID RESET -->
-<section id="hwid" style="background: rgba(243,186,79,0.015); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
-    <h2 class="section-title">Сброс HWID Привязки</h2>
-    <p class="section-desc">Сменили комплектующие или ОС? Сбросьте привязку оборудования в один клик.</p>
-
-    <div class="product-card" style="max-width: 420px; margin: 0 auto;">
-        <div>
-            <span class="card-tag">INSTANT</span>
-            <h3>HWID RESET TICKET</h3>
-            <p>Моментальный автоматический сброс вашей привязки через личный кабинет.</p>
-        </div>
-        <div class="card-footer" style="margin-top:20px;">
-            <div class="price-row">
-                <span style="color:var(--muted); font-size:13px;">Стоимость:</span>
-                <span class="price-val">200 ₽</span>
-            </div>
-            <button class="buy-btn" onclick="buyHwidReset()">Купить сброс HWID</button>
+    <div class="modal" id="profileModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('profileModal')">&times;</span>
+            <h2>Личный кабинет</h2>
+            <p><strong>Имя мага:</strong> Александр</p>
+            <p><strong>Email:</strong> alex@magickstoree.ru</p>
+            <p><strong>Привязанные карты:</strong> **** **** **** 4821 (Мир)</p>
+            <hr style="margin: 1rem 0;">
+            <h3 style="font-size: 1rem; margin-bottom: 0.5rem;">История заказов:</h3>
+            <p style="font-size: 0.9rem; color: #555;">📦 Заказ #1042 — В пути (Доставка в башню)</p>
         </div>
     </div>
-</section>
 
-<!-- SUPPORT SECTION -->
-<section id="support">
-    <h2 class="section-title">Поддержка игроков</h2>
-    <p class="section-desc">Возникли вопросы по установке, запуску лаунчера или оплате? Мы на связи 24/7.</p>
+    <script>
+        let cart = [];
 
-    <div class="support-grid">
-        <div class="support-card">
-            <div class="support-icon">💬</div>
-            <div>
-                <h3>Telegram Поддержка</h3>
-                <p>Быстрый ответ оператора, помощь с багами и решение любых вопросов по софту через нашего бота.</p>
-            </div>
-            <a href="https://t.me/Vezqora_Bot" target="_blank" class="support-btn">Написать в Telegram</a>
-        </div>
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
 
-        <div class="support-card">
-            <div class="support-icon">🎮</div>
-            <div>
-                <h3>Discord Сообщество</h3>
-                <p>Общайтесь с другими игроками, следите за обновлениями и делитесь фидбеком.</p>
-            </div>
-            <a href="https://discord.gg/CbBs9tTPVG" target="_blank" class="support-btn">Войти в Discord</a>
-        </div>
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
 
-        <div class="support-card">
-            <div class="support-icon">⚙️</div>
-            <div>
-                <h3>FAQ / Инструкции</h3>
-                <p>Подробные гайды по первому запуску лаунчера, обходу ошибок и настройке модов.</p>
-            </div>
-            <a href="#rules" class="support-btn">Смотреть правила</a>
-        </div>
-    </div>
-</section>
+        function addToCart(title, price) {
+            cart.push({ title, price });
+            updateCartUI();
+            alert(`Товар "${title}" добавлен в корзину!`);
+        }
 
-<!-- RULES SECTION (РАСШИРЕННЫЙ БЛОК ПРАВИЛ) -->
-<section id="rules">
-    <h2 class="section-title">Правила сервиса</h2>
-    <p class="section-desc">Внимательно ознакомьтесь с регламентом использования платформы VEXQORA.</p>
+        function updateCartUI() {
+            document.getElementById('cartCount').innerText = cart.length;
+            let listHTML = '';
+            let total = 0;
+            
+            if (cart.length === 0) {
+                listHTML = 'Корзина пуста';
+            } else {
+                cart.forEach((item, index) => {
+                    total += item.price;
+                    listHTML += `<div class="cart-item"><span>${item.title}</span> <span>${item.price} ₽</span></div>`;
+                });
+            }
+            
+            document.getElementById('cartItemsList').innerHTML = listHTML;
+            document.getElementById('cartTotal').innerText = `Итого: ${total} ₽`;
+        }
 
-    <div class="rules-container">
-        <div class="rule-item">
-            <h4>1. Безопасность аккаунта и запрет передачи данных</h4>
-            <p>Передача купленного аккаунта, ключа доступа или лаунчера третьим лицам категорически запрещена. Каждый аккаунт защищен внутренней системой мониторинга: при обнаружении попыток совместного использования или передачи данных ключ аннулируется без возможности восстановления и возврата средств.</p>
-        </div>
-        <div class="rule-item">
-            <h4>2. Политика возврата средств</h4>
-            <p>Поскольку продукты поставляются в цифровом виде (лицензионные ключи, цифровые подписки, HWID-тикеты), после их успешной выдачи или активации возврат денежных средств не производится. Возврат возможен исключительно в случае технической неработоспособности софта по вине разработчиков, если проблема не может быть решена технической поддержкой в течение 48 часов.</p>
-        </div>
-        <div class="rule-item">
-            <h4>3. Привязка оборудования (HWID) и сброс</h4>
-            <p>При первом запуске программное обеспечение жестко привязывается к аппаратным компонентам вашего ПК (HWID). При смене комплектующих, переустановке Windows или покупке нового железа пользователь обязан использовать официальный тикет сброса HWID, доступный в магазине, либо обратиться в поддержку.</p>
-        </div>
-        <div class="rule-item">
-            <h4>4. Статус продуктов и обновления</h4>
-            <p>Разработчики обязуются выпускать патчи и обновления при выходе новых версий игры. Тем не менее, пользователь осознает возможные риски блокировок на сторонних серверах и соглашается с тем, что администрация не несет ответственности за баны на сторонних проектах при нарушении правил этих серверов.</p>
-        </div>
-        <div class="rule-item">
-            <h4>5. Правила общения с технической поддержкой</h4>
-            <p>Любые оскорбления, нецензурная брань, спам, угрозы или проявления токсичности в адрес администрации, операторов поддержки или участников сообщества строго запрещены. При нарушении данного правила администрация оставляет за собой право заблокировать доступ к аккаунту и техподдержке без предварительного уведомления.</p>
-        </div>
-        <div class="rule-item">
-            <h4>6. Использование стороннего софта</h4>
-            <p>Администрация не несет ответственности за стабильность работы софта VEXQORA, если пользователь модифицирует файлы лаунчера, внедряет сторонние вредоносные скрипты или использует нелицензионное стороннее программное обеспечение на одном ПК.</p>
-        </div>
-    </div>
-</section>
+        function clearCart() {
+            cart = [];
+            updateCartUI();
+            closeModal('cartModal');
+        }
 
-<!-- FOOTER -->
-<footer>
-    <div>© 2026 VEXQORA SOFTWARE. All rights reserved.</div>
-    <div>SECURE LICENSE & LAUNCHER PLATFORM</div>
-</footer>
+        function searchProducts() {
+            let query = document.getElementById('searchInput').value.toLowerCase();
+            let cards = document.querySelectorAll('.product-card');
 
-<!-- MODAL: ACCOUNT & ADVANCED CABINET -->
-<div class="modal" id="accountModal">
-    <div class="modal-content">
-        <button class="close-btn" onclick="closeAccountModal()">×</button>
-
-        <!-- Вход -->
-        <div id="loginForm">
-            <h2>Авторизация</h2>
-            <p>Войдите в личный кабинет Vexqora.</p>
-            <input type="text" class="input-field" id="logUser" placeholder="Логин">
-            <input type="password" class="input-field" id="logPass" placeholder="Пароль">
-            <button class="buy-btn" onclick="handleLogin()">Войти</button>
-            <div class="auth-switch">Нет аккаунта? <span onclick="switchModal('register')">Зарегистрироваться</span></div>
-        </div>
-
-        <!-- Регистрация -->
-        <div id="registerForm" style="display:none;">
-            <h2>Регистрация</h2>
-            <p>Создайте новый аккаунт за пару секунд.</p>
-            <input type="text" class="input-field" id="regUser" placeholder="Придумайте логин">
-            <input type="password" class="input-field" id="regPass" placeholder="Придумайте пароль">
-            <button class="buy-btn" onclick="handleRegister()">Создать аккаунт</button>
-            <div class="auth-switch">Есть аккаунт? <span onclick="switchModal('login')">Войти</span></div>
-        </div>
-
-        <!-- Личный кабинет -->
-        <div id="cabinetView" class="cabinet-panel">
-            <div class="cab-header-card">
-                <div class="cab-user-info">
-                    <h3 id="cabName">Username</h3>
-                    <p>● Активный аккаунт</p>
-                </div>
-                <button class="buy-btn" style="width: auto; padding: 8px 16px; font-size: 11px; background: rgba(255,60,60,0.2); color: #ff7777; border: 1px solid rgba(255,60,60,0.4);" onclick="handleLogout()">Выйти</button>
-            </div>
-
-            <!-- Блок кошелька -->
-            <div class="wallet-box">
-                <div class="wallet-info">
-                    <span>Баланс кошелька</span>
-                    <strong id="walletBalance">0 ₽</strong>
-                </div>
-                <button class="download-btn-mini" onclick="switchCabTab('topup', document.querySelectorAll('.cab-tab')[3])">Пополнить</button>
-            </div>
-
-            <!-- Вкладки кабинета -->
-            <div class="cabinet-tabs">
-                <button class="cab-tab active" onclick="switchCabTab('keys', this)">Мои ключи</button>
-                <button class="cab-tab" onclick="switchCabTab('download', this)">Скачать</button>
-                <button class="cab-tab" onclick="switchCabTab('activate', this)">Активация</button>
-                <button class="cab-tab" onclick="switchCabTab('topup', this)">Пополнение</button>
-            </div>
-
-            <!-- Вкладка: Ключи -->
-            <div id="tabKeys" class="cab-section active">
-                <p style="font-size:12px; margin-bottom:6px; color:var(--muted);">Ваши купленные ключи и HWID тикеты:</p>
-                <div class="keys-list" id="cabKeys">
-                    <div style="color:var(--muted); font-size:12px; text-align:center; padding:15px;">Список ключей пуст.</div>
-                </div>
-            </div>
-
-            <!-- Вкладка: Скачать -->
-            <div id="tabDownload" class="cab-section">
-                <div class="download-box">
-                    <div class="download-info">
-                        <h4>Vexqora Installer (.EXE)</h4>
-                        <p>Для Windows (Рекомендуется)</p>
-                    </div>
-                    <a href="#" onclick="alert('Загрузка Vexqora-Setup.exe началась!'); return false;" class="download-btn-mini">Скачать</a>
-                </div>
-
-                <div class="download-box">
-                    <div class="download-info">
-                        <h4>Vexqora Universal (.JAR)</h4>
-                        <p>Кроссплатформенный архив</p>
-                    </div>
-                    <a href="#" onclick="alert('Загрузка Vexqora-Launcher.jar началась!'); return false;" class="download-btn-mini">Скачать</a>
-                </div>
-            </div>
-
-            <!-- Вкладка: Активация -->
-            <div id="tabActivate" class="cab-section">
-                <p style="font-size:12px; margin-bottom:8px; color:var(--muted);">Введите ваш лицензионный ключ для привязки:</p>
-                <input type="text" class="input-field" id="activateKeyInput" placeholder="VEX-XXXX-XXXX-XXXX" style="margin-bottom:10px;">
-                <button class="buy-btn" onclick="activateUserKey()">Привязать ключ</button>
-            </div>
-
-            <!-- Вкладка: Пополнение баланса -->
-            <div id="tabTopup" class="cab-section">
-                <p style="font-size:12px; margin-bottom:10px; color:var(--muted);">Выберите способ оплаты и пополните баланс (РФ, РК, Украина и др.):</p>
-                
-                <div class="payment-methods-grid">
-                    <div class="pay-method-card active" onclick="selectPayMethod(this, 'Kaspi QR / Bank (КЗ)')">🇰🇿 Kaspi / Банки КЗ</div>
-                    <div class="pay-method-card" onclick="selectPayMethod(this, 'Банковская карта РФ (МИР/Visa/MC)')">🇷🇺 Карты РФ (МИР)</div>
-                    <div class="pay-method-card" onclick="selectPayMethod(this, 'СБП (Система Быстрых Платежей)')">⚡ СБП РФ</div>
-                    <div class="pay-method-card" onclick="selectPayMethod(this, 'Карты Украины / Мира (Visa/MC)')">🇺🇦 Карты UA / Другие</div>
-                </div>
-
-                <input type="number" class="input-field" id="topupAmountInput" placeholder="Сумма пополнения в ₽" style="margin-bottom:10px;">
-                <button class="buy-btn" onclick="executeTopup()">Перейти к оплате</button>
-            </div>
-        </div>
-
-    </div>
-</div>
-
-<script>
-let selectedPaymentMethod = 'Kaspi QR / Bank (КЗ)';
-
-// Выбор метода оплаты
-function selectPayMethod(el, method) {
-    document.querySelectorAll('.pay-method-card').forEach(c => c.classList.remove('active'));
-    el.classList.add('active');
-    selectedPaymentMethod = method;
-}
-
-// Выбор срока подписки
-function selectDuration(btn, days, price) {
-    const card = btn.closest('.product-card');
-    card.querySelectorAll('.dur-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    
-    card.setAttribute('data-days', days);
-    card.setAttribute('data-price', price);
-    card.querySelector('.dynamic-price').innerText = price;
-}
-
-// Покупка софта (списание с баланса кошелька)
-function buyProduct(btn, productName) {
-    let user = localStorage.getItem('vex_current_user');
-    if (!user) {
-        alert('Пожалуйста, войдите в личный кабинет перед покупкой!');
-        openAccountModal();
-        return;
-    }
-
-    const card = btn.closest('.product-card');
-    const days = card.getAttribute('data-days') || '30';
-    const price = parseInt(card.getAttribute('data-price') || '600');
-    const durationName = days === 'Lifetime' ? 'Навсегда' : days + ' дн.';
-
-    let currentBalance = parseInt(localStorage.getItem('vex_wallet_' + user) || '0');
-
-    if (currentBalance < price) {
-        alert(`Недостаточно средств на балансе! Требуется: ${price} ₽, у вас: ${currentBalance} ₽. Пополните кошелек в личном кабинете.`);
-        openAccountModal();
-        switchCabTab('topup', document.querySelectorAll('.cab-tab')[3]);
-        return;
-    }
-
-    if (confirm(`Купить "${productName}" (${durationName}) за ${price} ₽ с баланса аккаунта?`)) {
-        currentBalance -= price;
-        localStorage.setItem('vex_wallet_' + user, currentBalance);
-
-        const fakeKey = 'VEX-' + Math.random().toString(36).substring(2,6).toUpperCase() + '-' + Math.random().toString(36).substring(2,6).toUpperCase() + '-' + Math.random().toString(36).substring(2,6).toUpperCase();
-        saveUserKey(user, `[${productName} - ${durationName}]`, fakeKey);
-
-        alert('Оплата прошла успешно! Ключ добавлен в ваш личный кабинет в раздел "Мои ключи".');
-        openAccountModal();
-        updateCabinetState();
-    }
-}
-
-// Покупка HWID сброса
-function buyHwidReset() {
-    let user = localStorage.getItem('vex_current_user');
-    if (!user) {
-        alert('Сначала войдите в личный кабинет!');
-        openAccountModal();
-        return;
-    }
-
-    const price = 200;
-    let currentBalance = parseInt(localStorage.getItem('vex_wallet_' + user) || '0');
-
-    if (currentBalance < price) {
-        alert(`Недостаточно средств на балансе для покупки сброса HWID (${price} ₽). Пополните кошелек!`);
-        openAccountModal();
-        switchCabTab('topup', document.querySelectorAll('.cab-tab')[3]);
-        return;
-    }
-
-    if (confirm('Приобрести сброс HWID за 200 ₽ с баланса?')) {
-        currentBalance -= price;
-        localStorage.setItem('vex_wallet_' + user, currentBalance);
-
-        const hwidTicket = 'HWID-RESET-' + Math.random().toString(36).substring(2,8).toUpperCase();
-        saveUserKey(user, '[Сброс HWID тикет]', hwidTicket);
-        alert('Тикет на сброс HWID успешно куплен!');
-        openAccountModal();
-        updateCabinetState();
-    }
-}
-
-// Пополнение баланса
-function executeTopup() {
-    let user = localStorage.getItem('vex_current_user');
-    let amountInput = document.getElementById('topupAmountInput').value.trim();
-    let amount = parseInt(amountInput);
-
-    if (!amount || amount <= 0) {
-        alert('Введите корректную сумму пополнения!');
-        return;
-    }
-
-    if (confirm(`Подтверждаете пополнение баланса на ${amount} ₽ через способ: ${selectedPaymentMethod}?`)) {
-        let currentBalance = parseInt(localStorage.getItem('vex_wallet_' + user) || '0');
-        currentBalance += amount;
-        localStorage.setItem('vex_wallet_' + user, currentBalance);
-
-        document.getElementById('topupAmountInput').value = '';
-        alert(`Баланс успешно пополнен на ${amount} ₽!`);
-        updateCabinetState();
-        switchCabTab('keys', document.querySelectorAll('.cab-tab')[0]);
-    }
-}
-
-// Сохранение ключа
-function saveUserKey(user, title, keyStr) {
-    let keys = JSON.parse(localStorage.getItem('vex_keys_' + user)) || [];
-    keys.push({ title, key: keyStr });
-    localStorage.setItem('vex_keys_' + user, JSON.stringify(keys));
-}
-
-// Активация ключа вручную
-function activateUserKey() {
-    let user = localStorage.getItem('vex_current_user');
-    let keyInput = document.getElementById('activateKeyInput').value.trim();
-    if (!keyInput) { alert('Введите ключ!'); return; }
-
-    saveUserKey(user, '[Активирован вручную]', keyInput);
-    document.getElementById('activateKeyInput').value = '';
-    alert('Ключ успешно привязан к вашему аккаунту!');
-    updateCabinetState();
-}
-
-// Модальное окно
-function openAccountModal() {
-    document.getElementById('accountModal').classList.add('active');
-    updateCabinetState();
-}
-
-function closeAccountModal() {
-    document.getElementById('accountModal').classList.remove('active');
-}
-
-function switchModal(type) {
-    if (type === 'register') {
-        document.getElementById('loginForm').style.display = 'none';
-        document.getElementById('registerForm').style.display = 'block';
-    } else {
-        document.getElementById('registerForm').style.display = 'none';
-        document.getElementById('loginForm').style.display = 'block';
-    }
-}
-
-// Вкладки в личном кабинете
-function switchCabTab(tabName, el) {
-    document.querySelectorAll('.cab-tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.cab-section').forEach(s => s.classList.remove('active'));
-
-    el.classList.add('active');
-    if (tabName === 'keys') document.getElementById('tabKeys').classList.add('active');
-    if (tabName === 'download') document.getElementById('tabDownload').classList.add('active');
-    if (tabName === 'activate') document.getElementById('tabActivate').classList.add('active');
-    if (tabName === 'topup') document.getElementById('tabTopup').classList.add('active');
-}
-
-// Регистрация / Вход / Выход
-function handleRegister() {
-    let u = document.getElementById('regUser').value.trim();
-    let p = document.getElementById('regPass').value.trim();
-    if (!u || !p) { alert('Заполните все поля!'); return; }
-    if (localStorage.getItem('vex_u_' + u)) { alert('Логин уже занят!'); return; }
-
-    localStorage.setItem('vex_u_' + u, p);
-    localStorage.setItem('vex_current_user', u);
-    alert('Регистрация прошла успешно!');
-    updateCabinetState();
-}
-
-function handleLogin() {
-    let u = document.getElementById('logUser').value.trim();
-    let p = document.getElementById('logPass').value.trim();
-    if (!u || !p) { alert('Заполните все поля!'); return; }
-    
-    let savedPass = localStorage.getItem('vex_u_' + u);
-    if (!savedPass || savedPass !== p) { alert('Неверный логин или пароль!'); return; }
-
-    localStorage.setItem('vex_current_user', u);
-    alert('Успешный вход!');
-    updateCabinetState();
-}
-
-function handleLogout() {
-    localStorage.removeItem('vex_current_user');
-    updateCabinetState();
-}
-
-// Обновление состояния интерфейса кабинета
-function updateCabinetState() {
-    let user = localStorage.getItem('vex_current_user');
-    let loginForm = document.getElementById('loginForm');
-    let regForm = document.getElementById('registerForm');
-    let cabView = document.getElementById('cabinetView');
-
-    if (user) {
-        loginForm.style.display = 'none';
-        regForm.style.display = 'none';
-        cabView.classList.add('active');
-
-        document.getElementById('cabName').innerText = user;
-        
-        let balance = localStorage.getItem('vex_wallet_' + user) || '0';
-        document.getElementById('walletBalance').innerText = balance + ' ₽';
-
-        let keys = JSON.parse(localStorage.getItem('vex_keys_' + user)) || [];
-        let keysContainer = document.getElementById('cabKeys');
-        
-        if (keys.length === 0) {
-            keysContainer.innerHTML = '<div style="color:var(--muted); font-size:12px; text-align:center; padding:15px;">Список ключей пуст.</div>';
-        } else {
-            keysContainer.innerHTML = '';
-            keys.forEach(k => {
-                keysContainer.innerHTML += `<div class="key-item"><strong>${k.title}</strong><br>${k.key}</div>`;
+            cards.forEach(card => {
+                let name = card.getAttribute('data-name').toLowerCase();
+                if (name.includes(query)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
             });
         }
-    } else {
-        cabView.classList.remove('active');
-        loginForm.style.display = 'block';
-        regForm.style.display = 'none';
-    }
-}
-</script>
-
+    </script>
 </body>
 </html>
