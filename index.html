@@ -7,9 +7,9 @@
     <style>
         :root {
             --bg-color: #08040f;
-            --panel-bg: rgba(14, 8, 24, 0.92);
+            --panel-bg: rgba(14, 8, 24, 0.95);
             --neon-purple: #a855f7;
-            --neon-glow: rgba(168, 85, 247, 0.4);
+            --neon-glow: rgba(168, 85, 247, 0.5);
             --text-main: #ffffff;
             --text-muted: #9ca3af;
             --danger: #ef4444;
@@ -46,6 +46,12 @@
             border-radius: 14px; padding: 30px;
             box-shadow: 0 0 40px rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(12px);
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .hidden { display: none !important; }
@@ -66,14 +72,15 @@
             cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s;
             box-shadow: 0 0 15px rgba(124, 58, 237, 0.4); margin-top: 10px;
         }
-        button:hover { background: linear-gradient(135deg, #8b5cf6, #a855f7); box-shadow: 0 0 25px var(--neon-glow); }
+        button:hover { background: linear-gradient(135deg, #8b5cf6, #a855f7); box-shadow: 0 0 25px var(--neon-glow); transform: translateY(-1px); }
 
-        /* Сетка публичного состава */
+        /* Сетка состава */
         .roster-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 25px; }
         .roster-card {
             background: rgba(18, 10, 32, 0.8); border: 1px solid rgba(168, 85, 247, 0.3);
-            border-radius: 10px; padding: 20px; text-align: center; position: relative;
+            border-radius: 10px; padding: 20px; text-align: center; transition: 0.3s;
         }
+        .roster-card:hover { border-color: var(--neon-purple); box-shadow: 0 0 15px var(--neon-glow); }
         .roster-card h3 { color: #fff; margin-bottom: 6px; font-size: 1.2rem; }
         .roster-card p { color: var(--neon-purple); font-size: 0.9rem; margin-bottom: 12px; font-weight: 600; }
 
@@ -102,6 +109,36 @@
         .status-approved { background: rgba(34, 197, 94, 0.2); color: var(--success); border: 1px solid var(--success); }
         .status-rejected { background: rgba(239, 68, 68, 0.2); color: var(--danger); border: 1px solid var(--danger); }
 
+        /* КРАСИВАЯ ОТКРЫТКА С АНИМАЦИЕЙ ДЛЯ ОДОБРЕННЫХ */
+        .congrats-card {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.15), rgba(168, 85, 247, 0.15));
+            border: 2px solid var(--success);
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(34, 197, 94, 0.3);
+            animation: popUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin-top: 15px;
+        }
+        @keyframes popUp {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .congrats-card h3 { color: var(--success); font-size: 1.4rem; margin-bottom: 10px; }
+        .congrats-card p { color: #fff; font-size: 0.95rem; margin-bottom: 15px; line-height: 1.5; }
+        .whatsapp-btn {
+            display: inline-block;
+            background: #25d366;
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            text-decoration: none;
+            box-shadow: 0 0 15px rgba(37, 211, 102, 0.4);
+            transition: 0.3s;
+        }
+        .whatsapp-btn:hover { background: #20ba5a; box-shadow: 0 0 25px rgba(37, 211, 102, 0.7); }
+
         .admin-card { background: rgba(10, 5, 20, 0.9); border: 1px solid rgba(168, 85, 247, 0.4); padding: 18px; border-radius: 8px; margin-bottom: 15px; }
         .admin-actions { display: flex; gap: 10px; margin-top: 12px; }
         .btn-approve { background: var(--success); box-shadow: 0 0 10px rgba(34, 197, 94, 0.4); margin: 0; }
@@ -124,7 +161,7 @@
 
     <div class="container">
 
-        <!-- ГЛАВНАЯ: СОСТАВ КОМАНДЫ -->
+        <!-- ГЛАВНАЯ: СОСТАВ -->
         <div id="public-roster-section">
             <h2>Основной состав команды</h2>
             <div class="roster-grid" id="roster-container"></div>
@@ -132,7 +169,7 @@
             <div class="toggle-link" onclick="toggleAdminMode()" style="margin-top: 20px;">Панель администратора</div>
         </div>
 
-        <!-- АВТОРИЗАЦИЯ ИГРОКА -->
+        <!-- АВТОРИЗАЦИЯ -->
         <div id="auth-section" class="hidden">
             <h2>Авторизация игрока</h2>
             <div class="form-group">
@@ -154,7 +191,7 @@
             <div class="toggle-link" onclick="showRoster()">Назад на главную</div>
         </div>
 
-        <!-- ПОЛНОЦЕННЫЙ ЛИЧНЫЙ КАБИНЕТ ИГРОКА -->
+        <!-- КАБИНЕТ ИГРОКА -->
         <div id="player-cabinet" class="hidden">
             <div class="cabinet-header">
                 <div style="display: flex; align-items: center; gap: 15px;">
@@ -167,13 +204,12 @@
                 <button class="logout-btn" onclick="logout()">Выйти</button>
             </div>
 
-            <!-- Вкладки личного кабинета -->
             <div class="tabs">
                 <button class="tab-btn active" onclick="switchTab('application', this)">Моя заявка</button>
                 <button class="tab-btn" onclick="switchTab('settings', this)">Настройки профиля</button>
             </div>
 
-            <!-- Вкладка 1: Заявка -->
+            <!-- Вкладка: Заявка -->
             <div id="tab-application">
                 <div id="app-form-wrap">
                     <h3 style="font-size: 1.1rem; color: #fff; margin-bottom: 15px;">Заполнить анкету в состав</h3>
@@ -198,27 +234,29 @@
                     <button onclick="submitApp()">Отправить заявку админу</button>
                 </div>
 
-                <div id="app-status-wrap" class="hidden" style="text-align: center; padding: 25px; background: rgba(20, 10, 35, 0.6); border-radius: 10px;">
+                <div id="app-status-wrap" class="hidden" style="text-align: center; padding: 20px;">
                     <p style="color: var(--text-muted); margin-bottom: 10px; font-size: 0.9rem;">Текущий статус вашей заявки:</p>
                     <div id="status-badge-box" style="margin-bottom: 15px;"></div>
                     <p id="status-desc" style="font-size: 0.95rem; color: #fff;"></p>
+                    
+                    <!-- КРАСИВАЯ ОТКРЫТКА ПРИ ОДОБРЕНИИ -->
+                    <div id="congrats-card-container" class="hidden"></div>
                 </div>
             </div>
 
-            <!-- Вкладка 2: Настройки профиля -->
+            <!-- Вкладка: Настройки -->
             <div id="tab-settings" class="hidden">
                 <h3 style="font-size: 1.1rem; color: #fff; margin-bottom: 15px;">Информация об аккаунте</h3>
                 <div class="form-group">
                     <label>Ваш системный логин</label>
                     <input type="text" id="settings-login" disabled style="opacity: 0.6;">
                 </div>
-                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 15px;">Для смены логина или сброса сессии перезайдите в систему под новым именем.</p>
             </div>
 
             <div class="toggle-link" style="margin-top: 25px;" onclick="showRoster()">Перейти к просмотру состава команды</div>
         </div>
 
-        <!-- ПАНЕЛЬ АДМИНИСТРАТОРА -->
+        <!-- АДМИН ПАНЕЛЬ -->
         <div id="admin-panel" class="hidden">
             <div class="cabinet-header">
                 <div class="user-details">
@@ -248,6 +286,7 @@
 
     <script>
         const ADMIN_KEY = "NEXORA-ADMIN-2026";
+        const ADMIN_WHATSAPP = "+77002538020";
 
         const defaultRoster = [
             { id: 1, nick: "Nexora | Shadow", role: "IGL (Captain)", faceit: "#" },
@@ -352,25 +391,19 @@
             routeUser();
         }
 
-        // Переключение вкладок в кабинете игрока
         function switchTab(tabName, btn) {
             document.querySelectorAll('#player-cabinet .tab-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-
             document.getElementById('tab-application').classList.add('hidden');
             document.getElementById('tab-settings').classList.add('hidden');
-
             document.getElementById('tab-' + tabName).classList.remove('hidden');
         }
 
-        // Переключение вкладок в админке
         function switchAdminTab(tabName, btn) {
             document.querySelectorAll('#admin-panel .tab-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-
             document.getElementById('admin-tab-apps').classList.add('hidden');
             document.getElementById('admin-tab-roster').classList.add('hidden');
-
             document.getElementById('admin-tab-' + tabName).classList.remove('hidden');
         }
 
@@ -398,19 +431,36 @@
             const statusWrap = document.getElementById('app-status-wrap');
             const badgeBox = document.getElementById('status-badge-box');
             const desc = document.getElementById('status-desc');
+            const congratsCard = document.getElementById('congrats-card-container');
 
             if(app) {
                 formWrap.classList.add('hidden');
                 statusWrap.classList.remove('hidden');
+                
                 if(app.status === 'pending') {
                     badgeBox.innerHTML = `<span class="status-badge status-pending">На рассмотрении</span>`;
                     desc.innerText = "Ваша анкета получена. Ожидайте решения администратора.";
+                    congratsCard.classList.add('hidden');
                 } else if(app.status === 'approved') {
                     badgeBox.innerHTML = `<span class="status-badge status-approved">Одобрена</span>`;
                     desc.innerText = "Поздравляем! Вы зачислены в основной состав команды Nexora.";
+                    
+                    // Показываем открытку с WhatsApp
+                    congratsCard.classList.remove('hidden');
+                    congratsCard.innerHTML = `
+                        <div class="congrats-card">
+                            <h3>⚡ ТЫ В КОМАНДЕ! ⚡</h3>
+                            <p>Твоя заявка одобрена! Свяжись с капитаном в WhatsApp для дальнейших инструкций и пракков.</p>
+                            <a href="https://wa.me/${ADMIN_WHATSAPP.replace('+', '')}?text=Привет!%20Мою%20заявку%20в%20Nexora%20одобрили.%20Я%20готов!" 
+                               target="_blank" class="whatsapp-btn">
+                                Написать в WhatsApp (${ADMIN_WHATSAPP})
+                            </a>
+                        </div>
+                    `;
                 } else if(app.status === 'rejected') {
                     badgeBox.innerHTML = `<span class="status-badge status-rejected">Отклонена</span>`;
                     desc.innerText = "К сожалению, ваша заявка была отклонена организаторами.";
+                    congratsCard.classList.add('hidden');
                 }
             } else {
                 formWrap.classList.remove('hidden');
@@ -455,7 +505,6 @@
 
             if(status === 'approved') {
                 let roster = getRoster();
-                // Проверяем, нет ли уже такого игрока в составе
                 if(!roster.some(m => m.nick === apps[index].nick)) {
                     roster.push({ id: Date.now(), nick: apps[index].nick, role: apps[index].role, faceit: apps[index].faceit });
                     localStorage.setItem('nexora_roster', JSON.stringify(roster));
