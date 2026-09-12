@@ -66,6 +66,9 @@
         }
         input:focus, select:focus, textarea:focus { border-color: var(--neon-purple); box-shadow: 0 0 12px var(--neon-glow); }
 
+        .error-input { border-color: var(--danger) !important; box-shadow: 0 0 10px rgba(239, 68, 68, 0.4); }
+        .error-msg { color: var(--danger); font-size: 0.75rem; margin-top: 5px; display: block; }
+
         button {
             width: 100%; padding: 12px; background: linear-gradient(135deg, #7c3aed, #9333ea);
             border: none; border-radius: 8px; color: white; font-size: 1rem; font-weight: bold;
@@ -109,7 +112,7 @@
         .status-approved { background: rgba(34, 197, 94, 0.2); color: var(--success); border: 1px solid var(--success); }
         .status-rejected { background: rgba(239, 68, 68, 0.2); color: var(--danger); border: 1px solid var(--danger); }
 
-        /* КРАСИВАЯ ОТКРЫТКА С АНИМАЦИЕЙ ДЛЯ ОДОБРЕННЫХ */
+        /* Открытка с анимацией */
         .congrats-card {
             background: linear-gradient(135deg, rgba(34, 197, 94, 0.15), rgba(168, 85, 247, 0.15));
             border: 2px solid var(--success);
@@ -175,6 +178,7 @@
             <div class="form-group">
                 <label>Ваш игровой ID / Логин</label>
                 <input type="text" id="user-login-input" placeholder="например, player_1337">
+                <span id="login-error" class="error-msg hidden">Введите логин (минимум 3 символа)</span>
             </div>
             <button onclick="loginUser()">Войти в кабинет</button>
             <div class="toggle-link" onclick="showRoster()">&larr; На главную (Состав)</div>
@@ -213,10 +217,13 @@
             <div id="tab-application">
                 <div id="app-form-wrap">
                     <h3 style="font-size: 1.1rem; color: #fff; margin-bottom: 15px;">Заполнить анкету в состав</h3>
+                    
                     <div class="form-group">
                         <label>Игровой Никнейм</label>
                         <input type="text" id="app-nick" placeholder="например, s1mple">
+                        <span id="nick-error" class="error-msg hidden">Ник должен быть не короче 3 символов!</span>
                     </div>
+
                     <div class="form-group">
                         <label>Роль в команде</label>
                         <select id="app-role">
@@ -227,10 +234,13 @@
                             <option value="Lurker">Lurker</option>
                         </select>
                     </div>
+
                     <div class="form-group">
                         <label>Ссылка на FACEIT / Steam</label>
                         <input type="text" id="app-faceit" placeholder="https://faceit.com/ru/players/...">
+                        <span id="faceit-error" class="error-msg hidden">Введите корректную ссылку (должна содержать faceit.com или steamcommunity.com)</span>
                     </div>
+
                     <button onclick="submitApp()">Отправить заявку админу</button>
                 </div>
 
@@ -239,7 +249,6 @@
                     <div id="status-badge-box" style="margin-bottom: 15px;"></div>
                     <p id="status-desc" style="font-size: 0.95rem; color: #fff;"></p>
                     
-                    <!-- КРАСИВАЯ ОТКРЫТКА ПРИ ОДОБРЕНИИ -->
                     <div id="congrats-card-container" class="hidden"></div>
                 </div>
             </div>
@@ -368,8 +377,19 @@
         }
 
         function loginUser() {
-            const login = document.getElementById('user-login-input').value.trim();
-            if(!login) { alert('Введите логин!'); return; }
+            const loginInput = document.getElementById('user-login-input');
+            const login = loginInput.value.trim();
+            const errorSpan = document.getElementById('login-error');
+
+            if(login.length < 3) {
+                loginInput.classList.add('error-input');
+                errorSpan.classList.remove('hidden');
+                return;
+            }
+
+            loginInput.classList.remove('error-input');
+            errorSpan.classList.add('hidden');
+
             localStorage.setItem('nexora_user', login);
             localStorage.setItem('nexora_role', 'player');
             routeUser();
@@ -407,13 +427,42 @@
             document.getElementById('admin-tab-' + tabName).classList.remove('hidden');
         }
 
+        // ЖЕСТКАЯ ВАЛИДАЦИЯ АНКЕТЫ
         function submitApp() {
-            const nick = document.getElementById('app-nick').value.trim();
+            const nickInput = document.getElementById('app-nick');
+            const faceitInput = document.getElementById('app-faceit');
+            const nickError = document.getElementById('nick-error');
+            const faceitError = document.getElementById('faceit-error');
+            
+            const nick = nickInput.value.trim();
             const role = document.getElementById('app-role').value;
-            const faceit = document.getElementById('app-faceit').value.trim();
+            const faceit = faceitInput.value.trim();
             const user = localStorage.getItem('nexora_user');
 
-            if(!nick || !faceit) { alert('Заполните ник и ссылку на FACEIT!'); return; }
+            let hasError = false;
+
+            // Проверка никнейма (минимум 3 символа)
+            if(nick.length < 3) {
+                nickInput.classList.add('error-input');
+                nickError.classList.remove('hidden');
+                hasError = true;
+            } else {
+                nickInput.classList.remove('error-input');
+                nickError.classList.add('hidden');
+            }
+
+            // Проверка ссылки на FACEIT/Steam (обязательно наличие домена и http)
+            const isValidUrl = faceit.startsWith('http') && (faceit.includes('faceit.com') || faceit.includes('steamcommunity.com'));
+            if(!isValidUrl) {
+                faceitInput.classList.add('error-input');
+                faceitError.classList.remove('hidden');
+                hasError = true;
+            } else {
+                faceitInput.classList.remove('error-input');
+                faceitError.classList.add('hidden');
+            }
+
+            if(hasError) return; // Прерываем отправку, если есть ошибки
 
             let apps = getApps();
             apps = apps.filter(a => a.user !== user); 
@@ -421,7 +470,7 @@
             
             localStorage.setItem('nexora_apps', JSON.stringify(apps));
             checkUserAppStatus(user);
-            alert('Заявка успешно отправлена!');
+            alert('Заявка успешно прошла проверку и отправлена администратору!');
         }
 
         function checkUserAppStatus(user) {
@@ -445,7 +494,6 @@
                     badgeBox.innerHTML = `<span class="status-badge status-approved">Одобрена</span>`;
                     desc.innerText = "Поздравляем! Вы зачислены в основной состав команды Nexora.";
                     
-                    // Показываем открытку с WhatsApp
                     congratsCard.classList.remove('hidden');
                     congratsCard.innerHTML = `
                         <div class="congrats-card">
