@@ -1,1165 +1,525 @@
-"use strict";
+const modal = document.getElementById("modal");
+const content = document.getElementById("modal-content");
 
+let currentUser = localStorage.getItem("nexoraUser");
 
-/* =========================
-   ELEMENTS
-========================= */
+let applications =
+    JSON.parse(localStorage.getItem("nexoraApplications")) || [];
 
-const generateButton =
-    document.getElementById("generateButton");
-
-const promptInput =
-    document.getElementById("prompt");
-
-const statusElement =
-    document.getElementById("status");
-
-const creditsElement =
-    document.getElementById("credits");
-
-const navCredits =
-    document.getElementById("navCredits");
-
-const result =
-    document.getElementById("result");
-
-const video =
-    document.getElementById("video");
-
-const download =
-    document.getElementById("download");
-
-const loginButton =
-    document.getElementById("loginButton");
-
-const loginModal =
-    document.getElementById("loginModal");
-
-const closeLoginButton =
-    document.getElementById("closeLogin");
-
-const googleButton =
-    document.getElementById("googleButton");
-
-const emailLoginButton =
-    document.getElementById("emailLoginButton");
-
-const registerButton =
-    document.getElementById("registerButton");
-
-const logoutButton =
-    document.getElementById("logoutButton");
-
-const emailInput =
-    document.getElementById("email");
-
-const passwordInput =
-    document.getElementById("password");
-
-const accountSection =
-    document.getElementById("account");
-
-const historyContainer =
-    document.getElementById("history");
-
-
-/* =========================
-   PLANS
-========================= */
-
-const plans = {
-
-    Free: {
-        credits: 1,
-        maxSeconds: 10,
-        quality: "basic"
-    },
-
-    Basic: {
-        credits: 10,
-        maxSeconds: 30,
-        quality: "hd"
-    },
-
-    Pro: {
-        credits: 50,
-        maxSeconds: 60,
-        quality: "fullhd"
-    },
-
-    Ultra: {
-        credits: 150,
-        maxSeconds: 120,
-        quality: "4k"
-    }
-
-};
-
-
-const qualityRank = {
-
-    basic: 1,
-
-    hd: 2,
-
-    fullhd: 3,
-
-    "4k": 4
-
-};
-
-
-/* =========================
-   STORAGE
-========================= */
-
-function loadUser() {
-
-    try {
-
-        return JSON.parse(
-            localStorage.getItem(
-                "veoUser"
-            )
-        ) || null;
-
-    } catch {
-
-        return null;
-
-    }
-
+function showModal(html) {
+    content.innerHTML = html;
+    modal.classList.add("active");
 }
 
+function closeModal() {
+    modal.classList.remove("active");
+}
 
-function loadHistory() {
-
-    try {
-
-        return JSON.parse(
-            localStorage.getItem(
-                "veoHistory"
-            )
-        ) || [];
-
-    } catch {
-
-        return [];
-
+modal.addEventListener("click", function (e) {
+    if (e.target === modal) {
+        closeModal();
     }
-
-}
-
-
-let user = loadUser();
-
-let credits =
-    Number(
-        localStorage.getItem(
-            "veoCredits"
-        )
-    );
-
-if (
-    !Number.isFinite(credits) ||
-    credits < 0
-) {
-    credits = 1;
-}
-
-
-let history =
-    loadHistory();
+});
 
 
 /* =========================
-   SAVE
+   AUTH
 ========================= */
 
-function saveUser() {
+function openAuth() {
 
-    if (!user) {
-
-        localStorage.removeItem(
-            "veoUser"
-        );
-
+    if (currentUser) {
+        openAccount();
         return;
     }
 
-    localStorage.setItem(
-        "veoUser",
-        JSON.stringify(user)
-    );
+    showModal(`
+        <h2>Вход в NEXORA</h2>
 
+        <div class="form">
+
+            <label>Игровой ник / логин</label>
+            <input id="loginName" placeholder="KVY1NN">
+
+            <label>Пароль</label>
+            <input id="loginPassword" type="password">
+
+            <button class="btn purple" onclick="login()">
+                Войти
+            </button>
+
+            <button class="btn secondary" onclick="openRegister()">
+                Создать аккаунт
+            </button>
+
+        </div>
+    `);
 }
 
 
-function saveCredits() {
+function openRegister() {
 
-    localStorage.setItem(
-        "veoCredits",
-        String(credits)
-    );
+    showModal(`
+        <h2>Создание аккаунта</h2>
 
+        <div class="form">
+
+            <label>Логин</label>
+            <input id="regName" placeholder="Твой ник">
+
+            <label>Пароль</label>
+            <input id="regPassword" type="password">
+
+            <label>Повторите пароль</label>
+            <input id="regPassword2" type="password">
+
+            <button class="btn purple" onclick="register()">
+                Зарегистрироваться
+            </button>
+
+            <button class="btn secondary" onclick="openAuth()">
+                Назад
+            </button>
+
+        </div>
+    `);
 }
 
 
-function saveHistory() {
+function register() {
 
-    localStorage.setItem(
-        "veoHistory",
-        JSON.stringify(history)
-    );
+    const name = document.getElementById("regName").value.trim();
+    const password = document.getElementById("regPassword").value;
+    const password2 = document.getElementById("regPassword2").value;
 
+    if (!name || !password) {
+        alert("Заполни все поля.");
+        return;
+    }
+
+    if (password.length < 6) {
+        alert("Пароль должен содержать минимум 6 символов.");
+        return;
+    }
+
+    if (password !== password2) {
+        alert("Пароли не совпадают.");
+        return;
+    }
+
+    localStorage.setItem("nexoraUser", name);
+    currentUser = name;
+
+    openAccount();
+}
+
+
+function login() {
+
+    const name = document.getElementById("loginName").value.trim();
+
+    if (!name) {
+        alert("Введи логин.");
+        return;
+    }
+
+    localStorage.setItem("nexoraUser", name);
+    currentUser = name;
+
+    openAccount();
+}
+
+
+function logout() {
+
+    localStorage.removeItem("nexoraUser");
+
+    currentUser = null;
+
+    closeModal();
 }
 
 
 /* =========================
-   UI
+   ACCOUNT
 ========================= */
 
-function updateCredits() {
+function openAccount() {
 
-    creditsElement.textContent =
-        credits;
-
-    navCredits.textContent =
-        `⚡ ${credits}`;
-
-
-    const accountCredits =
-        document.getElementById(
-            "accountCredits"
-        );
-
-    if (accountCredits) {
-
-        accountCredits.textContent =
-            credits;
-
-    }
-
-
-    saveCredits();
-
-}
-
-
-function updateAccount() {
-
-    if (!user) {
-
-        accountSection.classList.add(
-            "hidden"
-        );
-
-        loginButton.textContent =
-            "Войти";
-
+    if (!currentUser) {
+        openAuth();
         return;
-
     }
 
-
-    accountSection.classList.remove(
-        "hidden"
+    const myApps = applications.filter(
+        app => app.user === currentUser
     );
 
+    let appsHTML = "";
 
-    document.getElementById(
-        "userName"
-    ).textContent =
-        user.name;
+    if (myApps.length === 0) {
 
-
-    document.getElementById(
-        "userEmail"
-    ).textContent =
-        user.email;
-
-
-    document.getElementById(
-        "accountPlan"
-    ).textContent =
-        user.plan || "Free";
-
-
-    loginButton.textContent =
-        "Мой аккаунт";
-
-
-    updateCredits();
-
-}
-
-
-/* =========================
-   MODAL
-========================= */
-
-function openLogin() {
-
-    loginModal.classList.remove(
-        "hidden"
-    );
-
-    setTimeout(() => {
-
-        emailInput.focus();
-
-    }, 50);
-
-}
-
-
-function closeLogin() {
-
-    loginModal.classList.add(
-        "hidden"
-    );
-
-}
-
-
-loginButton.addEventListener(
-    "click",
-    () => {
-
-        if (!user) {
-
-            openLogin();
-
-            return;
-
-        }
-
-
-        accountSection.scrollIntoView({
-            behavior: "smooth",
-            block: "center"
-        });
-
-    }
-);
-
-
-closeLoginButton.addEventListener(
-    "click",
-    closeLogin
-);
-
-
-loginModal.addEventListener(
-    "click",
-    event => {
-
-        if (
-            event.target ===
-            loginModal
-        ) {
-
-            closeLogin();
-
-        }
-
-    }
-);
-
-
-document.addEventListener(
-    "keydown",
-    event => {
-
-        if (
-            event.key === "Escape" &&
-            !loginModal.classList.contains(
-                "hidden"
-            )
-        ) {
-
-            closeLogin();
-
-        }
-
-    }
-);
-
-
-/* =========================
-   GOOGLE DEMO
-========================= */
-
-googleButton.addEventListener(
-    "click",
-    () => {
-
-        user = {
-
-            name: "Google User",
-
-            email:
-                "google@example.com",
-
-            plan: "Free"
-
-        };
-
-
-        credits = 1;
-
-
-        saveUser();
-
-        saveCredits();
-
-        updateAccount();
-
-        closeLogin();
-
-
-        showStatus(
-            "✓ Вы вошли через Google."
-        );
-
-    }
-);
-
-
-/* =========================
-   EMAIL LOGIN
-========================= */
-
-function loginWithEmail() {
-
-    const email =
-        emailInput.value.trim();
-
-    const password =
-        passwordInput.value.trim();
-
-
-    if (!email) {
-
-        showStatus(
-            "⚠️ Введите email.",
-            true
-        );
-
-        emailInput.focus();
-
-        return;
-
-    }
-
-
-    if (
-        !email.includes("@") ||
-        !email.includes(".")
-    ) {
-
-        showStatus(
-            "⚠️ Введите корректный email.",
-            true
-        );
-
-        emailInput.focus();
-
-        return;
-
-    }
-
-
-    if (password.length < 4) {
-
-        showStatus(
-            "⚠️ Пароль должен содержать минимум 4 символа.",
-            true
-        );
-
-        passwordInput.focus();
-
-        return;
-
-    }
-
-
-    const existingUser =
-        loadUser();
-
-
-    if (
-        existingUser &&
-        existingUser.email === email
-    ) {
-
-        user = existingUser;
+        appsHTML = `
+            <p>У тебя пока нет заявок.</p>
+        `;
 
     } else {
 
-        user = {
+        appsHTML = myApps.map(app => `
+            <div class="application">
 
-            name:
-                email
-                    .split("@")[0],
+                <b>${escapeHTML(app.nickname)}</b>
 
-            email: email,
+                <br>
 
-            plan: "Free"
+                <small>
+                    ${escapeHTML(app.role)}
+                    • ${escapeHTML(app.rank)}
+                </small>
 
-        };
+                <br>
 
+                <span class="status">
+                    ${escapeHTML(app.status)}
+                </span>
 
-        credits = 1;
-
-        saveCredits();
-
+            </div>
+        `).join("");
     }
 
+    showModal(`
 
-    saveUser();
+        <h2>Личный кабинет</h2>
 
-    updateAccount();
+        <div class="message">
+            Добро пожаловать, <b>${escapeHTML(currentUser)}</b>
+        </div>
 
-    closeLogin();
+        <h3>Мои заявки</h3>
 
+        ${appsHTML}
 
-    showStatus(
-        "✓ Вход выполнен."
-    );
+        <button class="btn purple" onclick="openApply()">
+            Подать заявку
+        </button>
 
-}
+        <button class="btn secondary" onclick="logout()">
+            Выйти
+        </button>
 
-
-emailLoginButton.addEventListener(
-    "click",
-    loginWithEmail
-);
-
-
-passwordInput.addEventListener(
-    "keydown",
-    event => {
-
-        if (
-            event.key === "Enter"
-        ) {
-
-            loginWithEmail();
-
-        }
-
-    }
-);
-
-
-/* =========================
-   REGISTER
-========================= */
-
-registerButton.addEventListener(
-    "click",
-    () => {
-
-        const email =
-            emailInput.value.trim();
-
-        const password =
-            passwordInput.value.trim();
-
-
-        if (!email || !password) {
-
-            showStatus(
-                "⚠️ Заполните email и пароль.",
-                true
-            );
-
-            return;
-
-        }
-
-
-        if (!email.includes("@")) {
-
-            showStatus(
-                "⚠️ Введите корректный email.",
-                true
-            );
-
-            return;
-
-        }
-
-
-        if (password.length < 4) {
-
-            showStatus(
-                "⚠️ Пароль должен содержать минимум 4 символа.",
-                true
-            );
-
-            return;
-
-        }
-
-
-        user = {
-
-            name:
-                email
-                    .split("@")[0],
-
-            email: email,
-
-            plan: "Free"
-
-        };
-
-
-        credits = 1;
-
-
-        saveUser();
-
-        saveCredits();
-
-        updateAccount();
-
-        closeLogin();
-
-
-        showStatus(
-            "✓ Аккаунт создан."
-        );
-
-    }
-);
-
-
-/* =========================
-   LOGOUT
-========================= */
-
-logoutButton.addEventListener(
-    "click",
-    () => {
-
-        user = null;
-
-        localStorage.removeItem(
-            "veoUser"
-        );
-
-        updateAccount();
-
-
-        showStatus(
-            "Вы вышли из аккаунта."
-        );
-
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        });
-
-    }
-);
-
-
-/* =========================
-   PLANS
-========================= */
-
-document
-    .querySelectorAll(
-        "[data-plan-button]"
-    )
-    .forEach(button => {
-
-        button.addEventListener(
-            "click",
-            () => {
-
-                const plan =
-                    button.dataset.planButton;
-
-                selectPlan(plan);
-
-            }
-        );
-
-    });
-
-
-function selectPlan(plan) {
-
-    if (!plans[plan]) {
-        return;
-    }
-
-
-    if (!user) {
-
-        openLogin();
-
-        showStatus(
-            "⚠️ Сначала войдите в аккаунт."
-        );
-
-        return;
-
-    }
-
-
-    if (plan === "Free") {
-
-        user.plan = "Free";
-
-        credits =
-            plans.Free.credits;
-
-        saveUser();
-
-        saveCredits();
-
-        updateAccount();
-
-        updateSelectedPlan();
-
-        showStatus(
-            "✓ Бесплатный тариф активирован."
-        );
-
-        return;
-
-    }
-
-
-    /*
-        Пока оплата демонстрационная.
-        После подключения backend
-        здесь будет платёжная система.
-    */
-
-    const confirmed =
-        window.confirm(
-            `Вы выбираете тариф ${plan}.\n\nСейчас это демо-режим. Активировать тариф?`
-        );
-
-
-    if (!confirmed) {
-        return;
-    }
-
-
-    user.plan = plan;
-
-    credits =
-        plans[plan].credits;
-
-
-    saveUser();
-
-    saveCredits();
-
-    updateAccount();
-
-    updateSelectedPlan();
-
-
-    showStatus(
-        `✓ Тариф ${plan} активирован в демо-режиме.`
-    );
-
-}
-
-
-function updateSelectedPlan() {
-
-    document
-        .querySelectorAll(
-            ".price-card"
-        )
-        .forEach(card => {
-
-            card.classList.remove(
-                "selected"
-            );
-
-
-            if (
-                user &&
-                card.dataset.plan ===
-                user.plan
-            ) {
-
-                card.classList.add(
-                    "selected"
-                );
-
-            }
-
-        });
-
-
-    document
-        .querySelectorAll(
-            "[data-plan-button]"
-        )
-        .forEach(button => {
-
-            const plan =
-                button.dataset.planButton;
-
-
-            if (
-                user &&
-                plan === user.plan
-            ) {
-
-                button.textContent =
-                    "✓ Активен";
-
-            } else {
-
-                button.textContent =
-                    plan === "Free"
-                        ? "Выбрать"
-                        : `Выбрать ${plan}`;
-
-            }
-
-        });
-
+    `);
 }
 
 
 /* =========================
-   GENERATOR
+   APPLICATION
 ========================= */
 
-generateButton.addEventListener(
-    "click",
-    generateVideo
-);
+function openApply() {
 
-
-async function generateVideo() {
-
-    const prompt =
-        promptInput.value.trim();
-
-
-    const ratio =
-        document.getElementById(
-            "ratio"
-        ).value;
-
-
-    const quality =
-        document.getElementById(
-            "quality"
-        ).value;
-
-
-    const duration =
-        Number(
-            document.getElementById(
-                "duration"
-            ).value
-        );
-
-
-    if (!prompt) {
-
-        showStatus(
-            "⚠️ Напишите описание видео.",
-            true
-        );
-
-        promptInput.focus();
-
+    if (!currentUser) {
+        openAuth();
         return;
-
     }
 
+    showModal(`
 
-    if (!user) {
+        <h2>Заявка в NEXORA</h2>
 
-        showStatus(
-            "⚠️ Войдите в аккаунт."
-        );
+        <div class="form">
 
-        openLogin();
+            <label>Игровой ник *</label>
+            <input id="appNickname" placeholder="KVY1NN">
+
+            <label>Возраст *</label>
+            <input id="appAge" type="number" min="12" max="50">
+
+            <label>Позиция *</label>
+
+            <select id="appRole">
+                <option>Rifler</option>
+                <option>AWPer</option>
+                <option>IGL</option>
+                <option>Support</option>
+                <option>Entry</option>
+                <option>Lurker</option>
+            </select>
+
+            <label>Faceit / Premier ранг *</label>
+            <input id="appRank" placeholder="Faceit 8 / 20k Premier">
+
+            <label>Сколько играешь в неделю? *</label>
+            <input id="appHours" placeholder="20 часов">
+
+            <label>Discord / Telegram</label>
+            <input id="appContact" placeholder="@username">
+
+            <label>Опыт / достижения</label>
+            <textarea id="appAbout"
+                placeholder="Расскажи о своих командах, турнирах и опыте...">
+            </textarea>
+
+            <button class="btn purple" onclick="sendApplication()">
+                Отправить заявку
+            </button>
+
+        </div>
+    `);
+}
+
+
+function sendApplication() {
+
+    const nickname =
+        document.getElementById("appNickname").value.trim();
+
+    const age =
+        document.getElementById("appAge").value;
+
+    const role =
+        document.getElementById("appRole").value;
+
+    const rank =
+        document.getElementById("appRank").value.trim();
+
+    const hours =
+        document.getElementById("appHours").value.trim();
+
+    const contact =
+        document.getElementById("appContact").value.trim();
+
+    const about =
+        document.getElementById("appAbout").value.trim();
+
+    if (!nickname || !age || !rank || !hours) {
+
+        alert("Заполни обязательные поля.");
 
         return;
-
     }
 
+    const application = {
 
-    if (credits <= 0) {
+        id: Date.now(),
 
-        showStatus(
-            "❌ У вас закончились кредиты.",
-            true
-        );
+        user: currentUser,
 
-        return;
+        nickname,
 
-    }
+        age,
 
+        role,
 
-    const currentPlan =
-        plans[user.plan || "Free"];
+        rank,
 
+        hours,
 
-    if (
-        duration >
-        currentPlan.maxSeconds
-    ) {
+        contact,
 
-        showStatus(
-            `❌ Тариф ${user.plan} позволяет видео максимум ${currentPlan.maxSeconds} секунд.`,
-            true
-        );
+        about,
 
-        return;
+        status: "На рассмотрении",
 
-    }
-
-
-    if (
-        qualityRank[quality] >
-        qualityRank[currentPlan.quality]
-    ) {
-
-        showStatus(
-            `❌ Качество ${quality.toUpperCase()} недоступно на тарифе ${user.plan}.`,
-            true
-        );
-
-        return;
-
-    }
-
-
-    generateButton.disabled =
-        true;
-
-    generateButton.textContent =
-        "⏳ Генерируем...";
-
-
-    showStatus(
-        "AI создаёт ваше видео..."
-    );
-
-
-    result.classList.add(
-        "hidden"
-    );
-
-
-    /*
-        ЗДЕСЬ ПОЗЖЕ БУДЕТ REAL API:
-
-        fetch("/api/generate", {
-            method: "POST",
-            headers: {
-                "Content-Type":
-                    "application/json"
-            },
-            body: JSON.stringify({
-                prompt,
-                ratio,
-                quality,
-                duration
-            })
-        });
-
-        API KEY НЕЛЬЗЯ хранить
-        в этом JS-файле.
-    */
-
-
-    await wait(3000);
-
-
-    credits--;
-
-    saveCredits();
-
-    updateCredits();
-
-
-    const item = {
-
-        prompt: prompt,
-
-        ratio: ratio,
-
-        quality: quality,
-
-        duration: duration,
-
-        date:
-            new Date()
-                .toLocaleString(
-                    "ru-RU"
-                )
-
+        date: new Date().toLocaleDateString("ru-RU")
     };
 
+    applications.push(application);
 
-    history.unshift(item);
-
-
-    if (history.length > 20) {
-
-        history =
-            history.slice(0, 20);
-
-    }
-
-
-    saveHistory();
-
-    renderHistory();
-
-
-    showStatus(
-        "✓ Генерация завершена в демо-режиме. Подключи AI API для получения настоящего видео."
+    localStorage.setItem(
+        "nexoraApplications",
+        JSON.stringify(applications)
     );
 
+    showModal(`
 
-    generateButton.disabled =
-        false;
+        <h2>Заявка отправлена ✓</h2>
 
-    generateButton.textContent =
-        "✦ Сгенерировать видео";
+        <div class="message">
+            Спасибо! Заявка успешно отправлена
+            администрации NEXORA.
+        </div>
 
+        <button class="btn purple"
+            onclick="openAccount()">
+            Открыть кабинет
+        </button>
+
+    `);
 }
 
 
 /* =========================
-   HISTORY
+   ADMIN
 ========================= */
 
-function renderHistory() {
+const ADMIN_KEY = "NEXORA-2026-ADMIN";
 
-    if (!history.length) {
 
-        historyContainer.innerHTML = `
-            <div class="empty-history">
-                Здесь появятся созданные вами видео.
-            </div>
-        `;
+function openAdmin() {
+
+    showModal(`
+
+        <h2>Администрация NEXORA</h2>
+
+        <div class="form">
+
+            <label>Ключ администратора</label>
+
+            <input
+                id="adminKey"
+                type="password"
+                placeholder="Введите ключ">
+
+            <button class="btn purple"
+                onclick="adminLogin()">
+                Войти
+            </button>
+
+        </div>
+    `);
+}
+
+
+function adminLogin() {
+
+    const key =
+        document.getElementById("adminKey").value;
+
+    if (key !== ADMIN_KEY) {
+
+        alert("Неверный ключ администратора.");
 
         return;
-
     }
 
-
-    historyContainer.innerHTML =
-        history
-            .map(item => {
-
-                return `
-                    <div class="history-item">
-
-                        <b>
-                            ${escapeHtml(
-                                item.prompt
-                            )}
-                        </b>
-
-                        <small>
-                            ${escapeHtml(
-                                item.date
-                            )}
-                            •
-                            ${escapeHtml(
-                                item.ratio
-                            )}
-                            •
-                            ${item.duration}
-                            сек.
-                            •
-                            ${escapeHtml(
-                                item.quality
-                            )}
-                        </small>
-
-                    </div>
-                `;
-
-            })
-            .join("");
-
+    openAdminPanel();
 }
 
 
-/* =========================
-   STATUS
-========================= */
+function openAdminPanel() {
 
-function showStatus(
-    message,
-    error = false
-) {
+    applications =
+        JSON.parse(
+            localStorage.getItem("nexoraApplications")
+        ) || [];
 
-    statusElement.textContent =
-        message;
+    let html = `
+        <h2>Admin Panel</h2>
 
-    statusElement.style.color =
-        error
-            ? "#d87861"
-            : "#b8b4aa";
+        <div class="message">
+            Всего заявок:
+            <b>${applications.length}</b>
+        </div>
+    `;
 
+    if (applications.length === 0) {
+
+        html += `
+            <p>Заявок пока нет.</p>
+        `;
+
+    } else {
+
+        html += applications.map(app => `
+
+            <div class="application">
+
+                <b>
+                    #${app.id} —
+                    ${escapeHTML(app.nickname)}
+                </b>
+
+                <br>
+
+                <small>
+                    Игрок:
+                    ${escapeHTML(app.user)}
+                </small>
+
+                <br>
+
+                <small>
+                    Возраст: ${escapeHTML(app.age)}
+                    • Позиция: ${escapeHTML(app.role)}
+                    • Ранг: ${escapeHTML(app.rank)}
+                </small>
+
+                <br>
+
+                <small>
+                    В неделю:
+                    ${escapeHTML(app.hours)}
+                </small>
+
+                <br>
+
+                <small>
+                    Контакт:
+                    ${escapeHTML(app.contact || "не указан")}
+                </small>
+
+                <p>
+                    ${escapeHTML(app.about || "Описание отсутствует")}
+                </p>
+
+                <select
+                    onchange="changeStatus(${app.id}, this.value)">
+
+                    <option
+                        ${app.status === "На рассмотрении" ? "selected" : ""}>
+                        На рассмотрении
+                    </option>
+
+                    <option
+                        ${app.status === "Принята" ? "selected" : ""}>
+                        Принята
+                    </option>
+
+                    <option
+                        ${app.status === "Отклонена" ? "selected" : ""}>
+                        Отклонена
+                    </option>
+
+                </select>
+
+            </div>
+
+        `).join("");
+    }
+
+    showModal(html);
 }
 
 
-/* =========================
-   HELPERS
-========================= */
+function changeStatus(id, status) {
 
-function wait(ms) {
-
-    return new Promise(
-        resolve =>
-            setTimeout(
-                resolve,
-                ms
-            )
+    const app = applications.find(
+        item => item.id === id
     );
 
-}
+    if (!app) return;
 
+    app.status = status;
 
-function escapeHtml(value) {
+    localStorage.setItem(
+        "nexoraApplications",
+        JSON.stringify(applications)
+    );
 
-    const div =
-        document.createElement(
-            "div"
-        );
-
-    div.textContent =
-        String(value);
-
-    return div.innerHTML;
-
+    openAdminPanel();
 }
 
 
 /* =========================
-   INITIALIZATION
+   SECURITY FOR DISPLAY
 ========================= */
 
-updateCredits();
+function escapeHTML(text) {
 
-updateAccount();
-
-updateSelectedPlan();
-
-renderHistory();
+    return String(text || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
