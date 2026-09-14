@@ -105,7 +105,7 @@
         .page-view.active { display: block; }
 
         .hero {
-            padding: 180px 8% 100px 8%;
+            padding: 180px 8% 80px 8%;
             max-width: 1300px;
             margin: 0 auto;
         }
@@ -144,6 +144,21 @@
             margin-bottom: 40px;
             font-weight: 500;
         }
+
+        .rating-stars-preview {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 12px 20px;
+            border-radius: 14px;
+            width: fit-content;
+        }
+        .stars { color: var(--warning); font-size: 1.1rem; letter-spacing: 2px; }
+        .rating-stars-preview span { font-size: 0.9rem; color: var(--text-secondary); font-weight: 600; }
+        .rating-stars-preview strong { color: #fff; }
 
         .btn-main {
             background: var(--accent);
@@ -186,7 +201,7 @@
         .btn-danger:hover { background: var(--error); color: #fff; }
 
         .section {
-            padding: 80px 8%;
+            padding: 60px 8%;
             max-width: 1300px;
             margin: 0 auto;
         }
@@ -223,6 +238,43 @@
         .lang-icon { font-size: 2.2rem; margin-bottom: 12px; }
         .lang-card h3 { font-size: 1.2rem; margin-bottom: 5px; }
         .lang-card p { color: var(--text-secondary); font-size: 0.8rem; }
+
+        /* Блок «Почему выбирают нас» и отзывы */
+        .why-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 60px;
+        }
+
+        .why-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 30px;
+            border-radius: 20px;
+        }
+        .why-card h3 { font-size: 1.2rem; margin-bottom: 10px; color: #fff; }
+        .why-card p { color: var(--text-secondary); font-size: 0.92rem; }
+
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+        }
+
+        .review-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 30px;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .review-card .stars { margin-bottom: 15px; }
+        .review-card p { color: #cbd5e1; font-size: 0.95rem; margin-bottom: 20px; font-style: italic; }
+        .review-author { font-weight: 700; font-size: 0.9rem; color: #fff; }
+        .review-author span { display: block; font-weight: 400; font-size: 0.8rem; color: var(--text-secondary); }
 
         .levels-container, .dashboard-container, .admin-container {
             padding: 140px 8% 80px 8%;
@@ -416,10 +468,78 @@
     <div id="page-home" class="page-view active">
         <section class="hero">
             <div class="badge">Защищенная академия кода</div>
+            
+            <div class="rating-stars-preview">
+                <div class="stars">★★★★★</div>
+                <span>Рейтинг академии: <strong>4.9 / 5.0</strong> (на основе 1,240 оценок)</span>
+            </div>
+
             <h1>Учи <span>13 языков программирования</span> на 1300+ продвинутых уровнях</h1>
             <p>Продвинутый тренажер с максимальной защитой от копирования материалов, подробнейшими разборами и авторизацией по SMS.</p>
             <div class="sub-info-text">Без регистрации. Все языки закрыты.</div>
             <button class="btn-main" onclick="switchPage('levels')">Открыть все уровни</button>
+        </section>
+
+        <!-- Блок «Почему выбирают нас» -->
+        <section class="section" style="padding-top: 20px;">
+            <h2 class="section-title">Почему выбирают нас?</h2>
+            <p class="section-desc">Наши главные преимущества для эффективного обучения программированию.</p>
+            
+            <div class="why-grid">
+                <div class="why-card">
+                    <h3>🚀 1300+ практических уровней</h3>
+                    <p>Никакой скучной теории. Каждый язык содержит по 100 тщательно отобранных задач от базовых конструкций до продвинутой архитектуры.</p>
+                </div>
+                <div class="why-card">
+                    <h3>🔒 Защищенная среда</h3>
+                    <p>Уникальная система защиты контента и кода предотвращает списывание и помогает развивать реальное инженерное мышление.</p>
+                </div>
+                <div class="why-card">
+                    <h3>📊 Прогресс в реальном времени</h3>
+                    <p>Личный кабинет и детальная статистика по выполненным заданиям и заработанным очкам XP для контроля успехов.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Блок «Отзывы студентов» (5 звезд) -->
+        <section class="section" style="padding-top: 0;">
+            <h2 class="section-title">Отзывы студентов</h2>
+            <p class="section-desc">Что говорят те, кто уже прокачал свои навыки на нашей платформе.</p>
+
+            <div class="reviews-grid">
+                <div class="review-card">
+                    <div>
+                        <div class="stars">★★★★★</div>
+                        <p>&laquo;Лучшая платформа для практики! Очень круто, что для каждого языка есть по 100 уровней. Объяснения понятные, а тренажер проверяет код мгновенно.&raquo;</p>
+                    </div>
+                    <div class="review-author">
+                        Александр С.
+                        <span>Курс: Python &amp; JavaScript Developer</span>
+                    </div>
+                </div>
+
+                <div class="review-card">
+                    <div>
+                        <div class="stars">★★★★★</div>
+                        <p>&laquo;Удобный интерфейс, классная система авторизации и крутые задачи по Java и C++. Помогло подтянуть синтаксис и уверенно писать код.&raquo;</p>
+                    </div>
+                    <div class="review-author">
+                        Диас М.
+                        <span>Курс: Java Backend</span>
+                    </div>
+                </div>
+
+                <div class="review-card">
+                    <div>
+                        <div class="stars">★★★★★</div>
+                        <p>&laquo;Занимаюсь каждый день после колледжа. Отличная подача материала, а админ-панель позволяет наглядно отслеживать сколько заданий уже пройдено!&raquo;</p>
+                    </div>
+                    <div class="review-author">
+                        Тимур К.
+                        <span>Курс: Python Fullstack</span>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <section class="section">
