@@ -825,46 +825,162 @@
         ];
         let currentLang = 'python';
 
-        // Банк разнообразных тем для генерации 100 уникальных и постепенно усложняющихся задач на каждый язык
         const taskBlueprints = {
             python: [
                 {t: "Вывод текста", desc: "Используйте функцию print для вывода сообщения.", code: "print('Hello, World!')", key: "print"},
                 {t: "Переменные", desc: "Создайте целочисленную переменную x и присвойте ей 10.", code: "x = 10", key: "x ="},
                 {t: "Арифметика", desc: "Сложите переменные a и b.", code: "res = a + b", key: "+"},
                 {t: "Условие if", desc: "Проверьте условие, что x больше 5.", code: "if x > 5:\n    pass", key: "if"},
-                {t: "Конструкция if-else", desc: "Добавьте ветку иначе (else).", code: "if x > 5:\n    print('Yes')\nelse:\n    print('No')", key: "else"},
                 {t: "Цикл while", desc: "Создайте цикл с условием пока x меньше 10.", code: "while x < 10:\n    x += 1", key: "while"},
-                {t: "Цикл for и range", desc: "Пройдитесь в цикле от 0 до 5.", code: "for i in range(5):\n    print(i)", key: "for"},
-                {t: "Создание функции", desc: "Объявите пустую функцию с именем greet.", code: "def greet():\n    return 'Hi'", key: "def"},
-                {t: "Аргументы функции", desc: "Напишите функцию, принимающую имя name.", code: "def say_hello(name):\n    return f'Hello {name}'", key: "def"},
-                {t: "Списки (List)", desc: "Создайте список из трех чисел.", code: "numbers = [1, 2, 3]", key: "["},
-                {t: "Словари (Dict)", desc: "Создайте словарь с ключом 'name'.", code: "user = {'name': 'Alex'}", key: "{"},
-                {t: "Генератор списка", desc: "Создайте список квадратов чисел в одну строку.", code: "squares = [x**2 for x in range(5)]", key: "for"},
-                {t: "ООП: Класс", desc: "Создайте простой класс Car.", code: "class Car:\n    pass", key: "class"},
-                {t: "ООП: Конструктор", desc: "Добавьте метод инициализации __init__.", code: "class User:\n    def __init__(self, name):\n        self.name = name", key: "__init__"},
-                {t: "Декораторы", desc: "Создайте функцию-декоратор.", code: "def my_decorator(func):\n    def wrapper():\n        return func()\n    return wrapper", key: "def"}
+                {t: "Цикл for", desc: "Пройдитесь в цикле от 0 до 5.", code: "for i in range(5):\n    print(i)", key: "for"},
+                {t: "Функция def", desc: "Объявите пустую функцию с именем greet.", code: "def greet():\n    return 'Hi'", key: "def"},
+                {t: "Списки", desc: "Создайте список из трех чисел.", code: "numbers = [1, 2, 3]", key: "["},
+                {t: "Словари", desc: "Создайте словарь с ключом 'name'.", code: "user = {'name': 'Alex'}", key: "{"},
+                {t: "Классы OOP", desc: "Создайте простой класс Car.", code: "class Car:\n    pass", key: "class"}
             ],
             java: [
                 {t: "Вывод в консоль", desc: "Выведите строку через System.out.println.", code: "System.out.println(\"Hello\");", key: "System.out.println"},
-                {t: "Примитивные типы", desc: "Объявите целочисленную переменную age.", code: "int age = 25;", key: "int"},
-                {t: "Условный оператор", desc: "Напишите проверку if (score > 50).", code: "if (score > 50) {\n    System.out.println(\"Pass\");\n}", key: "if"},
-                {t: "Цикл for", desc: "Напишите стандартный цикл for от 0 до 10.", code: "for(int i = 0; i < 10; i++) {}", key: "for"},
-                {t: "Создание метода", desc: "Объявите публичный метод sum.", code: "public int sum(int a, int b) {\n    return a + b;\n}", key: "public"},
+                {t: "Типы данных", desc: "Объявите целочисленную переменную age.", code: "int age = 25;", key: "int"},
+                {t: "Условие if", desc: "Напишите проверку if (score > 50).", code: "if (score > 50) {\n    System.out.println(\"Pass\");\n}", key: "if"},
+                {t: "Цикл for", desc: "Напишите стандартный цикл for.", code: "for(int i = 0; i < 10; i++) {}", key: "for"},
+                {t: "Методы", desc: "Объявите публичный метод sum.", code: "public int sum(int a, int b) {\n    return a + b;\n}", key: "public"},
                 {t: "Массивы", desc: "Инициализируйте массив строк.", code: "String[] names = {\"Alice\", \"Bob\"};", key: "[]"},
-                {t: "Класс и объекты", desc: "Создайте класс Person.", code: "public class Person {\n    String name;\n}", key: "class"},
+                {t: "Классы OOP", desc: "Создайте класс Person.", code: "public class Person {\n    String name;\n}", key: "class"},
                 {t: "Интерфейсы", desc: "Объявите интерфейс Flyable.", code: "public interface Flyable {\n    void fly();\n}", key: "interface"},
-                {t: "ArrayList", desc: "Создайте коллекцию списков.", code: "List<String> list = new ArrayList<>();", key: "ArrayList"},
-                {t: "Лямбда-выражение", desc: "Используйте лямбду для итерации.", code: "list.forEach(item -> System.out.println(item));", key: "->"}
+                {t: "ArrayList", desc: "Создайте список элементов.", code: "List<String> list = new ArrayList<>();", key: "ArrayList"},
+                {t: "Лямбда", desc: "Используйте лямбда-выражение.", code: "list.forEach(item -> System.out.println(item));", key: "->"}
             ],
             js: [
-                {t: "Вывод консоль", desc: "Используйте console.log.", code: "console.log('Hello');", key: "console.log"},
+                {t: "Вывод в консоль", desc: "Используйте console.log.", code: "console.log('Hello');", key: "console.log"},
                 {t: "Переменная let", desc: "Объявите переменную через let.", code: "let count = 10;", key: "let"},
-                {t: "Стрелочная функция", desc: "Создайте стрелочную функцию.", code: "const add = (a, b) => a + b;", key: "=>"},
-                {t: "Массивы и map", desc: "Преобразуйте массив через map.", code: "const nums = [1,2,3].map(n => n * 2);", key: "map"},
-                {t: "Деструктуризация", desc: "Достаньте свойство объекта.", code: "const { name, age } = user;", key: "const"},
-                {t: "Асинхронность async", desc: "Создайте асинхронную функцию.", code: "async function getData() {}", key: "async"},
-                {t: "Promise", desc: "Создайте промис.", code: "const p = new Promise((resolve) => resolve());", key: "Promise"},
-                {t: "Классы JS", desc: "Опишите класс ES6.", code: "class Animal {\n  constructor(name) { this.name = name; }\n}", key: "class"}
+                {t: "Функция", desc: "Создайте стрелочную функцию.", code: "const add = (a, b) => a + b;", key: "=>"},
+                {t: "Массивы map", desc: "Преобразуйте массив методом map.", code: "const nums = [1,2,3].map(n => n * 2);", key: "map"},
+                {t: "Объекты", desc: "Создайте объект user.", code: "const user = { name: 'Alex' };", key: "{"},
+                {t: "Деструктуризация", desc: "Достаньте свойство из объекта.", code: "const { name } = user;", key: "const"},
+                {t: "Асинхронность", desc: "Создайте async функцию.", code: "async function getData() {}", key: "async"},
+                {t: "Промисы", desc: "Создайте новый Promise.", code: "const p = new Promise((res) => res());", key: "Promise"},
+                {t: "Классы", desc: "Опишите класс ES6.", code: "class Animal {\n  constructor(name) { this.name = name; }\n}", key: "class"},
+                {t: "Модули", desc: "Экспортируйте функцию.", code: "export function run() {}", key: "export"}
+            ],
+            cpp: [
+                {t: "Подключение библиотеки", desc: "Подключите модуль ввода-вывода iostream.", code: "#include <iostream>", key: "#include"},
+                {t: "Главная функция", desc: "Напишите точку входа main.", code: "int main() {\n    return 0;\n}", key: "int main"},
+                {t: "Вывод cout", desc: "Выведите текст через std::cout.", code: "std::cout << \"Hello\" << std::endl;", key: "cout"},
+                {t: "Переменные", desc: "Создайте целочисленную переменную.", code: "int val = 100;", key: "int"},
+                {t: "Условие if", desc: "Напишите проверку if.", code: "if (val > 50) {}", key: "if"},
+                {t: "Цикл for", desc: "Напишите цикл for.", code: "for(int i=0; i<10; ++i) {}", key: "for"},
+                {t: "Указатели", desc: "Создайте указатель на переменную.", code: "int* ptr = &val;", key: "*"},
+                {t: "Ссылки", desc: "Создайте ссылку на переменную.", code: "int& ref = val;", key: "&"},
+                {t: "Функции", desc: "Объявите функцию сложения.", code: "int add(int a, int b) { return a + b; }", key: "int add"},
+                {t: "Классы OOP", desc: "Объявите класс с секцией public.", code: "class Box {\npublic:\n    int width;\n};", key: "class"}
+            ],
+            csharp: [
+                {t: "Пространство имен", desc: "Подключите System.", code: "using System;", key: "using"},
+                {t: "Вывод Console", desc: "Выведите текст в консоль.", code: "Console.WriteLine(\"Hello\");", key: "Console.WriteLine"},
+                {t: "Переменная var", desc: "Объявите неявную переменную.", code: "var text = \"Test\";", key: "var"},
+                {t: "Условие if", desc: "Напишите условие if.", code: "if (true) { }", key: "if"},
+                {t: "Цикл foreach", desc: "Пройдитесь по коллекции foreach.", code: "foreach(var item in collection) {}", key: "foreach"},
+                {t: "Методы", desc: "Создайте статический метод.", code: "public static void Main() {}", key: "static"},
+                {t: "Свойства get/set", desc: "Создайте авто-свойство.", code: "public string Name { get; set; }", key: "get; set;"},
+                {t: "Лямбда LINQ", desc: "Используйте Where в LINQ.", code: "var result = list.Where(x => x > 0);", key: "Where"},
+                {t: "Классы OOP", desc: "Создайте класс.", code: "class Program {}", key: "class"},
+                {t: "Интерфейсы", desc: "Объявите интерфейс.", code: "interface IWorker { void Work(); }", key: "interface"}
+            ],
+            ts: [
+                {t: "Типизация переменных", desc: "Укажите тип string для переменной.", code: "let username: string = \"Alex\";", key: ": string"},
+                {t: "Интерфейсы", desc: "Опишите структуру через interface.", code: "interface User {\n  id: number;\n  name: string;\n}", key: "interface"},
+                {t: "Типы (type)", desc: "Создайте кастомный тип.", code: "type Status = 'active' | 'offline';", key: "type"},
+                {t: "Функции и типы", desc: "Укажите тип возвращаемого значения.", code: "function sum(a: number, b: number): number { return a + b; }", key: ": number"},
+                {t: "Массивы типов", desc: "Задайте массив чисел.", code: "let scores: number[] = [90, 85];", key: "number[]"},
+                {t: "Дженерики (Generics)", desc: "Создайте обобщенную функцию.", code: "function identity<T>(arg: T): T { return arg; }", key: "<T>"},
+                {t: "Перечисления enum", desc: "Создайте enum направлений.", code: "enum Direction { Up, Down }", key: "enum"},
+                {t: "Опциональные поля", desc: "Сделайте свойство age необязательным.", code: "interface Profile { age?: number; }", key: "?"},
+                {t: "Классы TS", desc: "Используйте модификатор доступа private.", code: "class Account {\n  private balance: number = 0;\n}", key: "private"},
+                {t: "Assertion (as)", desc: "Выполните приведение типов через as.", code: "let val = input as HTMLElement;", key: "as"}
+            ],
+            php: [
+                {t: "Открытие тега", desc: "Напишите стартовый тег PHP.", code: "<?php", key: "<?php"},
+                {t: "Переменная", desc: "Объявите переменную со знаком $.", code: "$name = \"Ivan\";", key: "$"},
+                {t: "Вывод echo", desc: "Выведите строку через echo.", code: "echo \"Hello World\";", key: "echo"},
+                {t: "Ассоциативные массивы", desc: "Создайте массив с ключами.", code: "$user = [\"name\" => \"Alex\", \"age\" => 30];", key: "=>"},
+                {t: "Условие if", desc: "Напишите блок проверки if.", code: "if ($age >= 18) { echo \"Adult\"; }", key: "if"},
+                {t: "Цикл foreach", desc: "Пройдитесь по массиву через foreach.", code: "foreach ($colors as $color) { }", key: "foreach"},
+                {t: "Функции", desc: "Объявите функцию с типом аргумента.", code: "function calculate(int $a): int { return $a; }", key: "function"},
+                {t: "Классы OOP", desc: "Создайте класс в PHP.", code: "class Database {\n    public $connection;\n}", key: "class"},
+                {t: "Конструктор __construct", desc: "Добавьте конструктор класса.", code: "public function __construct() { }", key: "__construct"},
+                {t: "Подключение файлов", desc: "Подключите файл через require_once.", code: "require_once 'config.php';", key: "require_once"}
+            ],
+            ruby: [
+                {t: "Вывод puts", desc: "Выведите текст через puts.", code: "puts \"Hello, Ruby!\"", key: "puts"},
+                {t: "Переменные", desc: "Присвойте значение переменной.", code: "age = 20", key: "="},
+                {t: "Интерполяция строк", desc: "Используйте #{} для вставки переменной.", code: "message = \"Привет, #{name}\"", key: "#{"},
+                {t: "Условие if", desc: "Напишите условие в стиле Ruby.", code: "if x > 10\n  puts \"Big\"\nend", key: "end"},
+                {t: "Итераторы each", desc: "Пройдитесь по массиву через each.", code: "[1, 2, 3].each { |n| puts n }", key: "each"},
+                {t: "Методы def", desc: "Определите метод без скобок.", code: "def square(n)\n  n * n\nend", key: "def"},
+                {t: "Хэши (Hashes)", desc: "Создайте хэш.", code: "user = { name: \"Alex\", role: \"admin\" }", key: "role:"},
+                {t: "Классы OOP", desc: "Создайте класс.", code: "class Dog\n  attr_accessor :name\nend", key: "attr_accessor"},
+                {t: "Модули mixins", desc: "Подключите модуль через include.", code: "include Comparable", key: "include"},
+                {t: "Блоки yield", desc: "Вызовите переданный блок через yield.", code: "def run\n  yield if block_given?\nend", key: "yield"}
+            ],
+            go: [
+                {t: "Пакет main", desc: "Объявите принадлежность к пакету main.", code: "package main", key: "package main"},
+                {t: "Импорт fmt", desc: "Импортируйте пакет форматирования.", code: "import \"fmt\"", key: "import"},
+                {t: "Функция main", desc: "Создайте главную функцию программы.", code: "func main() {\n    fmt.Println(\"Go\")\n}", key: "func main"},
+                {t: "Объявление var / :=", desc: "Объявите переменную через оператор :=.", code: "count := 42", key: ":="},
+                {t: "Условие if", desc: "Напишите проверку if.", code: "if x > 0 {\n}", key: "if"},
+                {t: "Цикл for", desc: "В Go цикл for заменяет все остальные.", code: "for i := 0; i < 10; i++ {}", key: "for"},
+                {t: "Структуры struct", desc: "Определите структуру User.", code: "type User struct {\n    Name string\n    Age  int\n}", key: "struct"},
+                {t: "Указатели", desc: "Используйте указатель в аргументе.", code: "func update(val *int) {}", key: "*int"},
+                {t: "Горутины go", desc: "Запустите асинхронную горутину.", code: "go worker()", key: "go "},
+                {t: "Каналы chan", desc: "Создайте канал для связи.", code: "ch := make(chan string)", key: "chan"}
+            ],
+            rust: [
+                {t: "Функция main", desc: "Создайте точку входа в программу на Rust.", code: "fn main() {\n    println!(\"Hello\");\n}", key: "fn main"},
+                {t: "Макрос вывода", desc: "Используйте макрос println!.", code: "println!(\"Value: {}\", x);", key: "println!"},
+                {t: "Мутабельность mut", desc: "Сделайте переменную изменяемой через mut.", code: "let mut count = 0;", key: "mut"},
+                {t: "Ссылки и заимствование", desc: "Передайте неизменяемую ссылку.", code: "let r = &s1;", key: "&"},
+                {t: "Условие match", desc: "Используйте мощный оператор выбора match.", code: "match x {\n    1 => println!(\"One\"),\n    _ => {}\n}", key: "match"},
+                {t: "Структуры struct", desc: "Опишите структуру данных.", code: "struct Point {\n    x: i32,\n    y: i32,\n}", key: "struct"},
+                {t: "Перечисления enum", desc: "Создайте enum с вариантами.", code: "enum Message {\n    Quit,\n    Move { x: i32, y: i32 },\n}", key: "enum"},
+                {t: "Ошибки Result", desc: "Используйте тип Result для обработки ошибок.", code: "fn divide(a: i32, b: i32) -> Result<i32, String> {}", key: "Result"},
+                {t: "Трейты trait", desc: "Определите интерфейс (trait).", code: "trait Summary {\n    fn summarize(&self) -> String;\n}", key: "trait"},
+                {t: "Управление памятью Box", desc: "Выделите память в куче через Box.", code: "let b = Box::new(5);", key: "Box::new"}
+            ],
+            swift: [
+                {t: "Вывод print", desc: "Выведите строку через print.", code: "print(\"Hello, Swift\")", key: "print"},
+                {t: "Константы let", desc: "Объявите константу через let.", code: "let maxAttempts = 3", key: "let"},
+                {t: "Опционалы ?", desc: "Создайте опциональный тип данных.", code: "var serverName: String?", key: "?"},
+                {t: "Безопасное извлечение", desc: "Используйте guard let.", code: "guard let name = username else { return }", key: "guard let"},
+                {t: "Условие if", desc: "Напишите проверку.", code: "if score > 80 { }", key: "if"},
+                {t: "Замыкания Closures", desc: "Напишите замыкание.", code: "let numbers = [1, 2].map { $0 * 2 }", key: "$0"},
+                {t: "Структуры struct", desc: "Определите структуру.", code: "struct Point {\n    var x: Double\n    var y: Double\n}", key: "struct"},
+                {t: "Классы и наследование", desc: "Создайте класс.", code: "class Vehicle {\n    var speed = 0.0\n}", key: "class"},
+                {t: "Протоколы protocol", desc: "Объявите протокол.", code: "protocol FullyNamed {\n    var name: String { get }\n}", key: "protocol"},
+                {t: "Расширения extension", desc: "Добавьте функционал через extension.", code: "extension String { }", key: "extension"}
+            ],
+            kotlin: [
+                {t: "Главная функция", desc: "Создайте точку входа main в Kotlin.", code: "fun main() {\n    println(\"Hello Kotlin\")\n}", key: "fun main"},
+                {t: "Переменные val/var", desc: "Объявите изменяемую переменную var.", code: "var count = 10", key: "var"},
+                {t: "Строковые шаблоны", desc: "Используйте знак $ для подстановки.", code: "val text = \"Имя: $name\"", key: "$"},
+                {t: "Условие when", desc: "Используйте продвинутый оператор when.", code: "when (x) {\n    1 -> println(\"One\")\n    else -> println(\"Other\")\n}", key: "when"},
+                {t: "Классы данных data class", desc: "Создайте класс данных.", code: "data class User(val id: Int, val name: String)", key: "data class"},
+                {t: "Лямбды и коллекции", desc: "Отфильтруйте коллекцию через filter.", code: "val list = listOf(1, 2, 3).filter { it > 1 }", key: "filter"},
+                {t: "Безопасность null (?.)", desc: "Используйте оператор безопасного вызова.", code: "val length = name?.length", key: "?."},
+                {t: "Создание интерфейса", desc: "Объявите интерфейс.", code: "interface Clickable {\n    fun click()\n}", key: "interface"},
+                {t: "Наследование и open", desc: "Разрешите наследование класса через open.", code: "open class Button : Clickable {}", key: "open class"},
+                {t: "Конструкторы", desc: "Опишите первичный конструктор.", code: "class Person(val firstName: String)", key: "constructor"}
+            ],
+            sql: [
+                {t: "Выборка SELECT", desc: "Получите все данные из таблицы users.", code: "SELECT * FROM users;", key: "SELECT"},
+                {t: "Фильтрация WHERE", desc: "Отфильтруйте строки по условию возраста.", code: "SELECT * FROM users WHERE age > 18;", key: "WHERE"},
+                {t: "Сортировка ORDER BY", desc: "Отсортируйте результаты по убыванию.", code: "SELECT * FROM items ORDER BY price DESC;", key: "ORDER BY"},
+                {t: "Создание таблицы CREATE", desc: "Создайте таблицу с первичным ключом.", code: "CREATE TABLE accounts (\n    id INT PRIMARY KEY,\n    username VARCHAR(50)\n);", key: "CREATE TABLE"},
+                {t: "Вставка INSERT", desc: "Добавьте новую запись в таблицу.", code: "INSERT INTO users (name, email) VALUES ('Alex', 'alex@mail.com');", key: "INSERT INTO"},
+                {t: "Обновление UPDATE", desc: "Измените данные в таблице.", code: "UPDATE users SET status = 'active' WHERE id = 1;", key: "UPDATE"},
+                {t: "Удаление DELETE", desc: "Удалите записи по условию.", code: "DELETE FROM logs WHERE created_at < '2025-01-01';", key: "DELETE FROM"},
+                {t: "Соединение JOIN", desc: "Объедините две таблицы через INNER JOIN.", code: "SELECT * FROM orders JOIN users ON orders.user_id = users.id;", key: "JOIN"},
+                {t: "Группировка GROUP BY", desc: "Сгруппируйте данные для агрегации.", code: "SELECT category, COUNT(*) FROM products GROUP BY category;", key: "GROUP BY"},
+                {t: "Индексация CREATE INDEX", desc: "Создайте индекс для ускорения поиска.", code: "CREATE INDEX idx_user_email ON users(email);", key: "CREATE INDEX"}
             ]
         };
 
@@ -873,20 +989,19 @@
             allLevels[l.id] = [];
             let blueprints = taskBlueprints[l.id] || taskBlueprints['python'];
             for(let i=1; i<=100; i++) {
-                // Динамически усложняем тему и требования в зависимости от номера уровня
                 let bpIndex = (i - 1) % blueprints.length;
                 let bp = blueprints[bpIndex];
                 
                 let difficultyName = i <= 30 ? "Базовый уровень" : (i <= 70 ? "Продвинутый уровень" : "Экспертный уровень (Алгоритмы)");
                 let taskTitle = `${i}. ${bp.t} (${difficultyName.split(' ')[0]})`;
-                let theoryText = `Уровень ${i} из 100 по курсу ${l.name}. Задача: ${bp.desc} Обратите внимание на синтаксические особенности языка для прохождения данного этапа.`;
+                let theoryText = `Уровень ${i} из 100 по курсу ${l.name}. Задача: ${bp.desc} Напишите правильную конструкцию на языке ${l.name}.`;
                 
                 allLevels[l.id].push({
                     id: i, 
                     lang: l.name, 
                     title: taskTitle,
                     theory: theoryText,
-                    example: bp.code + `\n// Уровень сложности: ${i}/100`, 
+                    example: bp.code, 
                     expectedKeyword: bp.key, 
                     done: false
                 });
