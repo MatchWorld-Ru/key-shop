@@ -227,7 +227,7 @@
             <div style="font-size: 3rem; margin-bottom: 15px;">⚠️</div>
             <h3 style="font-size: 1.5rem; margin-bottom: 15px; color: #fff;">Правила и предупреждение сайта</h3>
             <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; margin-bottom: 25px;">
-                Добро пожаловать в CodeCraft! Обратите внимание: на этой платформе <strong>администраторы и владельцы могут подшучивать над вами</strong>, включать резкие звуки (например, «бум» или «перезарядку») и присылать уведомления прямо во время вашего сеанса.<br><br>Вы согласны с этими правилами и готовы начать обучение?
+                Добро пожаловать в CodeCraft! Обратите внимание: на этой платформе <strong>администраторы и владельцы могут подшучивать над вами</strong>, включать резкие громкие звуки (например, «бум» или «перезарядку») и присылать уведомления прямо во время вашего сеанса.<br><br>Вы согласны с этими правилами и готовы начать обучение?
             </p>
             <button class="btn-main" style="width: 100%; padding: 14px; font-size: 1rem;" onclick="acceptRules()">Да, я согласен (-а)</button>
         </div>
@@ -256,7 +256,7 @@
                 <span>Рейтинг академии: <strong>4.9 / 5.0</strong> (на основе 1,240 оценок)</span>
             </div>
             <h1>Учи <span>13 языков программирования</span> на 1300+ продвинутых уровнях</h1>
-            <p>Интерактивный тренажер с продвинутой панелью владельца, контролем админов, звуковыми уведомлениями и защитой от копирования.</p>
+            <p>Интерактивный тренажер с продвинутой панелью владельца, контролем админов, усиленными звуковыми уведомлениями и защитой от копирования.</p>
             <button class="btn-main" onclick="switchPage('levels')">Открыть все уровни</button>
         </section>
 
@@ -371,23 +371,43 @@
         </div>
     </div>
 
-    <!-- СТРАНИЦА: Панель Владельца -->
+    <!-- СТРАНИЦА: Панель Владельца (Включает ВСЕ функции Админа + Управление ключами) -->
     <div id="page-owner" class="page-view">
         <div class="owner-container">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 15px;">
                 <div>
-                    <h2 class="section-title" style="margin-bottom: 5px; color: var(--owner-color);">Панель Владельца</h2>
-                    <p style="color: var(--text-secondary);">Полный контроль системы, генерация бесконечных паролей для администраторов и управление доступом.</p>
+                    <h2 class="section-title" style="margin-bottom: 5px; color: var(--owner-color);">Панель Владельца (Максимальный доступ)</h2>
+                    <p style="color: var(--text-secondary);">Полный контроль системы, звуки, сообщения, генерация паролей для админов и управление доступом.</p>
                 </div>
                 <button class="btn-danger" style="padding: 10px 20px; font-size: 0.9rem;" onclick="logoutRole('owner')">Выйти из панели владельца</button>
             </div>
 
             <div class="stats-grid">
-                <div class="stat-card"><span>Активных ключей владельца</span><h3>10 шт (Вшиты)</h3></div>
+                <div class="stat-card"><span>Активных сессий</span><h3 id="ownerTotalUsers">1</h3></div>
                 <div class="stat-card"><span>Созданных паролей админок</span><h3 id="ownerAdminPassCount">1</h3></div>
                 <div class="stat-card"><span>Уровень системы</span><h3 style="color: var(--owner-color);">MAX ROOT</h3></div>
             </div>
 
+            <!-- Блок Live-управления студентами (как у админа) -->
+            <div style="background: var(--card-bg); border: 1px solid var(--owner-color); padding: 30px; border-radius: 20px; margin-bottom: 40px;">
+                <h3 style="margin-bottom: 15px; color: var(--owner-color);">👑 Live-контроль студентов (функции администратора)</h3>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 20px;">Владелец может запускать громкие звуки и писать сообщения точно так же, как администратор.</p>
+                <div style="overflow-x: auto;">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Пользователь / Телефон</th>
+                                <th>Статус / Текущая активность</th>
+                                <th>Пройдено уровней</th>
+                                <th>Действия владельца</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ownerUsersTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Блок генерации паролей админов -->
             <div style="background: var(--card-bg); border: 1px solid var(--card-border); padding: 30px; border-radius: 20px; margin-bottom: 40px;">
                 <h3 style="margin-bottom: 15px;">Генератор новых паролей для Админ-панели</h3>
                 <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 20px;">Владелец может создавать бесконечное количество новых паролей для администраторов.</p>
@@ -471,7 +491,7 @@
         </div>
     </div>
 
-    <!-- Модальное окно отправки сообщения от админа -->
+    <!-- Модальное окно отправки сообщения от админа/владельца -->
     <div class="modal-overlay" id="adminMsgModal">
         <div class="modal-card">
             <button class="modal-close" onclick="closeAdminMsgModal()">✕</button>
@@ -526,6 +546,7 @@
 
         let selectedTargetForMsg = null;
 
+        // Звуковая функция с повышенной громкостью (Увеличен коэффициент усиления)
         function playSound(type) {
             try {
                 const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -533,27 +554,29 @@
                     const osc = ctx.createOscillator();
                     const gain = ctx.createGain();
                     osc.type = 'sawtooth';
-                    osc.frequency.setValueAtTime(120, ctx.currentTime);
-                    osc.frequency.exponentialRampToValueAtTime(20, ctx.currentTime + 0.8);
-                    gain.gain.setValueAtTime(1, ctx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.8);
+                    osc.frequency.setValueAtTime(140, ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(15, ctx.currentTime + 0.9);
+                    // Громкость установлена на максимум (2.5)
+                    gain.gain.setValueAtTime(2.5, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.9);
                     osc.connect(gain);
                     gain.connect(ctx.destination);
                     osc.start();
-                    osc.stop(ctx.currentTime + 0.8);
+                    osc.stop(ctx.currentTime + 0.9);
                 } else if (type === 'reload') {
-                    [0, 0.15, 0.4].forEach((t, idx) => {
+                    [0, 0.12, 0.35].forEach((t, idx) => {
                         setTimeout(() => {
                             const osc = ctx.createOscillator();
                             const gain = ctx.createGain();
                             osc.type = 'square';
-                            osc.frequency.setValueAtTime(idx === 2 ? 800 : 400, ctx.currentTime);
-                            gain.gain.setValueAtTime(0.3, ctx.currentTime);
-                            gain.gain.linearRampToValueAtTime(0.01, ctx.currentTime + 0.08);
+                            osc.frequency.setValueAtTime(idx === 2 ? 900 : 450, ctx.currentTime);
+                            // Громкость перезарядки усилена
+                            gain.gain.setValueAtTime(0.8, ctx.currentTime);
+                            gain.gain.linearRampToValueAtTime(0.01, ctx.currentTime + 0.1);
                             osc.connect(gain);
                             gain.connect(ctx.destination);
                             osc.start();
-                            osc.stop(ctx.currentTime + 0.08);
+                            osc.stop(ctx.currentTime + 0.1);
                         }, t * 1000);
                     });
                 }
@@ -620,6 +643,7 @@
             switchPage('home');
         }
 
+        // Обновление таблиц управления (и для админа, и для владельца)
         function updateAdminStats() {
             document.getElementById('adminTotalCompleted').innerText = currentUser.completed;
             document.getElementById('adminTotalXp').innerText = currentUser.xp + ' XP';
@@ -641,10 +665,45 @@
             `;
         }
 
+        function updateOwnerDashboard() {
+            document.getElementById('ownerAdminPassCount').innerText = validAdminPasswords.length;
+            
+            // Таблица управления студентами в панели владельца (полная копия админки)
+            const tbodyUsers = document.getElementById('ownerUsersTableBody');
+            tbodyUsers.innerHTML = `
+                <tr>
+                    <td><strong>${currentUser.phone}</strong></td>
+                    <td><span style="color: var(--success); font-weight:700;">${currentUser.activity}</span></td>
+                    <td>${currentUser.completed} / 1300</td>
+                    <td>
+                        <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                            <button class="btn-owner" onclick="triggerAdminAction('boom')">💥 Бум (громко)</button>
+                            <button class="btn-owner" onclick="triggerAdminAction('reload')">🔫 Перезарядка</button>
+                            <button class="btn-owner" style="background:rgba(236,72,153,0.2); color:#f472b6; border-color:var(--owner-color);" onclick="openAdminMsgModal()">💬 Сказать</button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+
+            // Таблица паролей админов
+            const tbodyPass = document.getElementById('ownerPasswordsTableBody');
+            tbodyPass.innerHTML = '';
+            validAdminPasswords.forEach((pass, index) => {
+                tbodyPass.innerHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td><code style="color: #38bdf8; font-size: 1rem;">${pass}</code></td>
+                        <td>Владелец системы</td>
+                        <td>${index === 0 ? '<span style="color:var(--text-secondary)">Системный</span>' : `<button class="btn-danger" style="padding:4px 10px; font-size:0.75rem;" onclick="deleteAdminPass(${index})">Удалить</button>`}</td>
+                    </tr>
+                `;
+            });
+        }
+
         function triggerAdminAction(type) {
             playSound(type);
-            if(type === 'boom') alert('💥 Администратор запустил звук «БУМ» на сеансе ученика!');
-            if(type === 'reload') alert('🔫 Администратор запустил звук «Перезарядка» на сеансе ученика!');
+            if(type === 'boom') alert('💥 Запущен громкий мощный звук «БУМ»!');
+            if(type === 'reload') alert('🔫 Запущен звук «Перезарядка»!');
         }
 
         function openAdminMsgModal() {
@@ -660,23 +719,7 @@
             const txt = document.getElementById('adminMessageText').value.trim();
             if(!txt) return;
             closeAdminMsgModal();
-            alert(`💬 Сообщение от Администратора:\n\n«${txt}»`);
-        }
-
-        function updateOwnerDashboard() {
-            document.getElementById('ownerAdminPassCount').innerText = validAdminPasswords.length;
-            const tbody = document.getElementById('ownerPasswordsTableBody');
-            tbody.innerHTML = '';
-            validAdminPasswords.forEach((pass, index) => {
-                tbody.innerHTML += `
-                    <tr>
-                        <td>${index + 1}</td>
-                        <td><code style="color: #38bdf8; font-size: 1rem;">${pass}</code></td>
-                        <td>Владелец системы</td>
-                        <td>${index === 0 ? '<span style="color:var(--text-secondary)">Системный</span>' : `<button class="btn-danger" style="padding:4px 10px; font-size:0.75rem;" onclick="deleteAdminPass(${index})">Удалить</button>`}</td>
-                    </tr>
-                `;
-            });
+            alert(`💬 Сообщение от Руководства:\n\n«${txt}»`);
         }
 
         function createNewAdminPassword() {
