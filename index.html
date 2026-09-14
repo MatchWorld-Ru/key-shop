@@ -3,193 +3,1005 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXORA — CS2 Team</title>
-    <link rel="stylesheet" href="style.css">
+    <title>CodeCraft &mdash; Академия программирования с тренажером</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: #131d31;
+            --card-border: #1e293b;
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --accent: #6366f1;
+            --accent-hover: #4f46e5;
+            --success: #10b981;
+            --error: #ef4444;
+            --warning: #f59e0b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            scroll-behavior: smooth;
+            user-select: none !important;
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+        }
+
+        textarea, input {
+            user-select: text !important;
+            -webkit-user-select: text !important;
+            -moz-user-select: text !important;
+            -ms-user-select: text !important;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        header {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            background: rgba(11, 15, 25, 0.9);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--card-border);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 8%;
+        }
+
+        .logo {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #fff;
+            text-decoration: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo span {
+            background: var(--accent);
+            color: #fff;
+            font-size: 0.7rem;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-weight: 700;
+        }
+
+        nav { display: flex; gap: 20px; align-items: center; }
+        nav a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+            cursor: pointer;
+        }
+        nav a:hover, nav a.active { color: #fff; }
+
+        .user-pill {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 6px 14px;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+        .user-pill img { width: 28px; height: 28px; border-radius: 50%; }
+
+        .page-view { display: none; }
+        .page-view.active { display: block; }
+
+        .hero {
+            padding: 180px 8% 100px 8%;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: #a5b4fc;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.3rem, 4.5vw, 4.2rem);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -1.5px;
+            margin-bottom: 25px;
+            max-width: 950px;
+        }
+        .hero h1 span { color: var(--accent); }
+        .hero p {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            max-width: 650px;
+            margin-bottom: 15px;
+        }
+
+        .sub-info-text {
+            font-size: 0.95rem;
+            color: #a5b4fc;
+            margin-bottom: 40px;
+            font-weight: 500;
+        }
+
+        .btn-main {
+            background: var(--accent);
+            color: #fff;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        .btn-main:hover { background: var(--accent-hover); transform: translateY(-3px); }
+
+        .btn-admin {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--warning);
+            border: 1px solid var(--warning);
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 0.85rem;
+        }
+        .btn-admin:hover { background: var(--warning); color: #000; }
+
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--error);
+            border: 1px solid var(--error);
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-danger:hover { background: var(--error); color: #fff; }
+
+        .section {
+            padding: 80px 8%;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            letter-spacing: -1px;
+        }
+
+        .section-desc {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+        }
+
+        .langs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .lang-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 25px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: center;
+        }
+        .lang-card:hover { border-color: var(--accent); transform: translateY(-5px); }
+        .lang-icon { font-size: 2.2rem; margin-bottom: 12px; }
+        .lang-card h3 { font-size: 1.2rem; margin-bottom: 5px; }
+        .lang-card p { color: var(--text-secondary); font-size: 0.8rem; }
+
+        .levels-container, .dashboard-container, .admin-container {
+            padding: 140px 8% 80px 8%;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .lang-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-secondary);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 0.85rem;
+        }
+        .tab-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+        .levels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .level-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 20px;
+            border-radius: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .level-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+        .level-info h4 { font-size: 1rem; margin-bottom: 3px; }
+        .level-info span { color: var(--text-secondary); font-size: 0.8rem; }
+        .level-status { font-weight: 700; font-size: 0.85rem; color: var(--text-secondary); }
+        .level-status.done { color: var(--success); }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 30px;
+            border-radius: 16px;
+        }
+        .stat-card span { color: var(--text-secondary); font-size: 0.9rem; display: block; margin-bottom: 8px; }
+        .stat-card h3 { font-size: 2.2rem; font-weight: 800; }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        .admin-table th, .admin-table td {
+            padding: 15px 20px;
+            text-align: left;
+            border-bottom: 1px solid var(--card-border);
+            font-size: 0.95rem;
+        }
+        .admin-table th { background: rgba(99, 102, 241, 0.1); color: #a5b4fc; font-weight: 700; }
+        .admin-table tr:last-child td { border-bottom: none; }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(6px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+        .modal-overlay.active { display: flex; }
+
+        .modal-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 35px;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px; right: 20px;
+            background: none; border: none;
+            color: var(--text-secondary);
+            font-size: 1.4rem;
+            cursor: pointer;
+        }
+
+        .code-box {
+            background: #05070c;
+            border: 1px solid var(--card-border);
+            padding: 15px;
+            border-radius: 10px;
+            font-family: monospace;
+            color: #38bdf8;
+            margin: 15px 0;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+        }
+
+        .input-field {
+            width: 100%;
+            background: #05070c;
+            border: 1px solid var(--card-border);
+            color: #fff;
+            padding: 14px 16px;
+            border-radius: 10px;
+            font-size: 1rem;
+            outline: none;
+            margin-bottom: 15px;
+        }
+
+        .feedback-msg {
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            display: none;
+        }
+        .feedback-msg.success { background: rgba(16, 185, 129, 0.15); color: var(--success); border: 1px solid var(--success); }
+        .feedback-msg.error { background: rgba(239, 68, 68, 0.15); color: var(--error); border: 1px solid var(--error); }
+
+        footer {
+            border-top: 1px solid var(--card-border);
+            padding: 40px 8%;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 850px) {
+            header { padding: 15px 5%; }
+            nav { display: none; }
+            .hero, .section, .levels-container, .dashboard-container, .admin-container { padding: 80px 5%; }
+        }
+    </style>
 </head>
 <body>
 
-<div class="bg"></div>
-
-<header>
-    <a href="#home" class="logo">
-        <span>N</span>
-        NEXORA
-        <small>CS TEAM</small>
-    </a>
-
-    <nav>
-        <a href="#home">Главная</a>
-        <a href="#recruit">Набор</a>
-        <a href="#about">О команде</a>
-    </nav>
-
-    <div class="header-buttons">
-        <button class="btn secondary" onclick="openAccount()">Личный кабинет</button>
-        <button class="btn purple" onclick="openAuth()">Войти</button>
-    </div>
-</header>
-
-<main>
-
-<section id="home" class="hero">
-    <div class="hero-left">
-
-        <div class="eyebrow">🇰🇿 KAZAKHSTAN • CS2 • ESPORTS</div>
-
-        <h1>
-            ONE TEAM.<br>
-            <span>ONE GOAL.</span>
-        </h1>
-
-        <p>
-            NEXORA — соревновательная CS2-команда.
-            Мы ищем игроков, которые готовы развиваться,
-            тренироваться и побеждать вместе.
-        </p>
-
-        <div class="hero-buttons">
-            <button class="btn purple large" onclick="openApply()">
-                Подать заявку →
-            </button>
-
-            <a href="#recruit" class="btn secondary large">
-                Открытые позиции
-            </a>
+    <header>
+        <a class="logo" onclick="switchPage('home')">CODECRAFT <span>PRO</span></a>
+        <nav>
+            <a onclick="switchPage('home')" id="nav-home" class="active">Главная</a>
+            <a onclick="switchPage('levels')" id="nav-levels">Каталог Уровней</a>
+            <a onclick="switchPage('dashboard')" id="nav-dashboard">Кабинет</a>
+            <button class="btn-admin" onclick="openAdminLoginModal()">👑 Админ-панель</button>
+        </nav>
+        
+        <div id="authContainer">
+            <button class="btn-main" style="padding: 8px 18px; font-size: 0.85rem;" onclick="openPhoneModal()">Войти по номеру</button>
         </div>
+    </header>
 
-        <div class="stats">
-            <div>
-                <b>CS2</b>
-                <span>DISCIPLINE</span>
+    <!-- СТРАНИЦА: Главная -->
+    <div id="page-home" class="page-view active">
+        <section class="hero">
+            <div class="badge">Защищенная академия кода</div>
+            <h1>Учи <span>13 языков программирования</span> на 1300+ продвинутых уровнях</h1>
+            <p>Продвинутый тренажер с максимальной защитой от копирования материалов, подробнейшими разборами и авторизацией по SMS.</p>
+            <div class="sub-info-text">Без регистрации. Все языки закрыты.</div>
+            <button class="btn-main" onclick="switchPage('levels')">Открыть все уровни</button>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Все направления языков</h2>
+            <p class="section-desc">13 языков, по 100 продвинутых практических уроков в каждом.</p>
+            <div class="langs-grid" id="langsGridMain"></div>
+        </section>
+    </div>
+
+    <!-- СТРАНИЦА: Уровни -->
+    <div id="page-levels" class="page-view">
+        <div class="levels-container">
+            <h2 class="section-title">Каталог продвинутых уровней</h2>
+            <p class="section-desc">Выбирай язык и решай задачи шаг за шагом.</p>
+            <div class="lang-tabs" id="langTabsContainer"></div>
+            <div class="levels-grid" id="levelsGrid"></div>
+        </div>
+    </div>
+
+    <!-- СТРАНИЦА: Личный кабинет -->
+    <div id="page-dashboard" class="page-view">
+        <div class="dashboard-container">
+            <h2 class="section-title" style="margin-bottom: 30px;">Личный кабинет</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span>Пройдено уровней</span>
+                    <h3 id="statCompleted">0 / 1300</h3>
+                </div>
+                <div class="stat-card">
+                    <span>Заработано XP</span>
+                    <h3 id="statXp">0 XP</h3>
+                </div>
+                <div class="stat-card">
+                    <span>Статус аккаунта</span>
+                    <h3 id="statStatus">Гость</h3>
+                </div>
             </div>
 
-            <div>
-                <b>5×5</b>
-                <span>TEAM FORMAT</span>
-            </div>
-
-            <div>
-                <b>KZ</b>
-                <span>COUNTRY</span>
+            <div style="background: var(--card-bg); border: 1px solid var(--card-border); padding: 30px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+                <div>
+                    <h3 style="margin-bottom: 10px;">Безопасность профиля</h3>
+                    <p id="authInfoText" style="color: var(--text-secondary);">Войдите через номер телефона, чтобы привязать прогресс к вашему аккаунту.</p>
+                </div>
+                <div id="logoutActionContainer"></div>
             </div>
         </div>
-
     </div>
 
-    <div class="hero-logo">
-        <div>N</div>
-        <strong>NEXORA</strong>
-        <small>COMPETITIVE DIVISION</small>
-    </div>
-</section>
+    <!-- СТРАНИЦА: Админ-панель -->
+    <div id="page-admin" class="page-view">
+        <div class="admin-container">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 15px;">
+                <div>
+                    <h2 class="section-title" style="margin-bottom: 5px;">Панель Администратора</h2>
+                    <p style="color: var(--text-secondary);">Мониторинг активности студентов и прохождения заданий в реальном времени.</p>
+                </div>
+                <button class="btn-danger" style="padding: 10px 20px; font-size: 0.9rem;" onclick="adminLogout()">Выйти из админки</button>
+            </div>
 
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span>Активных сессий</span>
+                    <h3 id="adminTotalUsers">1</h3>
+                </div>
+                <div class="stat-card">
+                    <span>Всего пройдено задач</span>
+                    <h3 id="adminTotalCompleted">0</h3>
+                </div>
+                <div class="stat-card">
+                    <span>Общий XP учеников</span>
+                    <h3 id="adminTotalXp">0 XP</h3>
+                </div>
+            </div>
 
-<section id="recruit" class="section">
-
-    <div class="section-head">
-        <span>01</span>
-        <h2>Открытые позиции</h2>
-    </div>
-
-    <div class="positions">
-
-        <article class="position">
-            <div class="number">01</div>
-            <div class="role">RIFLER</div>
-            <h3>Rifler / Entry</h3>
-            <p>
-                Сильная стрельба, хороший aim,
-                понимание игры и командная коммуникация.
-            </p>
-            <button onclick="openApply()">Подать заявку →</button>
-        </article>
-
-        <article class="position">
-            <div class="number">02</div>
-            <div class="role">AWPER</div>
-            <h3>AWPer</h3>
-            <p>
-                Уверенная игра с AWP, хороший positioning
-                и способность выигрывать ключевые раунды.
-            </p>
-            <button onclick="openApply()">Подать заявку →</button>
-        </article>
-
-        <article class="position">
-            <div class="number">03</div>
-            <div class="role">IGL</div>
-            <h3>In-Game Leader</h3>
-            <p>
-                Тактики, принятие решений,
-                лидерство и сильная коммуникация.
-            </p>
-            <button onclick="openApply()">Подать заявку →</button>
-        </article>
-
-        <article class="position">
-            <div class="number">04</div>
-            <div class="role">SUPPORT</div>
-            <h3>Support</h3>
-            <p>
-                Гранаты, поддержка тиммейтов
-                и грамотная командная игра.
-            </p>
-            <button onclick="openApply()">Подать заявку →</button>
-        </article>
-
-    </div>
-</section>
-
-
-<section id="about" class="section about">
-
-    <div>
-        <div class="eyebrow">ABOUT NEXORA</div>
-
-        <h2>Команда,<br>а не просто стак.</h2>
-
-        <p>
-            NEXORA создаётся как полноценная
-            киберспортивная организация.
-            Наша цель — собрать стабильный состав,
-            регулярно тренироваться и участвовать
-            в турнирах.
-        </p>
+            <h3 style="margin-bottom: 15px; font-size: 1.2rem;">Список пользователей и их прогресс</h3>
+            <div style="overflow-x: auto;">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Пользователь / Телефон</th>
+                            <th>Статус</th>
+                            <th>Пройдено уровней</th>
+                            <th>Заработано XP</th>
+                            <th>Последняя активность</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminUsersTableBody">
+                        <!-- Динамические данные -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
-    <div class="advantages">
-        <div>✓ Регулярные тренировки</div>
-        <div>✓ Разбор матчей</div>
-        <div>✓ Командная коммуникация</div>
-        <div>✓ Развитие игроков</div>
-        <div>✓ Участие в турнирах</div>
+    <!-- Модальное окно пароля админа -->
+    <div class="modal-overlay" id="adminLoginModal">
+        <div class="modal-card">
+            <button class="modal-close" onclick="closeAdminLoginModal()">✕</button>
+            <h3 style="margin-bottom: 10px; font-size: 1.3rem;">Вход в админ-панель</h3>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 20px;">Введите секретный пароль администратора.</p>
+            
+            <input type="password" class="input-field" id="adminPasswordInput" placeholder="Пароль администратора">
+            <button class="btn-main" style="width: 100%;" onclick="verifyAdminPassword()">Войти</button>
+            <div class="feedback-msg" id="adminLoginFeedback" style="margin-top: 15px;"></div>
+        </div>
     </div>
 
-</section>
+    <!-- Модальное окно авторизации по номеру -->
+    <div class="modal-overlay" id="phoneAuthModal">
+        <div class="modal-card">
+            <button class="modal-close" onclick="closePhoneModal()">✕</button>
+            <h3 style="margin-bottom: 10px; font-size: 1.3rem;">Вход по номеру телефона</h3>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 20px;">Введите ваш номер телефона, чтобы получить код подтверждения.</p>
 
-</main>
+            <div id="stepPhoneContainer">
+                <input type="tel" class="input-field" id="phoneNumberInput" placeholder="+7 (700) 000-00-00">
+                <button class="btn-main" style="width: 100%;" onclick="sendSmsCode()">Получить код</button>
+            </div>
 
+            <div id="stepCodeContainer" style="display: none;">
+                <div id="smsCodeHint" style="background: rgba(99, 102, 241, 0.1); border: 1px solid var(--accent); padding: 10px; border-radius: 8px; color: #a5b4fc; font-size: 0.85rem; margin-bottom: 15px;"></div>
+                <input type="text" class="input-field" id="smsCodeInput" placeholder="Введите 4 цифры из кода">
+                <button class="btn-main" style="width: 100%;" onclick="verifySmsCode()">Подтвердить и войти</button>
+            </div>
 
-<footer>
-    <div>
-        <b>NEXORA</b>
-        <span>CS TEAM • 🇰🇿 KAZAKHSTAN</span>
+            <div class="feedback-msg" id="phoneAuthFeedback" style="margin-top: 15px;"></div>
+        </div>
     </div>
 
-    <button onclick="openAdmin()" class="admin-button">
-        ADMIN
-    </button>
-</footer>
+    <!-- Модальное окно тренажера задач -->
+    <div class="modal-overlay" id="trainerModal">
+        <div class="modal-card" style="max-width: 750px; max-height: 90vh; overflow-y: auto;">
+            <button class="modal-close" onclick="closeTrainer()">✕</button>
+            <span id="trainerLang" style="color: var(--accent); font-weight: 700; font-size: 0.8rem; text-transform: uppercase;">Язык</span>
+            <h3 id="trainerTitle" style="margin-top: 5px; margin-bottom: 10px; font-size: 1.3rem;">Уровень</h3>
+            
+            <div style="background: rgba(99, 102, 241, 0.08); border-left: 4px solid var(--accent); padding: 14px; border-radius: 0 10px 10px 0; margin-bottom: 15px;">
+                <div style="font-size: 0.8rem; font-weight: 700; color: #a5b4fc; margin-bottom: 5px; text-transform: uppercase;">Понятное объяснение для новичка:</div>
+                <p id="trainerTheory" style="color: #cbd5e1; font-size: 0.92rem; line-height: 1.6;"></p>
+            </div>
+            
+            <div style="font-size: 0.85rem; font-weight: 700; margin-bottom: 5px; color: #fff;">Шаблон или пример кода:</div>
+            <div class="code-box" id="trainerExample">пример кода...</div>
 
+            <div style="font-size: 0.85rem; font-weight: 700; margin-bottom: 5px; color: #fff;">Напишите решение задачи здесь:</div>
+            <textarea class="input-field" id="userCodeInput" style="height: 120px; resize: vertical; font-family: monospace;" placeholder="Введите ваш код для проверки..."></textarea>
 
-<div id="modal" class="modal">
-    <div class="modal-box">
-        <button class="close" onclick="closeModal()">×</button>
-        <div id="modal-content"></div>
+            <div class="feedback-msg" id="feedbackBox"></div>
+
+            <div style="display: flex; gap: 10px;">
+                <button class="btn-main" style="flex: 1;" onclick="verifyUserCode()">Проверить код</button>
+                <button class="tab-btn" onclick="closeTrainer()">Закрыть</button>
+            </div>
+        </div>
     </div>
-</div>
 
-<script src="script.js"></script>
+    <footer>
+        <p>&copy; 2026 CodeCraft Pro. Все права защищены.</p>
+        <p>Безопасная авторизация по номеру телефона</p>
+    </footer>
 
+    <script>
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('keydown', e => {
+            if (
+                (e.ctrlKey && (e.key === 'c' || e.key === 'u' || e.key === 's' || e.key === 'a' || e.key === 'p')) ||
+                e.key === 'F12' ||
+                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c'))
+            ) {
+                e.preventDefault();
+                alert('Копирование материалов и исходного кода защищено системой CodeCraft Security.');
+                return false;
+            }
+        });
+        document.addEventListener('dragstart', e => e.preventDefault());
+
+        let generatedCode = "";
+        let pendingPhone = "";
+        let isAuthorized = false;
+        let isAdminLoggedIn = false;
+
+        let currentUser = {
+            phone: "Гость (не авторизован)",
+            status: "Гость",
+            completed: 0,
+            xp: 0,
+            lastActive: "Только что"
+        };
+
+        function openAdminLoginModal() {
+            if(isAdminLoggedIn) {
+                switchPage('admin');
+                return;
+            }
+            document.getElementById('adminLoginModal').classList.add('active');
+            document.getElementById('adminPasswordInput').value = '';
+            document.getElementById('adminLoginFeedback').style.display = 'none';
+        }
+
+        function closeAdminLoginModal() {
+            document.getElementById('adminLoginModal').classList.remove('active');
+        }
+
+        function verifyAdminPassword() {
+            const pass = document.getElementById('adminPasswordInput').value.trim();
+            const fb = document.getElementById('adminLoginFeedback');
+            fb.style.display = 'block';
+
+            if(pass === "Mansur-00") {
+                isAdminLoggedIn = true;
+                fb.className = 'feedback-msg success';
+                fb.innerText = 'Доступ разрешен!';
+                setTimeout(() => {
+                    closeAdminLoginModal();
+                    updateAdminStats();
+                    switchPage('admin');
+                }, 600);
+            } else {
+                fb.className = 'feedback-msg error';
+                fb.innerText = 'Неверный пароль администратора!';
+            }
+        }
+
+        function adminLogout() {
+            isAdminLoggedIn = false;
+            alert('Вы вышли из админ-панели.');
+            switchPage('home');
+        }
+
+        function updateAdminStats() {
+            document.getElementById('adminTotalCompleted').innerText = currentUser.completed;
+            document.getElementById('adminTotalXp').innerText = currentUser.xp + ' XP';
+            
+            const tbody = document.getElementById('adminUsersTableBody');
+            tbody.innerHTML = `
+                <tr>
+                    <td><strong>${currentUser.phone}</strong></td>
+                    <td><span style="color: ${currentUser.status === 'Активный студент' ? 'var(--success)' : 'var(--text-secondary)'}; font-weight:700;">${currentUser.status}</span></td>
+                    <td>${currentUser.completed} / 1300</td>
+                    <td>${currentUser.xp} XP</td>
+                    <td style="color: var(--text-secondary);">${currentUser.lastActive}</td>
+                </tr>
+            `;
+        }
+
+        function openPhoneModal() {
+            document.getElementById('phoneAuthModal').classList.add('active');
+            document.getElementById('stepPhoneContainer').style.display = 'block';
+            document.getElementById('stepCodeContainer').style.display = 'none';
+            document.getElementById('phoneNumberInput').value = '';
+            document.getElementById('phoneAuthFeedback').style.display = 'none';
+        }
+
+        function closePhoneModal() {
+            document.getElementById('phoneAuthModal').classList.remove('active');
+        }
+
+        function sendSmsCode() {
+            const phone = document.getElementById('phoneNumberInput').value.trim();
+            const fb = document.getElementById('phoneAuthFeedback');
+            fb.style.display = 'block';
+
+            if(phone.length < 6) {
+                fb.className = 'feedback-msg error';
+                fb.innerText = 'Введите корректный номер телефона!';
+                return;
+            }
+
+            pendingPhone = phone;
+            generatedCode = Math.floor(1000 + Math.random() * 9000).toString();
+
+            fb.className = 'feedback-msg success';
+            fb.innerText = 'Код успешно отправлен!';
+
+            document.getElementById('stepPhoneContainer').style.display = 'none';
+            document.getElementById('stepCodeContainer').style.display = 'block';
+            document.getElementById('smsCodeHint').innerHTML = `SMS с вашего телефона: код &mdash; <strong>${generatedCode}</strong>`;
+            document.getElementById('smsCodeInput').value = '';
+        }
+
+        function verifySmsCode() {
+            const enteredCode = document.getElementById('smsCodeInput').value.trim();
+            const fb = document.getElementById('phoneAuthFeedback');
+            fb.style.display = 'block';
+
+            if(enteredCode === generatedCode) {
+                fb.className = 'feedback-msg success';
+                fb.innerText = 'Успешная авторизация!';
+                
+                setTimeout(() => {
+                    closePhoneModal();
+                    completeLogin(pendingPhone);
+                }, 800);
+            } else {
+                fb.className = 'feedback-msg error';
+                fb.innerText = 'Неверный код подтверждения. Попробуйте еще раз.';
+            }
+        }
+
+        function completeLogin(phone) {
+            isAuthorized = true;
+            currentUser.phone = phone;
+            currentUser.status = "Активный студент";
+            currentUser.lastActive = "Только что";
+
+            document.getElementById('authContainer').innerHTML = `
+                <div class="user-pill" onclick="switchPage('dashboard')" title="Личный кабинет">
+                    <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(phone)}&background=6366f1&color=fff" alt="Avatar">
+                    <span style="font-weight: 600; font-size: 0.9rem;">${phone}</span>
+                </div>
+            `;
+
+            document.getElementById('statStatus').innerText = "Активный студент";
+            document.getElementById('authInfoText').innerHTML = `Вы авторизованы по номеру:<br><strong>${phone}</strong>`;
+            document.getElementById('logoutActionContainer').innerHTML = `<button class="btn-danger" onclick="logoutUser()">Выйти из аккаунта</button>`;
+            
+            switchPage('dashboard');
+        }
+
+        function logoutUser() {
+            isAuthorized = false;
+            pendingPhone = "";
+            generatedCode = "";
+
+            currentUser.phone = "Гость (не авторизован)";
+            currentUser.status = "Гость";
+
+            document.getElementById('authContainer').innerHTML = `
+                <button class="btn-main" style="padding: 8px 18px; font-size: 0.85rem;" onclick="openPhoneModal()">Войти по номеру</button>
+            `;
+
+            document.getElementById('statStatus').innerText = "Гость";
+            document.getElementById('authInfoText').innerHTML = `Войдите через номер телефона, чтобы привязать прогресс к вашему аккаунту.`;
+            document.getElementById('logoutActionContainer').innerHTML = '';
+
+            alert('Вы успешно вышли из аккаунта.');
+            switchPage('home');
+        }
+
+        const langsConfig = [
+            { id: 'python', name: 'Python', icon: '🐍' },
+            { id: 'java', name: 'Java', icon: '☕' },
+            { id: 'js', name: 'JavaScript', icon: '⚡' },
+            { id: 'cpp', name: 'C++', icon: '⚙️' },
+            { id: 'csharp', name: 'C#', icon: '🔷' },
+            { id: 'ts', name: 'TypeScript', icon: '💙' },
+            { id: 'php', name: 'PHP', icon: '🐘' },
+            { id: 'ruby', name: 'Ruby', icon: '💎' },
+            { id: 'go', name: 'Go', icon: '🐹' },
+            { id: 'rust', name: 'Rust', icon: '🦀' },
+            { id: 'swift', name: 'Swift', icon: '🍎' },
+            { id: 'kotlin', name: 'Kotlin', icon: '🤖' },
+            { id: 'sql', name: 'SQL', icon: '🗄️' }
+        ];
+
+        let currentLang = 'python';
+
+        const advancedTopics = {
+            python: [
+                {t: "Декораторы функций", desc: "Декоратор — это функция, которая оборачивает другую функцию для добавления нового функционала.", code: "def my_decorator(func):\n    def wrapper():\n        func()\n    return wrapper", key: "def"},
+                {t: "Генераторы списков", desc: "Компактный способ создания списков в одну строку с помощью цикла внутри скобок.", code: "squares = [x**2 for x in range(10)]", key: "for"},
+                {t: "Менеджеры контекста", desc: "Автоматически освобождают системные ресурсы с помощью ключевого слова with.", code: "with open('file.txt', 'r') as f:\n    data = f.read()", key: "with"}
+            ],
+            java: [
+                {t: "Лямбда-выражения", desc: "Короткая форма записи анонимных методов для работы с коллекциями.", code: "list.forEach(item -> System.out.println(item));", key: "->"},
+                {t: "Stream API", desc: "Конвейерная обработка наборов данных (фильтрация, маппинг).", code: "int sum = numbers.stream().mapToInt(i -> i).sum();", key: "stream"},
+                {t: "Интерфейсы", desc: "Задают контракт поведения для классов.", code: "public interface Runnable { void run(); }", key: "interface"}
+            ],
+            js: [
+                {t: "Promise.all", desc: "Ожидание выполнения сразу нескольких асинхронных задач параллельно.", code: "Promise.all([p1, p2]).then(res => console.log(res));", key: "Promise.all"},
+                {t: "Замыкания", desc: "Функция, сохраняющая доступ к внешней области видимости.", code: "function outer() { let x = 5; return () => x; }", key: "return"},
+                {t: "Прототипы", desc: "Механизм наследования свойств между объектами.", code: "Object.setPrototypeOf(child, parent);", key: "setPrototypeOf"}
+            ],
+            cpp: [
+                {t: "Умные указатели", desc: "Автоматическое управление динамической памятью без утечек.", code: "std::unique_ptr<int> ptr = std::make_unique<int>(10);", key: "unique_ptr"},
+                {t: "Семантика перемещения", desc: "Перенос данных временных объектов вместо копирования.", code: "Vector(Vector&& other) noexcept {}", key: "noexcept"},
+                {t: "Шаблоны классов", desc: "Универсальный код для любых типов данных.", code: "template <typename T>\nT add(T a, T b) { return a + b; }", key: "template"}
+            ],
+            csharp: [
+                {t: "LINQ запросы", desc: "Мощный язык запросов к коллекциям данных внутри C#.", code: "var res = from x in list where x > 5 select x;", key: "from"},
+                {t: "Асинхронность async/await", desc: "Выполнение долгих операций без зависания интерфейса.", code: "public async Task LoadAsync() { await Task.Delay(100); }", key: "async"},
+                {t: "События и делегаты", desc: "Паттерн подписки на уведомления в коде.", code: "public event EventHandler OnClick;", key: "event"}
+            ],
+            ts: [
+                {t: "Обобщенные типы (Generics)", desc: "Создание гибких компонентов со строгой типизацией.", code: "function identity<T>(arg: T): T { return arg; }", key: "<T>"},
+                {t: "Интерфейсы объектов", desc: "Описание структуры полей объекта.", code: "interface User { id: number; name: string; }", key: "interface"},
+                {t: "Утилитарные типы Partial", desc: "Превращение всех полей типа в необязательные.", code: "type OptionalUser = Partial<User>;", key: "Partial"}
+            ],
+            php: [
+                {t: "Классы и ООП", desc: "Создание структурированных серверных модулей.", code: "class Database {\n    public function connect() {}\n}", key: "class"},
+                {t: "Подготовленные выражения PDO", desc: "Защита базы данных от SQL-инъекций.", code: "$stmt = $pdo->prepare('SELECT * FROM users');", key: "prepare"},
+                {t: "Пространства имен", desc: "Изоляция названий классов в больших проектах.", code: "namespace App\\Models;", key: "namespace"}
+            ],
+            ruby: [
+                {t: "Блоки и итераторы", desc: "Передача логики в методы через блоки кода.", code: "arr.each { |el| puts el }", key: "each"},
+                {t: "Метапрограммирование", desc: "Динамическое создание методов на лету.", code: "def method_missing(name, *args)", key: "method_missing"},
+                {t: "Модули Mixins", desc: "Подключение готового набора методов.", code: "include Comparable", key: "include"}
+            ],
+            go: [
+                {t: "Горутины и каналы", desc: "Легковесные параллельные потоки и обмен данными.", code: "ch := make(chan string)\ngo worker(ch)", key: "make"},
+                {t: "Неявные интерфейсы", desc: "Автоматическая реализация интерфейсов структурами.", code: "type Reader interface { Read() }", key: "interface"},
+                {t: "Явная обработка ошибок", desc: "Возврат ошибки как обычного значения функции.", code: "if err != nil { return err }", key: "err != nil"}
+            ],
+            rust: [
+                {t: "Система владения", desc: "Управление памятью без сборщика мусора.", code: "let s1 = String::from(\"hello\");", key: "String::from"},
+                {t: "Оператор Match", desc: "Безопасное ветвление по всем вариантам перечислений.", code: "match val {\n    1 => println!(\"one\"),\n    _ => {}\n}", key: "match"},
+                {t: "Тип Result", desc: "Обработка успешного выполнения или ошибки без null.", code: "let res: Result<i32, &str> = Ok(10);", key: "Result"}
+            ],
+            swift: [
+                {t: "Опционалы", desc: "Безопасная работа со значениями, которые могут быть nil.", code: "var count: Int? = 5", key: "?"},
+                {t: "Замыкания", desc: "Захват контекста в лямбда-выражениях.", code: "let sorted = nums.sorted { $0 < $1 }", key: "sorted"},
+                {t: "Расширения (Extensions)", desc: "Добавление новых методов к существующим типам.", code: "extension String { func custom() {} }", key: "extension"}
+            ],
+            kotlin: [
+                {t: "Безопасность Null Safety", desc: "Защита от ошибок NullPointerException на этапе компиляции.", code: "var name: String? = null\nprintln(name?.length)", key: "?."},
+                {t: "Функции высшего порядка", desc: "Передача функций в качестве параметров.", code: "val sum: (Int, Int) -> Int = { a, b -> a + b }", key: "->"},
+                {t: "Классы данных", desc: "Автоматическая генерация служебных методов для структур.", code: "data class Item(val id: Int)", key: "data class"}
+            ],
+            sql: [
+                {t: "INNER JOIN", desc: "Объединение данных из нескольких таблиц по ключу.", code: "SELECT * FROM users JOIN orders ON users.id = orders.user_id;", key: "JOIN"},
+                {t: "Группировка GROUP BY", desc: "Агрегация строк для вычислений и подсчетов.", code: "SELECT role, COUNT(*) FROM users GROUP BY role;", key: "GROUP BY"},
+                {t: "Подзапросы", desc: "Использование вложенных запросов для фильтрации.", code: "SELECT * FROM items WHERE price > (SELECT AVG(price) FROM items);", key: "SELECT"}
+            ]
+        };
+
+        let allLevels = {};
+
+        langsConfig.forEach(langObj => {
+            const langKey = langObj.id;
+            allLevels[langKey] = [];
+            const baseList = advancedTopics[langKey] || advancedTopics['python'];
+
+            for(let i = 1; i <= 100; i++) {
+                let templateIndex = (i - 1) % baseList.length;
+                let item = baseList[templateIndex];
+
+                allLevels[langKey].push({
+                    id: i,
+                    lang: langObj.name,
+                    title: `Уровень ${i}: ${item.t}`,
+                    theory: `Тема: «${item.t}». ${item.desc} Напишите синтаксический элемент на языке ${langObj.name}, необходимый по условию задачи.`,
+                    example: item.code,
+                    expectedKeyword: item.key,
+                    done: false
+                });
+            }
+        });
+
+        function renderMainLangs() {
+            const grid = document.getElementById('langsGridMain');
+            if(!grid) return;
+            grid.innerHTML = '';
+            langsConfig.forEach(l => {
+                grid.innerHTML += `
+                    <div class="lang-card" onclick="selectLang('${l.id}')">
+                        <div class="lang-icon">${l.icon}</div>
+                        <h3>${l.name}</h3>
+                        <p>100 уроков</p>
+                    </div>
+                `;
+            });
+        }
+
+        function renderTabs() {
+            const container = document.getElementById('langTabsContainer');
+            if(!container) return;
+            container.innerHTML = '';
+            langsConfig.forEach(l => {
+                container.innerHTML += `
+                    <button class="tab-btn ${l.id === currentLang ? 'active' : ''}" onclick="selectLang('${l.id}')">${l.name}</button>
+                `;
+            });
+        }
+
+        function selectLang(langId) {
+            currentLang = langId;
+            renderTabs();
+            renderLevels();
+            switchPage('levels');
+        }
+
+        function renderLevels() {
+            const grid = document.getElementById('levelsGrid');
+            if(!grid) return;
+            grid.innerHTML = '';
+            const list = allLevels[currentLang] || [];
+
+            list.forEach(lvl => {
+                grid.innerHTML += `
+                    <div class="level-card" onclick="openTrainer('${currentLang}', ${lvl.id})">
+                        <div class="level-info">
+                            <h4>Уровень ${lvl.id}</h4>
+                            <span>${lvl.title}</span>
+                        </div>
+                        <div class="level-status ${lvl.done ? 'done' : ''}">
+                            ${lvl.done ? 'Пройдено ✓' : 'Начать'}
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        let activeLevelObj = null;
+
+        function openTrainer(lang, id) {
+            let lvl = allLevels[lang].find(l => l.id === id);
+            if(!lvl) return;
+            activeLevelObj = lvl;
+
+            document.getElementById('trainerLang').innerText = lvl.lang;
+            document.getElementById('trainerTitle').innerText = lvl.title;
+            document.getElementById('trainerTheory').innerText = lvl.theory;
+            document.getElementById('trainerExample').innerText = lvl.example;
+            document.getElementById('userCodeInput').value = '';
+            
+            const fb = document.getElementById('feedbackBox');
+            fb.style.display = 'none';
+            fb.className = 'feedback-msg';
+
+            document.getElementById('trainerModal').classList.add('active');
+        }
+
+        function closeTrainer() {
+            document.getElementById('trainerModal').classList.remove('active');
+        }
+
+        function verifyUserCode() {
+            const code = document.getElementById('userCodeInput').value.trim();
+            const fb = document.getElementById('feedbackBox');
+            fb.style.display = 'block';
+
+            if(!code) {
+                fb.className = 'feedback-msg error';
+                fb.innerText = 'Поле ввода кода не должно быть пустым!';
+                return;
+            }
+
+            if(code.includes(activeLevelObj.expectedKeyword)) {
+                fb.className = 'feedback-msg success';
+                fb.innerText = 'Правильно! Задание успешно засчитано.';
+
+                if(!activeLevelObj.done) {
+                    activeLevelObj.done = true;
+                    currentUser.completed += 1;
+                    currentUser.xp += 25;
+                    updateDashboardStats();
+                    renderLevels();
+                    if(isAdminLoggedIn) updateAdminStats();
+                }
+            } else {
+                fb.className = 'feedback-msg error';
+                fb.innerText = `Ошибка! В решении отсутствует обязательный элемент конструкции: "${activeLevelObj.expectedKeyword}".`;
+            }
+        }
+
+        function updateDashboardStats() {
+            document.getElementById('statCompleted').innerText = currentUser.completed + ' / 1300';
+            document.getElementById('statXp').innerText = currentUser.xp + ' XP';
+        }
+
+        function switchPage(pageId) {
+            document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
+            const target = document.getElementById('page-' + pageId);
+            if(target) target.classList.add('active');
+
+            document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+            if(pageId === 'home') document.getElementById('nav-home').classList.add('active');
+            if(pageId === 'levels') {
+                document.getElementById('nav-levels').classList.add('active');
+                renderTabs();
+                renderLevels();
+            }
+            if(pageId === 'dashboard') document.getElementById('nav-dashboard').classList.add('active');
+            if(pageId === 'admin') updateAdminStats();
+            
+            window.scrollTo(0, 0);
+        }
+
+        renderMainLangs();
+        renderTabs();
+        renderLevels();
+        updateDashboardStats();
+    </script>
 </body>
 </html>
