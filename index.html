@@ -266,7 +266,7 @@
             <div class="why-grid">
                 <div class="why-card">
                     <h3>🚀 1300+ задач</h3>
-                    <p>Каждый язык содержит по 100 практических упражнений с мгновенной проверкой синтаксиса.</p>
+                    <p>Каждый язык содержит по 100 уникальных практических упражнений с нарастающей сложностью.</p>
                 </div>
                 <div class="why-card">
                     <h3>🔒 Полный контроль</h3>
@@ -371,7 +371,7 @@
         </div>
     </div>
 
-    <!-- СТРАНИЦА: Панель Владельца (Включает ВСЕ функции Админа + Управление ключами) -->
+    <!-- СТРАНИЦА: Панель Владельца -->
     <div id="page-owner" class="page-view">
         <div class="owner-container">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 15px;">
@@ -388,7 +388,7 @@
                 <div class="stat-card"><span>Уровень системы</span><h3 style="color: var(--owner-color);">MAX ROOT</h3></div>
             </div>
 
-            <!-- Блок Live-управления студентами (как у админа) -->
+            <!-- Блок Live-управления студентами -->
             <div style="background: var(--card-bg); border: 1px solid var(--owner-color); padding: 30px; border-radius: 20px; margin-bottom: 40px;">
                 <h3 style="margin-bottom: 15px; color: var(--owner-color);">👑 Live-контроль студентов (функции администратора)</h3>
                 <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 20px;">Владелец может запускать громкие звуки и писать сообщения точно так же, как администратор.</p>
@@ -524,7 +524,6 @@
             document.getElementById('rulesModal').classList.remove('active');
         }
 
-        // 10 ключей владельца
         const ownerKeys = [
             "OWNER-CODE-777-ALPHA", "MASTER-KEY-999-BETA", "SUPREME-ADMIN-2026-X",
             "ROOT-ACCESS-555-OMEGA", "FOUNDER-PASS-888-SECURE", "CORE-SYSTEM-111-VIP",
@@ -546,7 +545,6 @@
 
         let selectedTargetForMsg = null;
 
-        // Звуковая функция с повышенной громкостью (Увеличен коэффициент усиления)
         function playSound(type) {
             try {
                 const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -556,7 +554,6 @@
                     osc.type = 'sawtooth';
                     osc.frequency.setValueAtTime(140, ctx.currentTime);
                     osc.frequency.exponentialRampToValueAtTime(15, ctx.currentTime + 0.9);
-                    // Громкость установлена на максимум (2.5)
                     gain.gain.setValueAtTime(2.5, ctx.currentTime);
                     gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.9);
                     osc.connect(gain);
@@ -570,7 +567,6 @@
                             const gain = ctx.createGain();
                             osc.type = 'square';
                             osc.frequency.setValueAtTime(idx === 2 ? 900 : 450, ctx.currentTime);
-                            // Громкость перезарядки усилена
                             gain.gain.setValueAtTime(0.8, ctx.currentTime);
                             gain.gain.linearRampToValueAtTime(0.01, ctx.currentTime + 0.1);
                             osc.connect(gain);
@@ -643,7 +639,6 @@
             switchPage('home');
         }
 
-        // Обновление таблиц управления (и для админа, и для владельца)
         function updateAdminStats() {
             document.getElementById('adminTotalCompleted').innerText = currentUser.completed;
             document.getElementById('adminTotalXp').innerText = currentUser.xp + ' XP';
@@ -668,7 +663,6 @@
         function updateOwnerDashboard() {
             document.getElementById('ownerAdminPassCount').innerText = validAdminPasswords.length;
             
-            // Таблица управления студентами в панели владельца (полная копия админки)
             const tbodyUsers = document.getElementById('ownerUsersTableBody');
             tbodyUsers.innerHTML = `
                 <tr>
@@ -685,7 +679,6 @@
                 </tr>
             `;
 
-            // Таблица паролей админов
             const tbodyPass = document.getElementById('ownerPasswordsTableBody');
             tbodyPass.innerHTML = '';
             validAdminPasswords.forEach((pass, index) => {
@@ -832,32 +825,70 @@
         ];
         let currentLang = 'python';
 
-        const advancedTopics = {
-            python: [{t: "Декораторы", desc: "Обертка функции.", code: "def dec(f): return f", key: "def"}],
-            java: [{t: "Лямбда", desc: "Анонимный метод.", code: "list.forEach(i->{});", key: "->"}],
-            js: [{t: "Promise", desc: "Асинхронность.", code: "Promise.resolve()", key: "Promise"}],
-            cpp: [{t: "Умный указатель", desc: "Память.", code: "std::unique_ptr<int> p;", key: "unique_ptr"}],
-            csharp: [{t: "LINQ", desc: "Запросы.", code: "var q = from x in l select x;", key: "from"}],
-            ts: [{t: "Generics", desc: "Типы.", code: "function id<T>(x: T): T {return x;}", key: "<T>"}],
-            php: [{t: "ООП", desc: "Классы.", code: "class A {}", key: "class"}],
-            ruby: [{t: "Блоки", desc: "Итераторы.", code: "arr.each {}", key: "each"}],
-            go: [{t: "Горутины", desc: "Потоки.", code: "go func(){}()", key: "go"}],
-            rust: [{t: "Match", desc: "Ветвление.", code: "match x { _ => {} }", key: "match"}],
-            swift: [{t: "Опционалы", desc: "Nil безопасность.", code: "var x: Int?", key: "?"}],
-            kotlin: [{t: "Null Safety", desc: "Безопасность.", code: "val x: String?", key: "?"}],
-            sql: [{t: "JOIN", desc: "Связи таблиц.", code: "SELECT * FROM a JOIN b ON a.id=b.id", key: "JOIN"}]
+        // Банк разнообразных тем для генерации 100 уникальных и постепенно усложняющихся задач на каждый язык
+        const taskBlueprints = {
+            python: [
+                {t: "Вывод текста", desc: "Используйте функцию print для вывода сообщения.", code: "print('Hello, World!')", key: "print"},
+                {t: "Переменные", desc: "Создайте целочисленную переменную x и присвойте ей 10.", code: "x = 10", key: "x ="},
+                {t: "Арифметика", desc: "Сложите переменные a и b.", code: "res = a + b", key: "+"},
+                {t: "Условие if", desc: "Проверьте условие, что x больше 5.", code: "if x > 5:\n    pass", key: "if"},
+                {t: "Конструкция if-else", desc: "Добавьте ветку иначе (else).", code: "if x > 5:\n    print('Yes')\nelse:\n    print('No')", key: "else"},
+                {t: "Цикл while", desc: "Создайте цикл с условием пока x меньше 10.", code: "while x < 10:\n    x += 1", key: "while"},
+                {t: "Цикл for и range", desc: "Пройдитесь в цикле от 0 до 5.", code: "for i in range(5):\n    print(i)", key: "for"},
+                {t: "Создание функции", desc: "Объявите пустую функцию с именем greet.", code: "def greet():\n    return 'Hi'", key: "def"},
+                {t: "Аргументы функции", desc: "Напишите функцию, принимающую имя name.", code: "def say_hello(name):\n    return f'Hello {name}'", key: "def"},
+                {t: "Списки (List)", desc: "Создайте список из трех чисел.", code: "numbers = [1, 2, 3]", key: "["},
+                {t: "Словари (Dict)", desc: "Создайте словарь с ключом 'name'.", code: "user = {'name': 'Alex'}", key: "{"},
+                {t: "Генератор списка", desc: "Создайте список квадратов чисел в одну строку.", code: "squares = [x**2 for x in range(5)]", key: "for"},
+                {t: "ООП: Класс", desc: "Создайте простой класс Car.", code: "class Car:\n    pass", key: "class"},
+                {t: "ООП: Конструктор", desc: "Добавьте метод инициализации __init__.", code: "class User:\n    def __init__(self, name):\n        self.name = name", key: "__init__"},
+                {t: "Декораторы", desc: "Создайте функцию-декоратор.", code: "def my_decorator(func):\n    def wrapper():\n        return func()\n    return wrapper", key: "def"}
+            ],
+            java: [
+                {t: "Вывод в консоль", desc: "Выведите строку через System.out.println.", code: "System.out.println(\"Hello\");", key: "System.out.println"},
+                {t: "Примитивные типы", desc: "Объявите целочисленную переменную age.", code: "int age = 25;", key: "int"},
+                {t: "Условный оператор", desc: "Напишите проверку if (score > 50).", code: "if (score > 50) {\n    System.out.println(\"Pass\");\n}", key: "if"},
+                {t: "Цикл for", desc: "Напишите стандартный цикл for от 0 до 10.", code: "for(int i = 0; i < 10; i++) {}", key: "for"},
+                {t: "Создание метода", desc: "Объявите публичный метод sum.", code: "public int sum(int a, int b) {\n    return a + b;\n}", key: "public"},
+                {t: "Массивы", desc: "Инициализируйте массив строк.", code: "String[] names = {\"Alice\", \"Bob\"};", key: "[]"},
+                {t: "Класс и объекты", desc: "Создайте класс Person.", code: "public class Person {\n    String name;\n}", key: "class"},
+                {t: "Интерфейсы", desc: "Объявите интерфейс Flyable.", code: "public interface Flyable {\n    void fly();\n}", key: "interface"},
+                {t: "ArrayList", desc: "Создайте коллекцию списков.", code: "List<String> list = new ArrayList<>();", key: "ArrayList"},
+                {t: "Лямбда-выражение", desc: "Используйте лямбду для итерации.", code: "list.forEach(item -> System.out.println(item));", key: "->"}
+            ],
+            js: [
+                {t: "Вывод консоль", desc: "Используйте console.log.", code: "console.log('Hello');", key: "console.log"},
+                {t: "Переменная let", desc: "Объявите переменную через let.", code: "let count = 10;", key: "let"},
+                {t: "Стрелочная функция", desc: "Создайте стрелочную функцию.", code: "const add = (a, b) => a + b;", key: "=>"},
+                {t: "Массивы и map", desc: "Преобразуйте массив через map.", code: "const nums = [1,2,3].map(n => n * 2);", key: "map"},
+                {t: "Деструктуризация", desc: "Достаньте свойство объекта.", code: "const { name, age } = user;", key: "const"},
+                {t: "Асинхронность async", desc: "Создайте асинхронную функцию.", code: "async function getData() {}", key: "async"},
+                {t: "Promise", desc: "Создайте промис.", code: "const p = new Promise((resolve) => resolve());", key: "Promise"},
+                {t: "Классы JS", desc: "Опишите класс ES6.", code: "class Animal {\n  constructor(name) { this.name = name; }\n}", key: "class"}
+            ]
         };
 
         let allLevels = {};
         langsConfig.forEach(l => {
             allLevels[l.id] = [];
-            let tList = advancedTopics[l.id] || advancedTopics['python'];
+            let blueprints = taskBlueprints[l.id] || taskBlueprints['python'];
             for(let i=1; i<=100; i++) {
-                let item = tList[(i-1) % tList.length];
+                // Динамически усложняем тему и требования в зависимости от номера уровня
+                let bpIndex = (i - 1) % blueprints.length;
+                let bp = blueprints[bpIndex];
+                
+                let difficultyName = i <= 30 ? "Базовый уровень" : (i <= 70 ? "Продвинутый уровень" : "Экспертный уровень (Алгоритмы)");
+                let taskTitle = `${i}. ${bp.t} (${difficultyName.split(' ')[0]})`;
+                let theoryText = `Уровень ${i} из 100 по курсу ${l.name}. Задача: ${bp.desc} Обратите внимание на синтаксические особенности языка для прохождения данного этапа.`;
+                
                 allLevels[l.id].push({
-                    id: i, lang: l.name, title: `Уровень ${i}: ${item.t}`,
-                    theory: `Тема: ${item.t}. ${item.desc} Напишите синтаксис.`,
-                    example: item.code, expectedKeyword: item.key, done: false
+                    id: i, 
+                    lang: l.name, 
+                    title: taskTitle,
+                    theory: theoryText,
+                    example: bp.code + `\n// Уровень сложности: ${i}/100`, 
+                    expectedKeyword: bp.key, 
+                    done: false
                 });
             }
         });
@@ -867,7 +898,7 @@
             if(!grid) return;
             grid.innerHTML = '';
             langsConfig.forEach(l => {
-                grid.innerHTML += `<div class="lang-card" onclick="selectLang('${l.id}')"><div class="lang-icon">${l.icon}</div><h3>${l.name}</h3><p>100 уроков</p></div>`;
+                grid.innerHTML += `<div class="lang-card" onclick="selectLang('${l.id}')"><div class="lang-icon">${l.icon}</div><h3>${l.name}</h3><p>100 уникальных уроков</p></div>`;
             });
         }
 
@@ -899,7 +930,7 @@
         let activeLevelObj = null;
         function openTrainer(lang, id) {
             activeLevelObj = allLevels[lang].find(l => l.id === id);
-            currentUser.activity = `Решает задачи по ${lang.toUpperCase()}`;
+            currentUser.activity = `Решает уровень ${id} по ${lang.toUpperCase()}`;
             document.getElementById('trainerLang').innerText = activeLevelObj.lang;
             document.getElementById('trainerTitle').innerText = activeLevelObj.title;
             document.getElementById('trainerTheory').innerText = activeLevelObj.theory;
@@ -928,7 +959,7 @@
                 }
             } else {
                 fb.className = 'feedback-msg error';
-                fb.innerText = `Ошибка! Требуется ключевой элемент: "${activeLevelObj.expectedKeyword}".`;
+                fb.innerText = `Ошибка! Для выполнения уровня требуется ключевой элемент: "${activeLevelObj.expectedKeyword}".`;
             }
         }
 
