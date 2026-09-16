@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Кастомный сайт клиента</title>
+    <title>Ultimate Web Builder</title>
     <style>
         :root {
             --main-bg: #ffffff;
             --main-text: #222222;
-            --accent-color: #d4af37; /* Золотой по умолчанию */
+            --accent-color: #d4af37;
         }
 
         body {
@@ -17,31 +17,45 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
             transition: background 0.3s, color 0.3s;
         }
 
-        header {
-            padding: 40px 20px;
-            text-align: center;
-            border-bottom: 2px solid var(--accent-color);
+        /* Рабочая область конструктора */
+        #canvas {
+            min-height: 80vh;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            position: relative;
         }
 
-        h1, h2, p {
-            outline: none;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 40px auto;
-            padding: 20px;
-        }
-
-        .card {
-            background: rgba(0,0,0,0.03);
-            border: 1px solid var(--accent-color);
+        /* Перетаскиваемые блоки */
+        .editable-block {
+            background: rgba(0,0,0,0.02);
+            border: 2px dashed rgba(212, 175, 55, 0.4);
             padding: 20px;
             border-radius: 12px;
-            margin-bottom: 20px;
+            position: relative;
+            cursor: move;
+            transition: border 0.2s;
+        }
+
+        .editable-block:hover {
+            border-color: var(--accent-color);
+        }
+
+        /* 3D Текст эффект */
+        .text-3d {
+            text-shadow: 
+                1px 1px 0px #ccc,
+                2px 2px 0px #bbb,
+                3px 3px 0px #aaa,
+                4px 4px 10px rgba(0,0,0,0.4);
+            font-weight: bold;
+            letter-spacing: 2px;
         }
 
         /* Кнопка-шестеренка в углу */
@@ -53,89 +67,106 @@
             color: #fff;
             border: none;
             border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            font-size: 28px;
+            width: 65px;
+            height: 65px;
+            font-size: 30px;
             cursor: pointer;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
             z-index: 10000;
             transition: transform 0.2s, background 0.3s;
         }
 
         #gear-btn:hover {
-            transform: scale(1.1);
+            transform: scale(1.1) rotate(45deg);
         }
 
-        /* Выдвижной GUI редактора */
+        /* Новая большая панель управления (GUI) */
         #builder-gui {
             position: fixed;
-            bottom: 100px;
+            bottom: 105px;
             right: 25px;
-            width: 320px;
-            background: #181818;
+            width: 350px;
+            background: #141414;
             color: #fff;
-            padding: 20px;
-            border-radius: 16px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+            padding: 25px;
+            border-radius: 18px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.7);
             display: none;
             z-index: 10000;
             font-size: 14px;
+            border: 1px solid #333;
+            max-height: 75vh;
+            overflow-y: auto;
         }
 
         #builder-gui h3 {
             margin-top: 0;
             color: var(--accent-color);
-            border-bottom: 1px solid #333;
-            padding-bottom: 8px;
+            border-bottom: 1px solid #222;
+            padding-bottom: 10px;
         }
 
         #builder-gui label {
             display: block;
-            margin-top: 12px;
-            color: #bbb;
+            margin-top: 15px;
+            color: #aaa;
+            font-size: 13px;
         }
 
-        #builder-gui input, #builder-gui select {
+        #builder-gui input, #builder-gui select, #builder-gui button {
             width: 100%;
             margin-top: 6px;
             padding: 10px;
             border-radius: 8px;
-            border: 1px solid #444;
-            background: #252525;
+            border: 1px solid #333;
+            background: #1f1f1f;
             color: #fff;
             box-sizing: border-box;
         }
 
-        .hint {
-            font-size: 12px;
-            color: #888;
-            margin-top: 15px;
-            text-align: center;
+        #builder-gui button.action-btn {
+            background: var(--accent-color);
+            color: #fff;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: opacity 0.2s;
+        }
+
+        #builder-gui button.action-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* Стили для кастомных форм */
+        .custom-form input, .custom-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 8px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1 contenteditable="true">Сайт твоего клиента</h1>
-        <p contenteditable="true">Кликай на любой текст на странице, чтобы изменить его прямо на лету!</p>
-    </header>
-
-    <div class="container">
-        <div class="card">
-            <h2 contenteditable="true">Блок с информацией</h2>
-            <p contenteditable="true">Здесь можно писать всё что угодно, менять цвета через шестеренку в правом нижнем углу и кастомизировать дизайн под себя.</p>
+    <!-- Рабочая область, куда можно добавлять контент -->
+    <div id="canvas">
+        <div class="editable-block" draggable="true">
+            <h1 contenteditable="true" class="text-3d">Главный заголовок</h1>
+            <p contenteditable="true">Этот текст можно двигать, менять цвета и перетаскивать.</p>
         </div>
     </div>
 
     <!-- Шестеренка -->
     <button id="gear-btn">⚙️</button>
 
-    <!-- GUI настройки -->
+    <!-- Панель управления -->
     <div id="builder-gui">
-        <h3>Панель дизайнера</h3>
+        <h3>Панель конструктора</h3>
         
-        <label>Цвет фона:</label>
+        <label>Цвет фона страницы:</label>
         <input type="color" id="bg-color-picker" value="#ffffff">
 
         <label>Цвет акцента (Золото / Любой):</label>
@@ -144,20 +175,29 @@
         <label>Цвет текста:</label>
         <input type="color" id="text-color-picker" value="#222222">
 
-        <div class="hint">Все изменения применяются мгновенно!</div>
+        <hr style="border:0; border-top:1px solid #333; margin:20px 0;">
+
+        <label>Добавить элемент на сайт:</label>
+        <button class="action-btn" id="add-text-btn">➕ Добавить текст</button>
+        <button class="action-btn" id="add-card-btn">➕ Добавить карточку</button>
+        <button class="action-btn" id="add-form-btn">➕ Добавить форму связи</button>
+
+        <label style="margin-top:20px;">Эффекты:</label>
+        <button class="action-btn" id="toggle-3d-btn" style="background:#333;">✨ Вкл/Выкл 3D-текст</button>
     </div>
 
     <script>
         const gearBtn = document.getElementById('gear-btn');
         const gui = document.getElementById('builder-gui');
         const root = document.documentElement;
+        const canvas = document.getElementById('canvas');
 
-        // Открытие/закрытие панели по клику на шестеренку
+        // Открытие/закрытие GUI
         gearBtn.addEventListener('click', () => {
             gui.style.display = gui.style.display === 'block' ? 'none' : 'block';
         });
 
-        // Управление цветами
+        // Настройка цветов
         document.getElementById('bg-color-picker').addEventListener('input', (e) => {
             root.style.setProperty('--main-bg', e.target.value);
         });
@@ -171,6 +211,92 @@
         document.getElementById('text-color-picker').addEventListener('input', (e) => {
             root.style.setProperty('--main-text', e.target.value);
         });
+
+        // Добавление элементов
+        document.getElementById('add-text-btn').addEventListener('click', () => {
+            const block = document.createElement('div');
+            block.className = 'editable-block';
+            block.setAttribute('draggable', 'true');
+            block.innerHTML = `<h2 contenteditable="true">Новый заголовок</h2><p contenteditable="true">Введите текст здесь...</p>`;
+            canvas.appendChild(block);
+            initDragAndDrop();
+        });
+
+        document.getElementById('add-card-btn').addEventListener('click', () => {
+            const block = document.createElement('div');
+            block.className = 'editable-block';
+            block.setAttribute('draggable', 'true');
+            block.innerHTML = `
+                <h3 contenteditable="true">Заголовок карточки</h3>
+                <p contenteditable="true">Описание карточки, которую можно кастомизировать.</p>
+                <button style="padding: 8px 16px; background: var(--accent-color); border:none; color:#fff; border-radius:5px; cursor:pointer;" contenteditable="true">Кнопка</button>
+            `;
+            canvas.appendChild(block);
+            initDragAndDrop();
+        });
+
+        document.getElementById('add-form-btn').addEventListener('click', () => {
+            const block = document.createElement('div');
+            block.className = 'editable-block custom-form';
+            block.setAttribute('draggable', 'true');
+            block.innerHTML = `
+                <h3 contenteditable="true">Форма обратной связи</h3>
+                <input type="text" placeholder="Ваше имя..." disabled>
+                <input type="email" placeholder="Ваш Email..." disabled>
+                <textarea placeholder="Ваше сообщение..." rows="3" disabled></textarea>
+                <button style="margin-top:10px; padding: 10px; background: var(--accent-color); border:none; color:#fff; border-radius:5px; width:100%;">Отправить</button>
+            `;
+            canvas.appendChild(block);
+            initDragAndDrop();
+        });
+
+        // Переключение 3D текста
+        document.getElementById('toggle-3d-btn').addEventListener('click', () => {
+            document.querySelectorAll('h1, h2, h3').forEach(el => {
+                el.classList.toggle('text-3d');
+            });
+        });
+
+        // Логика Drag & Drop (перетаскивание блоков)
+        let draggedItem = null;
+
+        function initDragAndDrop() {
+            const blocks = document.querySelectorAll('.editable-block');
+            blocks.forEach(block => {
+                block.addEventListener('dragstart', function () {
+                    draggedItem = this;
+                    setTimeout(() => this.style.display = 'none', 0);
+                });
+
+                block.addEventListener('dragend', function () {
+                    setTimeout(() => {
+                        draggedItem.style.display = 'block';
+                        draggedItem = null;
+                    }, 0);
+                });
+
+                block.addEventListener('dragover', function (e) {
+                    e.preventDefault();
+                });
+
+                block.addEventListener('drop', function (e) {
+                    e.preventDefault();
+                    if (this !== draggedItem) {
+                        let allBlocks = [...canvas.querySelectorAll('.editable-block')];
+                        let draggedPos = allBlocks.indexOf(draggedItem);
+                        let targetPos = allBlocks.indexOf(this);
+
+                        if (draggedPos < targetPos) {
+                            canvas.insertBefore(draggedItem, this.nextSibling);
+                        } else {
+                            canvas.insertBefore(draggedItem, this);
+                        }
+                    }
+                });
+            });
+        }
+
+        initDragAndDrop();
     </script>
 </body>
 </html>
