@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apple Style Pro Builder with Animations</title>
+    <title>Ultimate Webflow Style Builder</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:wght@700&family=Space+Mono&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -15,6 +15,7 @@
             --block-border: rgba(255, 255, 255, 0.08);
             --anim-speed: 0.4s;
             --hover-effect: translateY(-5px);
+            --sidebar-width: 380px;
         }
 
         body {
@@ -37,9 +38,10 @@
             display: flex;
             flex-direction: column;
             gap: 24px;
+            transition: margin-right 0.3s ease;
         }
 
-        /* Базовый блок с анимациями */
+        /* Блоки сайта */
         .editable-block {
             background: var(--block-bg);
             border: 1px solid var(--block-border);
@@ -51,7 +53,6 @@
             cursor: grab;
             transition: all var(--anim-speed) cubic-bezier(0.25, 1, 0.5, 1);
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            animation: fadeIn 0.6s ease-out forwards;
         }
 
         .editable-block:active {
@@ -64,27 +65,11 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 20px var(--accent-glow, transparent);
         }
 
-        /* Варианты анимаций появления */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(50px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes bounceIn {
-            0% { opacity: 0; transform: scale(0.9); }
-            60% { opacity: 1; transform: scale(1.02); }
-            100% { transform: scale(1); }
-        }
-
-        @keyframes zoomIn {
-            from { opacity: 0; transform: scale(0.8); }
-            to { opacity: 1; transform: scale(1); }
-        }
+        /* Анимации */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes bounceIn { 0% { opacity: 0; transform: scale(0.9); } 60% { opacity: 1; transform: scale(1.02); } 100% { transform: scale(1); } }
+        @keyframes zoomIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
 
         .anim-fade { animation: fadeIn var(--anim-speed) ease-out forwards; }
         .anim-slide { animation: slideUp var(--anim-speed) cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
@@ -111,33 +96,16 @@
             transition: opacity 0.2s;
         }
 
-        .editable-block:hover .delete-btn {
-            opacity: 1;
-        }
-
-        .delete-btn:hover {
-            background: #ff3b30;
-            color: #fff;
-        }
+        .editable-block:hover .delete-btn { opacity: 1; }
+        .delete-btn:hover { background: #ff3b30; color: #fff; }
 
         /* 3D Текст */
         .text-3d {
-            text-shadow: 
-                0 1px 0 #ccc,
-                0 2px 0 #c9c9c9,
-                0 3px 0 #bbb,
-                0 4px 0 #b9b9b9,
-                0 5px 0 #aaa,
-                0 6px 1px rgba(0,0,0,0.1),
-                0 0 5px rgba(0,0,0,0.1),
-                0 1px 3px rgba(0,0,0,0.3),
-                0 3px 5px rgba(0,0,0,0.2),
-                0 5px 10px rgba(0,0,0,0.25);
+            text-shadow: 0 1px 0 #ccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbb, 0 4px 0 #b9b9b9, 0 5px 0 #aaa, 0 6px 1px rgba(0,0,0,0.1), 0 0 5px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.3), 0 3px 5px rgba(0,0,0,0.2), 0 5px 10px rgba(0,0,0,0.25);
             font-weight: 800;
             letter-spacing: -0.02em;
         }
 
-        /* Элементы форм */
         .apple-input {
             width: 100%;
             padding: 14px 18px;
@@ -152,10 +120,7 @@
             outline: none;
             transition: border-color 0.2s;
         }
-
-        .apple-input:focus {
-            border-color: var(--accent-color);
-        }
+        .apple-input:focus { border-color: var(--accent-color); }
 
         .apple-button {
             display: inline-block;
@@ -170,18 +135,14 @@
             transition: transform 0.2s, opacity 0.2s;
             text-decoration: none;
         }
+        .apple-button:hover { opacity: 0.9; transform: scale(1.02); }
 
-        .apple-button:hover {
-            opacity: 0.9;
-            transform: scale(1.02);
-        }
-
-        /* Шестеренка */
+        /* Кнопка-шестеренка в углу */
         #gear-btn {
             position: fixed;
             bottom: 30px;
             right: 30px;
-            background: rgba(30, 30, 35, 0.8);
+            background: rgba(30, 30, 35, 0.85);
             backdrop-filter: blur(20px);
             color: var(--accent-color);
             border: 1px solid rgba(255,255,255,0.15);
@@ -197,53 +158,109 @@
             align-items: center;
             justify-content: center;
         }
+        #gear-btn:hover { transform: scale(1.08) rotate(90deg); border-color: var(--accent-color); }
 
-        #gear-btn:hover {
-            transform: scale(1.08) rotate(90deg);
+        /* БОКОВАЯ ПАНЕЛЬ (SIDEBAR) УРОВНЯ WEBFLOW */
+        #builder-sidebar {
+            position: fixed;
+            top: 0;
+            right: -550px; /* Скрыта по умолчанию */
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: rgba(18, 18, 22, 0.92);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            color: #fff;
+            box-shadow: -10px 0 40px rgba(0,0,0,0.7);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            transition: right 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+            border-left: 1px solid rgba(255,255,255,0.1);
+        }
+
+        #builder-sidebar.open {
+            right: 0;
+        }
+
+        /* Ручка для изменения размера боковой панели (Resize Handle) */
+        .resize-handle {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 6px;
+            height: 100%;
+            cursor: ew-resize;
+            background: transparent;
+            transition: background 0.2s;
+        }
+        .resize-handle:hover {
+            background: var(--accent-color);
+        }
+
+        /* Шапка боковой панели с табами (вкладками) */
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            gap: 8px;
+            background: rgba(0,0,0,0.2);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 8px 10px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: #98989d;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .tab-btn.active {
+            background: var(--accent-color);
+            color: #111;
             border-color: var(--accent-color);
         }
 
-        /* Главная панель управления (GUI) */
-        #builder-gui {
-            position: fixed;
-            bottom: 110px;
-            right: 30px;
-            width: 380px;
-            background: rgba(20, 20, 25, 0.88);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            color: #fff;
-            padding: 24px;
-            border-radius: 24px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.7);
-            display: none;
-            z-index: 10000;
-            font-size: 14px;
-            border: 1px solid rgba(255,255,255,0.1);
-            max-height: 80vh;
+        /* Содержимое вкладок */
+        .sidebar-content {
+            flex: 1;
+            padding: 20px;
             overflow-y: auto;
         }
 
-        #builder-gui h3 {
-            margin: 0 0 15px 0;
-            color: var(--accent-color);
-            font-size: 18px;
-            font-weight: 600;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding-bottom: 10px;
+        .tab-pane {
+            display: none;
         }
 
-        #builder-gui label {
+        .tab-pane.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        #builder-sidebar h3 {
+            margin: 0 0 15px 0;
+            color: var(--accent-color);
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        #builder-sidebar label {
             display: block;
             margin-top: 14px;
             color: #98989d;
-            font-size: 12px;
+            font-size: 11px;
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
 
-        #builder-gui input[type="color"], 
-        #builder-gui select {
+        #builder-sidebar input[type="color"], 
+        #builder-sidebar select {
             width: 100%;
             margin-top: 6px;
             padding: 10px;
@@ -268,17 +285,8 @@
             cursor: pointer;
             transition: all 0.2s;
         }
-
-        .gui-btn:hover {
-            background: rgba(255,255,255,0.15);
-            border-color: var(--accent-color);
-        }
-
-        .gui-btn.primary {
-            background: var(--accent-color);
-            color: #111;
-            border: none;
-        }
+        .gui-btn:hover { background: rgba(255,255,255,0.15); border-color: var(--accent-color); }
+        .gui-btn.primary { background: var(--accent-color); color: #111; border: none; }
     </style>
 </head>
 <body>
@@ -293,76 +301,145 @@
         </div>
     </div>
 
-    <!-- Шестеренка -->
+    <!-- Кнопка-шестеренка -->
     <button id="gear-btn">⚙️</button>
 
-    <!-- Панель управления -->
-    <div id="builder-gui">
-        <h3>Панель анимаций и стиля</h3>
+    <!-- БОКОВАЯ ПАНЕЛЬ С ВКЛАДКАМИ -->
+    <div id="builder-sidebar">
+        <div class="resize-handle" id="resize-handle"></div>
         
-        <label>Цвет фона страницы:</label>
-        <input type="color" id="bg-color-picker" value="#0f0f11">
+        <!-- Верхние кнопки для открытия окон/вкладок -->
+        <div class="sidebar-header">
+            <button class="tab-btn active" data-tab="tab-style">🎨 Стиль</button>
+            <button class="tab-btn" data-tab="tab-anim">✨ Анимации</button>
+            <button class="tab-btn" data-tab="tab-blocks">➕ Элементы</button>
+            <button class="tab-btn" data-tab="tab-settings">⚙️ Окно</button>
+        </div>
 
-        <label>Акцентный цвет (Золото / Неон):</label>
-        <input type="color" id="accent-color-picker" value="#d4af37">
+        <!-- Контент вкладок -->
+        <div class="sidebar-content">
+            
+            <!-- Вкладка 1: Стили -->
+            <div class="tab-pane active" id="tab-style">
+                <h3>Дизайн и Цвета</h3>
+                <label>Цвет фона страницы:</label>
+                <input type="color" id="bg-color-picker" value="#0f0f11">
 
-        <label>Цвет текста:</label>
-        <input type="color" id="text-color-picker" value="#f5f5f7">
+                <label>Акцентный цвет (Золото / Неон):</label>
+                <input type="color" id="accent-color-picker" value="#d4af37">
 
-        <label>Стиль шрифта:</label>
-        <select id="font-family-select">
-            <option value="'Inter', sans-serif">Inter (Современный)</option>
-            <option value="'Playfair Display', serif">Playfair (Элегантный)</option>
-            <option value="'Space Mono', monospace">Space Mono (Технологичный)</option>
-        </select>
+                <label>Цвет текста:</label>
+                <input type="color" id="text-color-picker" value="#f5f5f7">
 
-        <div style="height:1px; background:rgba(255,255,255,0.1); margin:20px 0;"></div>
+                <label>Стиль шрифта:</label>
+                <select id="font-family-select">
+                    <option value="'Inter', sans-serif">Inter (Современный)</option>
+                    <option value="'Playfair Display', serif">Playfair (Элегантный)</option>
+                    <option value="'Space Mono', monospace">Space Mono (Технологичный)</option>
+                </select>
 
-        <h3 style="font-size: 15px; margin-bottom: 5px; border:none; padding:0;">✨ Спецэффекты и Анимация</h3>
+                <label style="margin-top:20px;">Текст:</label>
+                <button class="gui-btn" id="toggle-3d-btn">✨ Вкл/Выкл 3D-эффект текста</button>
+            </div>
 
-        <label>Анимация появления блоков:</label>
-        <select id="anim-style-select">
-            <option value="anim-fade">Плавное проявление (Fade)</option>
-            <option value="anim-slide">Вылет снизу (Slide Up)</option>
-            <option value="anim-bounce">Пружинящий эффект (Bounce)</option>
-            <option value="anim-zoom">Увеличение (Zoom In)</option>
-        </select>
+            <!-- Вкладка 2: Анимации -->
+            <div class="tab-pane" id="tab-anim">
+                <h3>Спецэффекты блоков</h3>
+                <label>Анимация появления:</label>
+                <select id="anim-style-select">
+                    <option value="anim-fade">Плавное проявление (Fade)</option>
+                    <option value="anim-slide">Вылет снизу (Slide Up)</option>
+                    <option value="anim-bounce">Пружинящий эффект (Bounce)</option>
+                    <option value="anim-zoom">Увеличение (Zoom In)</option>
+                </select>
 
-        <label>Скорость анимации:</label>
-        <select id="anim-speed-select">
-            <option value="0.2s">Быстро (0.2s)</option>
-            <option value="0.4s" selected>Нормально (0.4s)</option>
-            <option value="0.8s">Медленно и плавно (0.8s)</option>
-        </select>
+                <label>Скорость анимации:</label>
+                <select id="anim-speed-select">
+                    <option value="0.2s">Быстро (0.2s)</option>
+                    <option value="0.4s" selected>Нормально (0.4s)</option>
+                    <option value="0.8s">Медленно и плавно (0.8s)</option>
+                </select>
 
-        <label>Интерактив при наведении (Hover):</label>
-        <select id="hover-effect-select">
-            <option value="translateY(-5px)">Легкий подъем</option>
-            <option value="translateY(-12px) scale(1.01)">Сильный подъем + увеличение</option>
-            <option value="scale(1.03)">Только увеличение</option>
-            <option value="none">Без смещения</option>
-        </select>
+                <label>Эффект при наведении (Hover):</label>
+                <select id="hover-effect-select">
+                    <option value="translateY(-5px)">Легкий подъем</option>
+                    <option value="translateY(-12px) scale(1.01)">Сильный подъем + увеличение</option>
+                    <option value="scale(1.03)">Только увеличение</option>
+                    <option value="none">Без смещения</option>
+                </select>
+            </div>
 
-        <div style="height:1px; background:rgba(255,255,255,0.1); margin:20px 0;"></div>
+            <!-- Вкладка 3: Добавление элементов -->
+            <div class="tab-pane" id="tab-blocks">
+                <h3>Конструктор блоков</h3>
+                <label>Добавить на сайт:</label>
+                <button class="gui-btn primary" id="add-hero-btn">➕ Hero Блок (Заголовок)</button>
+                <button class="gui-btn" id="add-card-btn">➕ Стеклянная карточка</button>
+                <button class="gui-btn" id="add-form-btn">➕ Форма обратной связи</button>
+            </div>
 
-        <label>Добавить блоки на сайт:</label>
-        <button class="gui-btn primary" id="add-hero-btn">➕ Hero Блок (Заголовок)</button>
-        <button class="gui-btn" id="add-card-btn">➕ Стеклянная карточка</button>
-        <button class="gui-btn" id="add-form-btn">➕ Форма обратной связи</button>
+            <!-- Вкладка 4: Настройки панели -->
+            <div class="tab-pane" id="tab-settings">
+                <h3>Параметры панели</h3>
+                <p style="color: #98989d; font-size: 13px; line-height: 1.5;">
+                    Ты можешь изменить ширину этой боковой панели, просто зажав левую границу панели мышкой и потянув её вбок!
+                </p>
+                <button class="gui-btn" id="reset-width-btn" style="margin-top: 15px;">🔄 Сбросить ширину панели</button>
+            </div>
 
-        <label style="margin-top:20px;">Текст:</label>
-        <button class="gui-btn" id="toggle-3d-btn">✨ Вкл/Выкл 3D-эффект текста</button>
+        </div>
     </div>
 
     <script>
         const gearBtn = document.getElementById('gear-btn');
-        const gui = document.getElementById('builder-gui');
+        const sidebar = document.getElementById('builder-sidebar');
         const root = document.documentElement;
         const canvas = document.getElementById('canvas');
 
-        // Открытие/закрытие GUI
+        // Открытие/закрытие боковой панели по шестеренке
         gearBtn.addEventListener('click', () => {
-            gui.style.display = gui.style.display === 'block' ? 'none' : 'block';
+            sidebar.classList.toggle('open');
+        });
+
+        // Логика переключения вкладок (табов) внутри панели
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabPanes = document.querySelectorAll('.tab-pane');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                tabBtns.forEach(b => b.classList.remove('active'));
+                tabPanes.forEach(p => p.classList.remove('active'));
+
+                btn.classList.add('active');
+                document.getElementById(btn.getAttribute('data-tab')).classList.add('active');
+            });
+        });
+
+        // Изменение размера боковой панели мышкой (Resize)
+        const resizeHandle = document.getElementById('resize-handle');
+        let isResizing = false;
+
+        resizeHandle.addEventListener('mousedown', (e) => {
+            isResizing = true;
+            document.body.style.cursor = 'ew-resize';
+            e.preventDefault();
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isResizing) return;
+            let newWidth = window.innerWidth - e.clientX;
+            if (newWidth > 280 && newWidth < 700) {
+                root.style.setProperty('--sidebar-width', newWidth + 'px');
+            }
+        });
+
+        window.addEventListener('mouseup', () => {
+            isResizing = false;
+            document.body.style.cursor = 'default';
+        });
+
+        document.getElementById('reset-width-btn').addEventListener('click', () => {
+            root.style.setProperty('--sidebar-width', '380px');
         });
 
         // Настройка цветов и шрифтов
@@ -373,7 +450,6 @@
         document.getElementById('accent-color-picker').addEventListener('input', (e) => {
             const color = e.target.value;
             root.style.setProperty('--accent-color', color);
-            // Создаем легкое свечение акцентным цветом при наведении
             root.style.setProperty('--accent-glow', color + '40');
         });
 
@@ -385,7 +461,7 @@
             root.style.setProperty('--font-family', e.target.value);
         });
 
-        // Настройки анимаций
+        // Анимации
         let currentAnimClass = 'anim-fade';
         document.getElementById('anim-style-select').addEventListener('change', (e) => {
             currentAnimClass = e.target.value;
@@ -402,7 +478,7 @@
             root.style.setProperty('--hover-effect', e.target.value);
         });
 
-        // Функция создания нового блока с примененными анимациями
+        // Функция добавления блока
         function addNewBlock(htmlContent) {
             const block = document.createElement('div');
             block.className = `editable-block ${currentAnimClass}`;
@@ -413,7 +489,6 @@
             initDeleteButtons();
         }
 
-        // Добавление Hero блока
         document.getElementById('add-hero-btn').addEventListener('click', () => {
             addNewBlock(`
                 <h2 contenteditable="true" style="font-size: 32px; margin: 0 0 10px 0;">Новый заголовок</h2>
@@ -422,7 +497,6 @@
             `);
         });
 
-        // Добавление карточки
         document.getElementById('add-card-btn').addEventListener('click', () => {
             addNewBlock(`
                 <h3 contenteditable="true" style="margin-top: 0; color: var(--accent-color);">Преимущество</h3>
@@ -430,7 +504,6 @@
             `);
         });
 
-        // Добавление формы
         document.getElementById('add-form-btn').addEventListener('click', () => {
             addNewBlock(`
                 <h3 contenteditable="true" style="margin-top: 0;">Свяжитесь с нами</h3>
@@ -440,14 +513,12 @@
             `);
         });
 
-        // Переключение 3D текста
         document.getElementById('toggle-3d-btn').addEventListener('click', () => {
             document.querySelectorAll('h1, h2, h3').forEach(el => {
                 el.classList.toggle('text-3d');
             });
         });
 
-        // Удаление блоков
         function initDeleteButtons() {
             document.querySelectorAll('.delete-btn').forEach(btn => {
                 btn.onclick = function() {
@@ -456,7 +527,7 @@
             });
         }
 
-        // Drag & Drop логика
+        // Drag & Drop
         let draggedItem = null;
 
         function initDragAndDrop() {
