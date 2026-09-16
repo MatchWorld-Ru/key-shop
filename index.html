@@ -3,159 +3,293 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate Web Builder</title>
+    <title>Apple Style Pro Builder with Animations</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:wght@700&family=Space+Mono&display=swap" rel="stylesheet">
     <style>
         :root {
-            --main-bg: #ffffff;
-            --main-text: #222222;
+            --main-bg: #0f0f11;
+            --main-text: #f5f5f7;
             --accent-color: #d4af37;
+            --font-family: 'Inter', sans-serif;
+            --block-bg: rgba(255, 255, 255, 0.03);
+            --block-border: rgba(255, 255, 255, 0.08);
+            --anim-speed: 0.4s;
+            --hover-effect: translateY(-5px);
         }
 
         body {
             background-color: var(--main-bg);
             color: var(--main-text);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: var(--font-family);
             margin: 0;
             padding: 0;
             min-height: 100vh;
             overflow-x: hidden;
-            transition: background 0.3s, color 0.3s;
+            transition: background 0.4s ease, color 0.4s ease;
         }
 
-        /* Рабочая область конструктора */
+        /* Рабочая область */
         #canvas {
-            min-height: 80vh;
-            padding: 40px;
+            max-width: 900px;
+            margin: 0 auto;
+            min-height: 100vh;
+            padding: 60px 20px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
-            position: relative;
+            gap: 24px;
         }
 
-        /* Перетаскиваемые блоки */
+        /* Базовый блок с анимациями */
         .editable-block {
-            background: rgba(0,0,0,0.02);
-            border: 2px dashed rgba(212, 175, 55, 0.4);
-            padding: 20px;
-            border-radius: 12px;
+            background: var(--block-bg);
+            border: 1px solid var(--block-border);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 35px;
+            border-radius: 20px;
             position: relative;
-            cursor: move;
-            transition: border 0.2s;
+            cursor: grab;
+            transition: all var(--anim-speed) cubic-bezier(0.25, 1, 0.5, 1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        .editable-block:active {
+            cursor: grabbing;
         }
 
         .editable-block:hover {
             border-color: var(--accent-color);
+            transform: var(--hover-effect);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 20px var(--accent-glow, transparent);
         }
 
-        /* 3D Текст эффект */
-        .text-3d {
-            text-shadow: 
-                1px 1px 0px #ccc,
-                2px 2px 0px #bbb,
-                3px 3px 0px #aaa,
-                4px 4px 10px rgba(0,0,0,0.4);
-            font-weight: bold;
-            letter-spacing: 2px;
+        /* Варианты анимаций появления */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Кнопка-шестеренка в углу */
-        #gear-btn {
-            position: fixed;
-            bottom: 25px;
-            right: 25px;
-            background: var(--accent-color);
-            color: #fff;
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes bounceIn {
+            0% { opacity: 0; transform: scale(0.9); }
+            60% { opacity: 1; transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes zoomIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .anim-fade { animation: fadeIn var(--anim-speed) ease-out forwards; }
+        .anim-slide { animation: slideUp var(--anim-speed) cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        .anim-bounce { animation: bounceIn var(--anim-speed) cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+        .anim-zoom { animation: zoomIn var(--anim-speed) ease-out forwards; }
+
+        /* Кнопка удаления */
+        .delete-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 59, 48, 0.1);
+            color: #ff3b30;
             border: none;
             border-radius: 50%;
-            width: 65px;
-            height: 65px;
-            font-size: 30px;
+            width: 30px;
+            height: 30px;
+            font-size: 14px;
             cursor: pointer;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .editable-block:hover .delete-btn {
+            opacity: 1;
+        }
+
+        .delete-btn:hover {
+            background: #ff3b30;
+            color: #fff;
+        }
+
+        /* 3D Текст */
+        .text-3d {
+            text-shadow: 
+                0 1px 0 #ccc,
+                0 2px 0 #c9c9c9,
+                0 3px 0 #bbb,
+                0 4px 0 #b9b9b9,
+                0 5px 0 #aaa,
+                0 6px 1px rgba(0,0,0,0.1),
+                0 0 5px rgba(0,0,0,0.1),
+                0 1px 3px rgba(0,0,0,0.3),
+                0 3px 5px rgba(0,0,0,0.2),
+                0 5px 10px rgba(0,0,0,0.25);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        /* Элементы форм */
+        .apple-input {
+            width: 100%;
+            padding: 14px 18px;
+            margin-top: 10px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            color: inherit;
+            font-family: inherit;
+            font-size: 15px;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .apple-input:focus {
+            border-color: var(--accent-color);
+        }
+
+        .apple-button {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 12px 28px;
+            background: var(--accent-color);
+            color: #111;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: transform 0.2s, opacity 0.2s;
+            text-decoration: none;
+        }
+
+        .apple-button:hover {
+            opacity: 0.9;
+            transform: scale(1.02);
+        }
+
+        /* Шестеренка */
+        #gear-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: rgba(30, 30, 35, 0.8);
+            backdrop-filter: blur(20px);
+            color: var(--accent-color);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 50%;
+            width: 64px;
+            height: 64px;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             z-index: 10000;
-            transition: transform 0.2s, background 0.3s;
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         #gear-btn:hover {
-            transform: scale(1.1) rotate(45deg);
+            transform: scale(1.08) rotate(90deg);
+            border-color: var(--accent-color);
         }
 
-        /* Новая большая панель управления (GUI) */
+        /* Главная панель управления (GUI) */
         #builder-gui {
             position: fixed;
-            bottom: 105px;
-            right: 25px;
-            width: 350px;
-            background: #141414;
+            bottom: 110px;
+            right: 30px;
+            width: 380px;
+            background: rgba(20, 20, 25, 0.88);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
             color: #fff;
-            padding: 25px;
-            border-radius: 18px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.7);
+            padding: 24px;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.7);
             display: none;
             z-index: 10000;
             font-size: 14px;
-            border: 1px solid #333;
-            max-height: 75vh;
+            border: 1px solid rgba(255,255,255,0.1);
+            max-height: 80vh;
             overflow-y: auto;
         }
 
         #builder-gui h3 {
-            margin-top: 0;
+            margin: 0 0 15px 0;
             color: var(--accent-color);
-            border-bottom: 1px solid #222;
+            font-size: 18px;
+            font-weight: 600;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
             padding-bottom: 10px;
         }
 
         #builder-gui label {
             display: block;
-            margin-top: 15px;
-            color: #aaa;
-            font-size: 13px;
+            margin-top: 14px;
+            color: #98989d;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
-        #builder-gui input, #builder-gui select, #builder-gui button {
+        #builder-gui input[type="color"], 
+        #builder-gui select {
             width: 100%;
             margin-top: 6px;
             padding: 10px;
-            border-radius: 8px;
-            border: 1px solid #333;
-            background: #1f1f1f;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05);
             color: #fff;
             box-sizing: border-box;
-        }
-
-        #builder-gui button.action-btn {
-            background: var(--accent-color);
-            color: #fff;
-            font-weight: bold;
-            border: none;
+            outline: none;
             cursor: pointer;
-            margin-top: 10px;
-            transition: opacity 0.2s;
         }
 
-        #builder-gui button.action-btn:hover {
-            opacity: 0.9;
-        }
-
-        /* Стили для кастомных форм */
-        .custom-form input, .custom-form textarea {
+        .gui-btn {
             width: 100%;
-            padding: 10px;
-            margin-top: 8px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-            box-sizing: border-box;
+            margin-top: 10px;
+            padding: 12px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .gui-btn:hover {
+            background: rgba(255,255,255,0.15);
+            border-color: var(--accent-color);
+        }
+
+        .gui-btn.primary {
+            background: var(--accent-color);
+            color: #111;
+            border: none;
         }
     </style>
 </head>
 <body>
 
-    <!-- Рабочая область, куда можно добавлять контент -->
+    <!-- Рабочая область -->
     <div id="canvas">
-        <div class="editable-block" draggable="true">
-            <h1 contenteditable="true" class="text-3d">Главный заголовок</h1>
-            <p contenteditable="true">Этот текст можно двигать, менять цвета и перетаскивать.</p>
+        <div class="editable-block anim-fade" draggable="true">
+            <button class="delete-btn">✕</button>
+            <h1 contenteditable="true" class="text-3d" style="font-size: 42px; margin: 0 0 10px 0;">Инновации в каждой детали.</h1>
+            <p contenteditable="true" style="color: #98989d; font-size: 18px; margin: 0;">Создавайте сайты будущего с абсолютной свободой кастомизации.</p>
+            <a href="#" class="apple-button" contenteditable="true">Узнать больше</a>
         </div>
     </div>
 
@@ -164,26 +298,60 @@
 
     <!-- Панель управления -->
     <div id="builder-gui">
-        <h3>Панель конструктора</h3>
+        <h3>Панель анимаций и стиля</h3>
         
         <label>Цвет фона страницы:</label>
-        <input type="color" id="bg-color-picker" value="#ffffff">
+        <input type="color" id="bg-color-picker" value="#0f0f11">
 
-        <label>Цвет акцента (Золото / Любой):</label>
+        <label>Акцентный цвет (Золото / Неон):</label>
         <input type="color" id="accent-color-picker" value="#d4af37">
 
         <label>Цвет текста:</label>
-        <input type="color" id="text-color-picker" value="#222222">
+        <input type="color" id="text-color-picker" value="#f5f5f7">
 
-        <hr style="border:0; border-top:1px solid #333; margin:20px 0;">
+        <label>Стиль шрифта:</label>
+        <select id="font-family-select">
+            <option value="'Inter', sans-serif">Inter (Современный)</option>
+            <option value="'Playfair Display', serif">Playfair (Элегантный)</option>
+            <option value="'Space Mono', monospace">Space Mono (Технологичный)</option>
+        </select>
 
-        <label>Добавить элемент на сайт:</label>
-        <button class="action-btn" id="add-text-btn">➕ Добавить текст</button>
-        <button class="action-btn" id="add-card-btn">➕ Добавить карточку</button>
-        <button class="action-btn" id="add-form-btn">➕ Добавить форму связи</button>
+        <div style="height:1px; background:rgba(255,255,255,0.1); margin:20px 0;"></div>
 
-        <label style="margin-top:20px;">Эффекты:</label>
-        <button class="action-btn" id="toggle-3d-btn" style="background:#333;">✨ Вкл/Выкл 3D-текст</button>
+        <h3 style="font-size: 15px; margin-bottom: 5px; border:none; padding:0;">✨ Спецэффекты и Анимация</h3>
+
+        <label>Анимация появления блоков:</label>
+        <select id="anim-style-select">
+            <option value="anim-fade">Плавное проявление (Fade)</option>
+            <option value="anim-slide">Вылет снизу (Slide Up)</option>
+            <option value="anim-bounce">Пружинящий эффект (Bounce)</option>
+            <option value="anim-zoom">Увеличение (Zoom In)</option>
+        </select>
+
+        <label>Скорость анимации:</label>
+        <select id="anim-speed-select">
+            <option value="0.2s">Быстро (0.2s)</option>
+            <option value="0.4s" selected>Нормально (0.4s)</option>
+            <option value="0.8s">Медленно и плавно (0.8s)</option>
+        </select>
+
+        <label>Интерактив при наведении (Hover):</label>
+        <select id="hover-effect-select">
+            <option value="translateY(-5px)">Легкий подъем</option>
+            <option value="translateY(-12px) scale(1.01)">Сильный подъем + увеличение</option>
+            <option value="scale(1.03)">Только увеличение</option>
+            <option value="none">Без смещения</option>
+        </select>
+
+        <div style="height:1px; background:rgba(255,255,255,0.1); margin:20px 0;"></div>
+
+        <label>Добавить блоки на сайт:</label>
+        <button class="gui-btn primary" id="add-hero-btn">➕ Hero Блок (Заголовок)</button>
+        <button class="gui-btn" id="add-card-btn">➕ Стеклянная карточка</button>
+        <button class="gui-btn" id="add-form-btn">➕ Форма обратной связи</button>
+
+        <label style="margin-top:20px;">Текст:</label>
+        <button class="gui-btn" id="toggle-3d-btn">✨ Вкл/Выкл 3D-эффект текста</button>
     </div>
 
     <script>
@@ -197,57 +365,79 @@
             gui.style.display = gui.style.display === 'block' ? 'none' : 'block';
         });
 
-        // Настройка цветов
+        // Настройка цветов и шрифтов
         document.getElementById('bg-color-picker').addEventListener('input', (e) => {
             root.style.setProperty('--main-bg', e.target.value);
         });
 
         document.getElementById('accent-color-picker').addEventListener('input', (e) => {
-            const val = e.target.value;
-            root.style.setProperty('--accent-color', val);
-            gearBtn.style.background = val;
+            const color = e.target.value;
+            root.style.setProperty('--accent-color', color);
+            // Создаем легкое свечение акцентным цветом при наведении
+            root.style.setProperty('--accent-glow', color + '40');
         });
 
         document.getElementById('text-color-picker').addEventListener('input', (e) => {
             root.style.setProperty('--main-text', e.target.value);
         });
 
-        // Добавление элементов
-        document.getElementById('add-text-btn').addEventListener('click', () => {
-            const block = document.createElement('div');
-            block.className = 'editable-block';
-            block.setAttribute('draggable', 'true');
-            block.innerHTML = `<h2 contenteditable="true">Новый заголовок</h2><p contenteditable="true">Введите текст здесь...</p>`;
-            canvas.appendChild(block);
-            initDragAndDrop();
+        document.getElementById('font-family-select').addEventListener('change', (e) => {
+            root.style.setProperty('--font-family', e.target.value);
         });
 
+        // Настройки анимаций
+        let currentAnimClass = 'anim-fade';
+        document.getElementById('anim-style-select').addEventListener('change', (e) => {
+            currentAnimClass = e.target.value;
+            document.querySelectorAll('.editable-block').forEach(block => {
+                block.className = block.className.replace(/anim-\w+/g, '') + ' ' + currentAnimClass;
+            });
+        });
+
+        document.getElementById('anim-speed-select').addEventListener('change', (e) => {
+            root.style.setProperty('--anim-speed', e.target.value);
+        });
+
+        document.getElementById('hover-effect-select').addEventListener('change', (e) => {
+            root.style.setProperty('--hover-effect', e.target.value);
+        });
+
+        // Функция создания нового блока с примененными анимациями
+        function addNewBlock(htmlContent) {
+            const block = document.createElement('div');
+            block.className = `editable-block ${currentAnimClass}`;
+            block.setAttribute('draggable', 'true');
+            block.innerHTML = `<button class="delete-btn">✕</button>` + htmlContent;
+            canvas.appendChild(block);
+            initDragAndDrop();
+            initDeleteButtons();
+        }
+
+        // Добавление Hero блока
+        document.getElementById('add-hero-btn').addEventListener('click', () => {
+            addNewBlock(`
+                <h2 contenteditable="true" style="font-size: 32px; margin: 0 0 10px 0;">Новый заголовок</h2>
+                <p contenteditable="true" style="color: #98989d; font-size: 16px; margin: 0 0 15px 0;">Описание продукта или услуги клиента.</p>
+                <a href="#" class="apple-button" contenteditable="true">Кнопка действия</a>
+            `);
+        });
+
+        // Добавление карточки
         document.getElementById('add-card-btn').addEventListener('click', () => {
-            const block = document.createElement('div');
-            block.className = 'editable-block';
-            block.setAttribute('draggable', 'true');
-            block.innerHTML = `
-                <h3 contenteditable="true">Заголовок карточки</h3>
-                <p contenteditable="true">Описание карточки, которую можно кастомизировать.</p>
-                <button style="padding: 8px 16px; background: var(--accent-color); border:none; color:#fff; border-radius:5px; cursor:pointer;" contenteditable="true">Кнопка</button>
-            `;
-            canvas.appendChild(block);
-            initDragAndDrop();
+            addNewBlock(`
+                <h3 contenteditable="true" style="margin-top: 0; color: var(--accent-color);">Преимущество</h3>
+                <p contenteditable="true" style="color: #98989d; margin: 0;">Расскажите о ключевой особенности здесь.</p>
+            `);
         });
 
+        // Добавление формы
         document.getElementById('add-form-btn').addEventListener('click', () => {
-            const block = document.createElement('div');
-            block.className = 'editable-block custom-form';
-            block.setAttribute('draggable', 'true');
-            block.innerHTML = `
-                <h3 contenteditable="true">Форма обратной связи</h3>
-                <input type="text" placeholder="Ваше имя..." disabled>
-                <input type="email" placeholder="Ваш Email..." disabled>
-                <textarea placeholder="Ваше сообщение..." rows="3" disabled></textarea>
-                <button style="margin-top:10px; padding: 10px; background: var(--accent-color); border:none; color:#fff; border-radius:5px; width:100%;">Отправить</button>
-            `;
-            canvas.appendChild(block);
-            initDragAndDrop();
+            addNewBlock(`
+                <h3 contenteditable="true" style="margin-top: 0;">Свяжитесь с нами</h3>
+                <input type="text" class="apple-input" placeholder="Ваше имя" disabled>
+                <input type="email" class="apple-input" placeholder="Ваш Email" disabled>
+                <button class="apple-button" style="width: 100%; text-align:center;">Отправить</button>
+            `);
         });
 
         // Переключение 3D текста
@@ -257,7 +447,16 @@
             });
         });
 
-        // Логика Drag & Drop (перетаскивание блоков)
+        // Удаление блоков
+        function initDeleteButtons() {
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.onclick = function() {
+                    this.parentElement.remove();
+                }
+            });
+        }
+
+        // Drag & Drop логика
         let draggedItem = null;
 
         function initDragAndDrop() {
@@ -297,6 +496,7 @@
         }
 
         initDragAndDrop();
+        initDeleteButtons();
     </script>
 </body>
 </html>
