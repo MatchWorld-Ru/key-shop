@@ -1,18 +1,21 @@
+```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>WEBCRAFT — Разработка сайтов</title>
+    <title>WEBCRAFT — Создаём сайты и цифровые продукты</title>
 
     <meta name="description"
-          content="Разработка сайтов, маркетплейсов, интернет-магазинов, лендингов и веб-приложений под заказ.">
+          content="Создание сайтов, маркетплейсов, интернет-магазинов, веб-приложений и цифровых продуктов под заказ.">
 
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+
+<div class="cursor-glow" id="cursorGlow"></div>
 
 <!-- ================= HEADER ================= -->
 
@@ -20,20 +23,24 @@
 
     <div class="container nav">
 
-        <a href="#" class="logo">
-            <span class="logo-icon">W</span>
-            <span>WEB<span>CRAFT</span></span>
+        <a href="#home" class="logo">
+            <span class="logo-mark">W</span>
+
+            <span class="logo-text">
+                WEB<span>CRAFT</span>
+            </span>
         </a>
 
         <nav class="menu">
             <a href="#services">Услуги</a>
-            <a href="#works">Работы</a>
-            <a href="#process">Как работаем</a>
+            <a href="#works">Портфолио</a>
+            <a href="#process">Процесс</a>
             <a href="#order">Заказать</a>
         </nav>
 
-        <a class="header-button" href="#order">
+        <a href="#order" class="header-button">
             Обсудить проект
+            <span>↗</span>
         </a>
 
         <button class="mobile-menu-button" id="mobileMenuButton">
@@ -43,10 +50,16 @@
     </div>
 
     <div class="mobile-menu" id="mobileMenu">
+
         <a href="#services">Услуги</a>
-        <a href="#works">Работы</a>
-        <a href="#process">Как работаем</a>
+        <a href="#works">Портфолио</a>
+        <a href="#process">Процесс</a>
         <a href="#order">Заказать</a>
+
+        <a href="#order" class="mobile-order">
+            Создать проект →
+        </a>
+
     </div>
 
 </header>
@@ -54,59 +67,207 @@
 
 <!-- ================= HERO ================= -->
 
+<main id="home">
+
 <section class="hero">
 
-    <div class="hero-background"></div>
+    <div class="hero-grid"></div>
 
-    <div class="container hero-content">
+    <div class="hero-orb hero-orb-one"></div>
+    <div class="hero-orb hero-orb-two"></div>
 
-        <div class="hero-badge">
-            <span></span>
-            Принимаем новые проекты
-        </div>
+    <div class="container hero-container">
 
-        <h1>
-            Создаём сайты,
-            <br>
-            <strong>которые работают</strong>
-        </h1>
+        <div class="hero-left">
 
-        <p class="hero-description">
-            Сайты, интернет-магазины, маркетплейсы,
-            веб-приложения и цифровые продукты под ваши задачи.
-        </p>
-
-        <div class="hero-buttons">
-
-            <a href="#order" class="button button-primary">
-                Создать проект
-                <span>→</span>
-            </a>
-
-            <a href="#works" class="button button-secondary">
-                Смотреть работы
-            </a>
-
-        </div>
-
-        <div class="hero-stats">
-
-            <div>
-                <strong>50+</strong>
-                <span>проектов</span>
+            <div class="availability">
+                <span class="online-dot"></span>
+                Открыты для новых проектов
             </div>
 
-            <div>
-                <strong>24/7</strong>
-                <span>на связи</span>
+            <h1>
+                Создаём
+                <span class="gradient-text">цифровые</span>
+                продукты
+            </h1>
+
+            <p class="hero-text">
+                Сайты, магазины, маркетплейсы и веб-приложения,
+                которые выглядят современно и решают задачи бизнеса.
+            </p>
+
+            <div class="hero-actions">
+
+                <a href="#order" class="main-button">
+                    <span>Создать проект</span>
+                    <b>↗</b>
+                </a>
+
+                <a href="#works" class="outline-button">
+                    Смотреть портфолио
+                    <span>↓</span>
+                </a>
+
             </div>
 
-            <div>
-                <strong>100%</strong>
-                <span>под ваш заказ</span>
+            <div class="hero-mini-stats">
+
+                <div>
+                    <strong>50+</strong>
+                    <span>проектов</span>
+                </div>
+
+                <div class="stat-divider"></div>
+
+                <div>
+                    <strong>4.9/5</strong>
+                    <span>оценка клиентов</span>
+                </div>
+
+                <div class="stat-divider"></div>
+
+                <div>
+                    <strong>24/7</strong>
+                    <span>на связи</span>
+                </div>
+
             </div>
 
         </div>
+
+
+        <!-- HERO VISUAL -->
+
+        <div class="hero-visual">
+
+            <div class="visual-glow"></div>
+
+            <div class="floating-card card-top">
+
+                <div class="floating-icon orange">
+                    ◈
+                </div>
+
+                <div>
+                    <strong>WEB DEVELOPMENT</strong>
+                    <span>Всё под ключ</span>
+                </div>
+
+            </div>
+
+
+            <div class="browser-window">
+
+                <div class="browser-bar">
+
+                    <div class="browser-dots">
+                        <i></i>
+                        <i></i>
+                        <i></i>
+                    </div>
+
+                    <div class="browser-url">
+                        webcraft.dev
+                    </div>
+
+                </div>
+
+
+                <div class="browser-content">
+
+                    <div class="fake-nav">
+                        <b>WEBCRAFT</b>
+
+                        <div>
+                            <i></i>
+                            <i></i>
+                            <i></i>
+                        </div>
+                    </div>
+
+                    <div class="fake-hero">
+
+                        <small>DIGITAL STUDIO</small>
+
+                        <h2>
+                            Build.
+                            <br>
+                            <span>Launch.</span>
+                        </h2>
+
+                        <p>
+                            Your next digital product.
+                        </p>
+
+                        <div class="fake-button">
+                            Start project →
+                        </div>
+
+                    </div>
+
+                    <div class="fake-cards">
+
+                        <div></div>
+                        <div></div>
+                        <div></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="floating-card card-bottom">
+
+                <div class="mini-avatar">
+                    W
+                </div>
+
+                <div>
+                    <strong>PROJECT READY</strong>
+                    <span>Ваш проект запущен</span>
+                </div>
+
+                <b class="check">
+                    ✓
+                </b>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= MARQUEE ================= -->
+
+<section class="marquee">
+
+    <div class="marquee-track">
+
+        <span>WEB DEVELOPMENT</span>
+        <i>✦</i>
+
+        <span>UI / UX DESIGN</span>
+        <i>✦</i>
+
+        <span>MARKETPLACES</span>
+        <i>✦</i>
+
+        <span>ECOMMERCE</span>
+        <i>✦</i>
+
+        <span>WEB APPS</span>
+        <i>✦</i>
+
+        <span>WEB DEVELOPMENT</span>
+        <i>✦</i>
+
+        <span>UI / UX DESIGN</span>
+        <i>✦</i>
 
     </div>
 
@@ -119,20 +280,25 @@
 
     <div class="container">
 
-        <div class="section-heading">
+        <div class="section-top">
 
             <div>
-                <span class="section-label">ВОЗМОЖНОСТИ</span>
+
+                <div class="eyebrow">
+                    01 / SERVICES
+                </div>
 
                 <h2>
-                    Что мы можем
-                    <span>создать?</span>
+                    Создаём всё,
+                    <span>что нужно вашему проекту.</span>
                 </h2>
+
             </div>
 
             <p>
-                От небольшой визитки до полноценной
-                онлайн-платформы.
+                От простой страницы до сложной
+                платформы с личными кабинетами,
+                каталогами и собственной системой.
             </p>
 
         </div>
@@ -140,94 +306,168 @@
 
         <div class="services-grid">
 
-            <div class="service-card">
-                <div class="service-number">01</div>
+            <article class="service-card service-big">
+
+                <div class="service-card-top">
+                    <span class="service-index">01</span>
+                    <span class="service-arrow">↗</span>
+                </div>
+
                 <div class="service-icon">◈</div>
 
-                <h3>Сайты</h3>
+                <h3>
+                    Сайты
+                </h3>
 
                 <p>
                     Лендинги, корпоративные сайты,
-                    портфолио и сайты компаний.
+                    портфолио, сайты компаний
+                    и персональные страницы.
                 </p>
 
-                <a href="#order">Заказать →</a>
-            </div>
+                <div class="service-tags">
+                    <span>Landing</span>
+                    <span>Business</span>
+                    <span>Portfolio</span>
+                </div>
+
+            </article>
 
 
-            <div class="service-card featured">
-                <div class="service-number">02</div>
+            <article class="service-card service-orange">
+
+                <div class="service-card-top">
+                    <span class="service-index">02</span>
+                    <span class="service-arrow">↗</span>
+                </div>
+
                 <div class="service-icon">▣</div>
 
-                <h3>Маркетплейсы</h3>
+                <h3>
+                    Маркетплейсы
+                </h3>
 
                 <p>
-                    Создание площадок для продажи
-                    товаров с каталогом и личными кабинетами.
+                    Каталоги товаров, продавцы,
+                    личные кабинеты, заказы,
+                    поиск и фильтры.
                 </p>
 
-                <a href="#order">Заказать →</a>
-            </div>
+                <div class="service-tags">
+                    <span>Marketplace</span>
+                    <span>Catalog</span>
+                </div>
+
+            </article>
 
 
-            <div class="service-card">
-                <div class="service-number">03</div>
+            <article class="service-card">
+
+                <div class="service-card-top">
+                    <span class="service-index">03</span>
+                    <span class="service-arrow">↗</span>
+                </div>
+
                 <div class="service-icon">◫</div>
 
-                <h3>Магазины</h3>
+                <h3>
+                    Интернет-магазины
+                </h3>
 
                 <p>
-                    Интернет-магазины с товарами,
-                    корзиной, заказами и оплатой.
+                    Современные магазины с
+                    корзиной, товарами, заказами
+                    и удобной мобильной версией.
                 </p>
 
-                <a href="#order">Заказать →</a>
-            </div>
+                <div class="service-tags">
+                    <span>E-commerce</span>
+                    <span>Shop</span>
+                </div>
+
+            </article>
 
 
-            <div class="service-card">
-                <div class="service-number">04</div>
+            <article class="service-card">
+
+                <div class="service-card-top">
+                    <span class="service-index">04</span>
+                    <span class="service-arrow">↗</span>
+                </div>
+
+                <div class="service-icon">⌘</div>
+
+                <h3>
+                    Веб-приложения
+                </h3>
+
+                <p>
+                    CRM, личные кабинеты,
+                    панели управления, сервисы
+                    и онлайн-системы.
+                </p>
+
+                <div class="service-tags">
+                    <span>Dashboard</span>
+                    <span>CRM</span>
+                </div>
+
+            </article>
+
+
+            <article class="service-card">
+
+                <div class="service-card-top">
+                    <span class="service-index">05</span>
+                    <span class="service-arrow">↗</span>
+                </div>
+
                 <div class="service-icon">✦</div>
 
-                <h3>Веб-приложения</h3>
+                <h3>
+                    UI / UX дизайн
+                </h3>
 
                 <p>
-                    Личные кабинеты, панели управления,
-                    CRM и другие системы.
+                    Придумываем структуру,
+                    визуальный стиль, интерфейс
+                    и пользовательский путь.
                 </p>
 
-                <a href="#order">Заказать →</a>
-            </div>
+                <div class="service-tags">
+                    <span>UI</span>
+                    <span>UX</span>
+                    <span>Figma</span>
+                </div>
+
+            </article>
 
 
-            <div class="service-card">
-                <div class="service-number">05</div>
-                <div class="service-icon">⌁</div>
+            <article class="service-card">
 
-                <h3>Дизайн</h3>
+                <div class="service-card-top">
+                    <span class="service-index">06</span>
+                    <span class="service-arrow">↗</span>
+                </div>
 
-                <p>
-                    Современный UI/UX-дизайн,
-                    прототипы и визуальный стиль.
-                </p>
-
-                <a href="#order">Заказать →</a>
-            </div>
-
-
-            <div class="service-card">
-                <div class="service-number">06</div>
                 <div class="service-icon">⚡</div>
 
-                <h3>Доработка</h3>
+                <h3>
+                    Доработка
+                </h3>
 
                 <p>
-                    Исправление ошибок и добавление
-                    новых функций в существующие проекты.
+                    Исправляем ошибки, добавляем
+                    функции, обновляем дизайн
+                    и ускоряем существующие сайты.
                 </p>
 
-                <a href="#order">Заказать →</a>
-            </div>
+                <div class="service-tags">
+                    <span>Fix</span>
+                    <span>Upgrade</span>
+                </div>
+
+            </article>
 
         </div>
 
@@ -242,102 +482,356 @@
 
     <div class="container">
 
-        <div class="section-heading">
+        <div class="section-top">
 
             <div>
-                <span class="section-label">ПОРТФОЛИО</span>
+
+                <div class="eyebrow">
+                    02 / SELECTED WORKS
+                </div>
 
                 <h2>
-                    Примеры
-                    <span>работ</span>
+                    Проекты,
+                    <span>которые говорят сами за себя.</span>
                 </h2>
+
             </div>
 
             <p>
-                Каждый проект создаётся
-                индивидуально под задачу клиента.
+                Несколько направлений,
+                в которых мы можем разработать
+                полноценный продукт.
             </p>
 
         </div>
 
 
-        <div class="works-grid">
+        <div class="portfolio-grid">
 
-            <div class="work-card work-large">
 
-                <div class="work-preview marketplace">
-                    <div class="mock-window">
-                        <div class="mock-top"></div>
+            <!-- PROJECT 01 -->
 
-                        <div class="mock-content">
-                            <div class="mock-sidebar"></div>
+            <article class="project project-large">
 
-                            <div class="mock-products">
-                                <i></i>
-                                <i></i>
-                                <i></i>
-                                <i></i>
+                <div class="project-preview marketplace-preview">
+
+                    <div class="project-label">
+                        MARKETPLACE
+                    </div>
+
+                    <div class="market-ui">
+
+                        <div class="market-sidebar">
+
+                            <div class="market-logo">
+                                NEXA
                             </div>
+
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+
                         </div>
+
+                        <div class="market-main">
+
+                            <div class="market-header">
+                                <b>Discover products</b>
+
+                                <div class="search-mini">
+                                    Search...
+                                </div>
+                            </div>
+
+                            <div class="market-banner">
+
+                                <div>
+                                    <small>NEW COLLECTION</small>
+
+                                    <strong>
+                                        Everything
+                                        <br>
+                                        you need.
+                                    </strong>
+                                </div>
+
+                                <div class="banner-orb"></div>
+
+                            </div>
+
+                            <div class="product-row">
+
+                                <div class="product-box">
+                                    <i></i>
+                                    <b>Headphones</b>
+                                    <small>$129</small>
+                                </div>
+
+                                <div class="product-box">
+                                    <i></i>
+                                    <b>Smart Watch</b>
+                                    <small>$199</small>
+                                </div>
+
+                                <div class="product-box">
+                                    <i></i>
+                                    <b>Camera</b>
+                                    <small>$399</small>
+                                </div>
+
+                            </div>
+
+                        </div>
+
                     </div>
+
                 </div>
 
-                <div class="work-info">
+                <div class="project-info">
+
                     <div>
-                        <span>WEB PLATFORM</span>
-                        <h3>Marketplace</h3>
+                        <span>01 / MARKETPLACE</span>
+
+                        <h3>
+                            NEXA — Marketplace
+                        </h3>
+
+                        <p>
+                            Каталог, поиск, фильтры,
+                            аккаунты и система заказов.
+                        </p>
                     </div>
 
-                    <div class="work-arrow">↗</div>
+                    <div class="project-link">
+                        ↗
+                    </div>
+
                 </div>
 
+            </article>
+
+
+            <!-- PROJECT 02 -->
+
+            <article class="project">
+
+                <div class="project-preview gaming-preview">
+
+                    <div class="project-label">
+                        GAMING
+                    </div>
+
+                    <div class="gaming-content">
+
+                        <small>
+                            ENTER THE FUTURE
+                        </small>
+
+                        <h3>
+                            NEXUS
+                        </h3>
+
+                        <div class="gaming-line"></div>
+
+                        <span>
+                            GAMING PLATFORM
+                        </span>
+
+                    </div>
+
+                    <div class="gaming-circle"></div>
+
+                </div>
+
+                <div class="project-info">
+
+                    <div>
+                        <span>02 / GAMING</span>
+
+                        <h3>
+                            NEXUS Gaming
+                        </h3>
+
+                        <p>
+                            Игровая платформа
+                            с личным кабинетом.
+                        </p>
+                    </div>
+
+                    <div class="project-link">
+                        ↗
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PROJECT 03 -->
+
+            <article class="project">
+
+                <div class="project-preview business-preview">
+
+                    <div class="project-label">
+                        BUSINESS
+                    </div>
+
+                    <div class="business-layout">
+
+                        <div class="business-title">
+                            <small>CREATIVE STUDIO</small>
+
+                            <strong>
+                                THINK
+                                <br>
+                                <span>DIFFERENT.</span>
+                            </strong>
+                        </div>
+
+                        <div class="business-shape">
+                            <div></div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="project-info">
+
+                    <div>
+                        <span>03 / BUSINESS</span>
+
+                        <h3>
+                            Creative Studio
+                        </h3>
+
+                        <p>
+                            Премиальный сайт
+                            digital-агентства.
+                        </p>
+                    </div>
+
+                    <div class="project-link">
+                        ↗
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PROJECT 04 -->
+
+            <article class="project project-wide">
+
+                <div class="project-preview store-preview">
+
+                    <div class="project-label">
+                        E-COMMERCE
+                    </div>
+
+                    <div class="store-ui">
+
+                        <div class="store-product-image">
+                            <div class="shoe"></div>
+                        </div>
+
+                        <div class="store-info">
+
+                            <small>
+                                COLLECTION 2026
+                            </small>
+
+                            <h3>
+                                AIR / ONE
+                            </h3>
+
+                            <p>
+                                Minimal sneaker
+                                collection.
+                            </p>
+
+                            <button>
+                                Explore →
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="project-info">
+
+                    <div>
+                        <span>04 / E-COMMERCE</span>
+
+                        <h3>
+                            AIR / ONE Store
+                        </h3>
+
+                        <p>
+                            Интернет-магазин
+                            с каталогом товаров.
+                        </p>
+                    </div>
+
+                    <div class="project-link">
+                        ↗
+                    </div>
+
+                </div>
+
+            </article>
+
+        </div>
+
+
+        <div class="portfolio-bottom">
+
+            <span>
+                Нужен проект под вашу идею?
+            </span>
+
+            <a href="#order">
+                Давайте создадим его →
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= NUMBERS ================= -->
+
+<section class="numbers-section">
+
+    <div class="container">
+
+        <div class="numbers-grid">
+
+            <div class="number-item">
+                <strong>50<span>+</span></strong>
+                <p>готовых проектов</p>
             </div>
 
-
-            <div class="work-card">
-
-                <div class="work-preview landing">
-                    <div class="landing-title">
-                        YOUR<br>
-                        <b>BRAND</b>
-                    </div>
-                </div>
-
-                <div class="work-info">
-                    <div>
-                        <span>LANDING PAGE</span>
-                        <h3>Brand Website</h3>
-                    </div>
-
-                    <div class="work-arrow">↗</div>
-                </div>
-
+            <div class="number-item">
+                <strong>15<span>+</span></strong>
+                <p>направлений разработки</p>
             </div>
 
+            <div class="number-item">
+                <strong>24<span>/7</span></strong>
+                <p>поддержка клиентов</p>
+            </div>
 
-            <div class="work-card">
-
-                <div class="work-preview shop">
-
-                    <div class="shop-circle"></div>
-
-                    <div class="shop-product">
-                        <div></div>
-                    </div>
-
-                    <span>ONLINE SHOP</span>
-
-                </div>
-
-                <div class="work-info">
-                    <div>
-                        <span>ECOMMERCE</span>
-                        <h3>Online Store</h3>
-                    </div>
-
-                    <div class="work-arrow">↗</div>
-                </div>
-
+            <div class="number-item">
+                <strong>100<span>%</span></strong>
+                <p>индивидуальный подход</p>
             </div>
 
         </div>
@@ -353,84 +847,153 @@
 
     <div class="container">
 
-        <div class="section-heading">
+        <div class="section-top">
 
             <div>
-                <span class="section-label">ПРОЦЕСС</span>
+
+                <div class="eyebrow">
+                    03 / PROCESS
+                </div>
 
                 <h2>
-                    От идеи
-                    <span>до запуска</span>
+                    Как появляется
+                    <span>ваш проект.</span>
                 </h2>
+
             </div>
 
         </div>
 
 
-        <div class="process">
+        <div class="process-list">
 
-            <div class="process-item">
+            <div class="process-row">
 
-                <div class="process-number">01</div>
+                <div class="process-number">
+                    01
+                </div>
 
-                <div>
+                <div class="process-main">
                     <h3>Заявка</h3>
 
                     <p>
-                        Вы рассказываете нам о своей идее
-                        через удобную анкету.
+                        Вы рассказываете, что хотите
+                        создать и какие задачи должен
+                        решать проект.
                     </p>
+                </div>
+
+                <div class="process-icon">
+                    ↗
                 </div>
 
             </div>
 
 
-            <div class="process-item">
+            <div class="process-row">
 
-                <div class="process-number">02</div>
+                <div class="process-number">
+                    02
+                </div>
 
-                <div>
-                    <h3>Обсуждение</h3>
+                <div class="process-main">
+                    <h3>Концепция</h3>
 
                     <p>
-                        Уточняем задачи, функции,
-                        дизайн и необходимые технологии.
+                        Определяем структуру, функции,
+                        стиль и внешний вид будущего
+                        продукта.
                     </p>
+                </div>
+
+                <div class="process-icon">
+                    ◇
                 </div>
 
             </div>
 
 
-            <div class="process-item">
+            <div class="process-row">
 
-                <div class="process-number">03</div>
+                <div class="process-number">
+                    03
+                </div>
 
-                <div>
+                <div class="process-main">
                     <h3>Разработка</h3>
 
                     <p>
-                        Создаём дизайн и разрабатываем
-                        ваш проект.
+                        Собираем интерфейс, подключаем
+                        необходимые функции и тестируем
+                        проект.
                     </p>
+                </div>
+
+                <div class="process-icon">
+                    ⌘
                 </div>
 
             </div>
 
 
-            <div class="process-item">
+            <div class="process-row">
 
-                <div class="process-number">04</div>
+                <div class="process-number">
+                    04
+                </div>
 
-                <div>
+                <div class="process-main">
                     <h3>Запуск</h3>
 
                     <p>
-                        Проверяем проект и передаём
-                        готовый сайт клиенту.
+                        Проверяем всё перед запуском
+                        и передаём готовый проект.
                     </p>
                 </div>
 
+                <div class="process-icon">
+                    ✓
+                </div>
+
             </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= CTA ================= -->
+
+<section class="cta-section">
+
+    <div class="container">
+
+        <div class="cta-card">
+
+            <div class="cta-noise"></div>
+
+            <div class="cta-content">
+
+                <span>
+                    YOUR IDEA → OUR CODE
+                </span>
+
+                <h2>
+                    Есть идея?
+                    <br>
+                    <strong>Давайте сделаем её.</strong>
+                </h2>
+
+                <a href="#order">
+                    Начать проект
+                    <b>↗</b>
+                </a>
+
+            </div>
+
+            <div class="cta-orb"></div>
 
         </div>
 
@@ -445,61 +1008,75 @@
 
     <div class="container">
 
-        <div class="order-wrapper">
+        <div class="order-grid">
 
             <div class="order-intro">
 
-                <span class="section-label">НОВЫЙ ПРОЕКТ</span>
+                <div class="eyebrow">
+                    04 / START PROJECT
+                </div>
 
                 <h2>
                     Расскажите
-                    <span>о своей идее</span>
+                    <span>о проекте.</span>
                 </h2>
 
                 <p>
-                    Заполните небольшую анкету.
-                    Мы получим её в WhatsApp и свяжемся
-                    с вами для обсуждения проекта.
+                    Заполните анкету. Необязательно
+                    знать технические детали — просто
+                    расскажите своими словами, что хотите
+                    получить.
                 </p>
 
-                <div class="contact-box">
+                <div class="whatsapp-box">
 
-                    <span>WhatsApp</span>
+                    <div class="whatsapp-icon">
+                        ◉
+                    </div>
 
-                    <strong>
-                        +7 700 253 8020
-                    </strong>
+                    <div>
+                        <span>Заявка поступит в WhatsApp</span>
+
+                        <strong>
+                            +7 700 253 8020
+                        </strong>
+                    </div>
 
                 </div>
 
             </div>
 
 
-            <form id="projectForm" class="project-form">
+            <form class="project-form" id="projectForm">
 
-                <div class="form-progress">
+                <div class="form-head">
 
-                    <div class="progress-line">
-                        <span id="progressBar"></span>
+                    <div>
+                        <strong>Заявка на проект</strong>
+                        <span>Заполните несколько полей</span>
                     </div>
 
                     <span id="progressText">
-                        0% заполнено
+                        0%
                     </span>
 
+                </div>
+
+                <div class="progress-line">
+                    <span id="progressBar"></span>
                 </div>
 
 
                 <div class="form-group">
 
                     <label>
-                        Как вас зовут?
+                        01 / Ваше имя
                     </label>
 
                     <input
                         type="text"
                         id="name"
-                        placeholder="Например, Артём"
+                        placeholder="Как к вам обращаться?"
                         required
                     >
 
@@ -509,39 +1086,57 @@
                 <div class="form-group">
 
                     <label>
-                        Что хотите создать?
+                        02 / Что создаём?
                     </label>
 
                     <div class="choice-grid">
 
                         <label class="choice">
                             <input type="checkbox" name="type" value="Сайт">
-                            <span>🌐 Сайт</span>
+                            <span>
+                                <b>01</b>
+                                🌐 Сайт
+                            </span>
                         </label>
 
                         <label class="choice">
                             <input type="checkbox" name="type" value="Маркетплейс">
-                            <span>🛒 Маркетплейс</span>
+                            <span>
+                                <b>02</b>
+                                🛒 Маркетплейс
+                            </span>
                         </label>
 
                         <label class="choice">
-                            <input type="checkbox" name="type" value="Магазин">
-                            <span>🏪 Магазин</span>
+                            <input type="checkbox" name="type" value="Интернет-магазин">
+                            <span>
+                                <b>03</b>
+                                🏪 Магазин
+                            </span>
                         </label>
 
                         <label class="choice">
                             <input type="checkbox" name="type" value="Веб-приложение">
-                            <span>⚙️ Веб-приложение</span>
+                            <span>
+                                <b>04</b>
+                                ⚙️ Веб-приложение
+                            </span>
                         </label>
 
                         <label class="choice">
                             <input type="checkbox" name="type" value="Визитка">
-                            <span>💼 Визитка</span>
+                            <span>
+                                <b>05</b>
+                                💼 Визитка
+                            </span>
                         </label>
 
                         <label class="choice">
                             <input type="checkbox" name="type" value="Другое">
-                            <span>✨ Другое</span>
+                            <span>
+                                <b>06</b>
+                                ✦ Другое
+                            </span>
                         </label>
 
                     </div>
@@ -552,13 +1147,12 @@
                 <div class="form-group">
 
                     <label>
-                        Расскажите о проекте
+                        03 / Расскажите о задаче
                     </label>
 
                     <textarea
                         id="description"
-                        rows="5"
-                        placeholder="Что должен уметь сайт? Какие страницы и функции нужны?"
+                        placeholder="Например: хочу сайт для магазина одежды с каталогом, корзиной и личным кабинетом..."
                         required
                     ></textarea>
 
@@ -568,7 +1162,7 @@
                 <div class="form-group">
 
                     <label>
-                        Примерный бюджет
+                        04 / Примерный бюджет
                     </label>
 
                     <div class="budget-grid">
@@ -580,22 +1174,22 @@
 
                         <label class="budget">
                             <input type="radio" name="budget" value="50 000 — 100 000 ₸">
-                            <span>50 000 — 100 000 ₸</span>
+                            <span>50 — 100K ₸</span>
                         </label>
 
                         <label class="budget">
                             <input type="radio" name="budget" value="100 000 — 250 000 ₸">
-                            <span>100 000 — 250 000 ₸</span>
+                            <span>100 — 250K ₸</span>
                         </label>
 
                         <label class="budget">
                             <input type="radio" name="budget" value="250 000+ ₸">
-                            <span>250 000+ ₸</span>
+                            <span>250K+ ₸</span>
                         </label>
 
-                        <label class="budget">
-                            <input type="radio" name="budget" value="Не знаю">
-                            <span>Не знаю</span>
+                        <label class="budget budget-wide">
+                            <input type="radio" name="budget" value="Пока не знаю">
+                            <span>Пока не знаю</span>
                         </label>
 
                     </div>
@@ -606,7 +1200,7 @@
                 <div class="form-group">
 
                     <label>
-                        Ваш номер телефона
+                        05 / Ваш телефон
                     </label>
 
                     <input
@@ -619,18 +1213,22 @@
                 </div>
 
 
-                <button type="submit" class="submit-button">
+                <button
+                    type="submit"
+                    class="submit-button"
+                >
 
-                    Отправить заявку в WhatsApp
+                    <span>
+                        Отправить заявку
+                    </span>
 
-                    <span>↗</span>
+                    <b>↗</b>
 
                 </button>
 
-
                 <p class="form-note">
-                    После отправки откроется WhatsApp с
-                    автоматически сформированной заявкой.
+                    После отправки откроется WhatsApp
+                    с автоматически сформированной заявкой.
                 </p>
 
             </form>
@@ -641,33 +1239,52 @@
 
 </section>
 
+</main>
+
 
 <!-- ================= FOOTER ================= -->
 
 <footer class="footer">
 
-    <div class="container footer-content">
+    <div class="container">
 
-        <div class="logo">
-            <span class="logo-icon">W</span>
-            <span>WEB<span>CRAFT</span></span>
+        <div class="footer-main">
+
+            <a href="#home" class="logo">
+                <span class="logo-mark">W</span>
+
+                <span class="logo-text">
+                    WEB<span>CRAFT</span>
+                </span>
+            </a>
+
+            <p>
+                Создаём современные
+                цифровые продукты.
+            </p>
+
+            <a href="#order" class="footer-button">
+                Начать проект →
+            </a>
+
         </div>
 
-        <p>
-            Создаём цифровые продукты
-            под ваши задачи.
-        </p>
+        <div class="footer-bottom">
 
-        <div class="footer-links">
-            <a href="#services">Услуги</a>
-            <a href="#works">Работы</a>
-            <a href="#order">Заказать</a>
+            <span>
+                © 2026 WEBCRAFT
+            </span>
+
+            <span>
+                Digital development studio
+            </span>
+
+            <span>
+                Kazakhstan
+            </span>
+
         </div>
 
-    </div>
-
-    <div class="copyright">
-        © 2026 WEBCRAFT. Все права защищены.
     </div>
 
 </footer>
