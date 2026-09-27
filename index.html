@@ -3,571 +3,677 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate Webflow Style Builder</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:wght@700&family=Space+Mono&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --main-bg: #0f0f11;
-            --main-text: #f5f5f7;
-            --accent-color: #d4af37;
-            --font-family: 'Inter', sans-serif;
-            --block-bg: rgba(255, 255, 255, 0.03);
-            --block-border: rgba(255, 255, 255, 0.08);
-            --anim-speed: 0.4s;
-            --hover-effect: translateY(-5px);
-            --sidebar-width: 380px;
-        }
 
-        body {
-            background-color: var(--main-bg);
-            color: var(--main-text);
-            font-family: var(--font-family);
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            overflow-x: hidden;
-            transition: background 0.4s ease, color 0.4s ease;
-        }
+    <title>WEBCRAFT — Разработка сайтов</title>
 
-        /* Рабочая область */
-        #canvas {
-            max-width: 900px;
-            margin: 0 auto;
-            min-height: 100vh;
-            padding: 60px 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-            transition: margin-right 0.3s ease;
-        }
+    <meta name="description"
+          content="Разработка сайтов, маркетплейсов, интернет-магазинов, лендингов и веб-приложений под заказ.">
 
-        /* Блоки сайта */
-        .editable-block {
-            background: var(--block-bg);
-            border: 1px solid var(--block-border);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            padding: 35px;
-            border-radius: 20px;
-            position: relative;
-            cursor: grab;
-            transition: all var(--anim-speed) cubic-bezier(0.25, 1, 0.5, 1);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-
-        .editable-block:active {
-            cursor: grabbing;
-        }
-
-        .editable-block:hover {
-            border-color: var(--accent-color);
-            transform: var(--hover-effect);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 20px var(--accent-glow, transparent);
-        }
-
-        /* Анимации */
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes bounceIn { 0% { opacity: 0; transform: scale(0.9); } 60% { opacity: 1; transform: scale(1.02); } 100% { transform: scale(1); } }
-        @keyframes zoomIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
-
-        .anim-fade { animation: fadeIn var(--anim-speed) ease-out forwards; }
-        .anim-slide { animation: slideUp var(--anim-speed) cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-        .anim-bounce { animation: bounceIn var(--anim-speed) cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
-        .anim-zoom { animation: zoomIn var(--anim-speed) ease-out forwards; }
-
-        /* Кнопка удаления */
-        .delete-btn {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: rgba(255, 59, 48, 0.1);
-            color: #ff3b30;
-            border: none;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            font-size: 14px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-
-        .editable-block:hover .delete-btn { opacity: 1; }
-        .delete-btn:hover { background: #ff3b30; color: #fff; }
-
-        /* 3D Текст */
-        .text-3d {
-            text-shadow: 0 1px 0 #ccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbb, 0 4px 0 #b9b9b9, 0 5px 0 #aaa, 0 6px 1px rgba(0,0,0,0.1), 0 0 5px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.3), 0 3px 5px rgba(0,0,0,0.2), 0 5px 10px rgba(0,0,0,0.25);
-            font-weight: 800;
-            letter-spacing: -0.02em;
-        }
-
-        .apple-input {
-            width: 100%;
-            padding: 14px 18px;
-            margin-top: 10px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 12px;
-            color: inherit;
-            font-family: inherit;
-            font-size: 15px;
-            box-sizing: border-box;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-        .apple-input:focus { border-color: var(--accent-color); }
-
-        .apple-button {
-            display: inline-block;
-            margin-top: 15px;
-            padding: 12px 28px;
-            background: var(--accent-color);
-            color: #111;
-            font-weight: 600;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: transform 0.2s, opacity 0.2s;
-            text-decoration: none;
-        }
-        .apple-button:hover { opacity: 0.9; transform: scale(1.02); }
-
-        /* Кнопка-шестеренка в углу */
-        #gear-btn {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: rgba(30, 30, 35, 0.85);
-            backdrop-filter: blur(20px);
-            color: var(--accent-color);
-            border: 1px solid rgba(255,255,255,0.15);
-            border-radius: 50%;
-            width: 64px;
-            height: 64px;
-            font-size: 28px;
-            cursor: pointer;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            z-index: 10000;
-            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        #gear-btn:hover { transform: scale(1.08) rotate(90deg); border-color: var(--accent-color); }
-
-        /* БОКОВАЯ ПАНЕЛЬ (SIDEBAR) УРОВНЯ WEBFLOW */
-        #builder-sidebar {
-            position: fixed;
-            top: 0;
-            right: -550px; /* Скрыта по умолчанию */
-            width: var(--sidebar-width);
-            height: 100vh;
-            background: rgba(18, 18, 22, 0.92);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            color: #fff;
-            box-shadow: -10px 0 40px rgba(0,0,0,0.7);
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            transition: right 0.35s cubic-bezier(0.25, 1, 0.5, 1);
-            border-left: 1px solid rgba(255,255,255,0.1);
-        }
-
-        #builder-sidebar.open {
-            right: 0;
-        }
-
-        /* Ручка для изменения размера боковой панели (Resize Handle) */
-        .resize-handle {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 6px;
-            height: 100%;
-            cursor: ew-resize;
-            background: transparent;
-            transition: background 0.2s;
-        }
-        .resize-handle:hover {
-            background: var(--accent-color);
-        }
-
-        /* Шапка боковой панели с табами (вкладками) */
-        .sidebar-header {
-            padding: 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            display: flex;
-            gap: 8px;
-            background: rgba(0,0,0,0.2);
-        }
-
-        .tab-btn {
-            flex: 1;
-            padding: 8px 10px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.08);
-            color: #98989d;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-align: center;
-        }
-
-        .tab-btn.active {
-            background: var(--accent-color);
-            color: #111;
-            border-color: var(--accent-color);
-        }
-
-        /* Содержимое вкладок */
-        .sidebar-content {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-        }
-
-        .tab-pane {
-            display: none;
-        }
-
-        .tab-pane.active {
-            display: block;
-            animation: fadeIn 0.3s ease;
-        }
-
-        #builder-sidebar h3 {
-            margin: 0 0 15px 0;
-            color: var(--accent-color);
-            font-size: 16px;
-            font-weight: 600;
-        }
-
-        #builder-sidebar label {
-            display: block;
-            margin-top: 14px;
-            color: #98989d;
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        #builder-sidebar input[type="color"], 
-        #builder-sidebar select {
-            width: 100%;
-            margin-top: 6px;
-            padding: 10px;
-            border-radius: 10px;
-            border: 1px solid rgba(255,255,255,0.1);
-            background: rgba(255,255,255,0.05);
-            color: #fff;
-            box-sizing: border-box;
-            outline: none;
-            cursor: pointer;
-        }
-
-        .gui-btn {
-            width: 100%;
-            margin-top: 10px;
-            padding: 12px;
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: #fff;
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .gui-btn:hover { background: rgba(255,255,255,0.15); border-color: var(--accent-color); }
-        .gui-btn.primary { background: var(--accent-color); color: #111; border: none; }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-    <!-- Рабочая область -->
-    <div id="canvas">
-        <div class="editable-block anim-fade" draggable="true">
-            <button class="delete-btn">✕</button>
-            <h1 contenteditable="true" class="text-3d" style="font-size: 42px; margin: 0 0 10px 0;">Инновации в каждой детали.</h1>
-            <p contenteditable="true" style="color: #98989d; font-size: 18px; margin: 0;">Создавайте сайты будущего с абсолютной свободой кастомизации.</p>
-            <a href="#" class="apple-button" contenteditable="true">Узнать больше</a>
-        </div>
+<!-- ================= HEADER ================= -->
+
+<header class="header">
+
+    <div class="container nav">
+
+        <a href="#" class="logo">
+            <span class="logo-icon">W</span>
+            <span>WEB<span>CRAFT</span></span>
+        </a>
+
+        <nav class="menu">
+            <a href="#services">Услуги</a>
+            <a href="#works">Работы</a>
+            <a href="#process">Как работаем</a>
+            <a href="#order">Заказать</a>
+        </nav>
+
+        <a class="header-button" href="#order">
+            Обсудить проект
+        </a>
+
+        <button class="mobile-menu-button" id="mobileMenuButton">
+            ☰
+        </button>
+
     </div>
 
-    <!-- Кнопка-шестеренка -->
-    <button id="gear-btn">⚙️</button>
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="#services">Услуги</a>
+        <a href="#works">Работы</a>
+        <a href="#process">Как работаем</a>
+        <a href="#order">Заказать</a>
+    </div>
 
-    <!-- БОКОВАЯ ПАНЕЛЬ С ВКЛАДКАМИ -->
-    <div id="builder-sidebar">
-        <div class="resize-handle" id="resize-handle"></div>
-        
-        <!-- Верхние кнопки для открытия окон/вкладок -->
-        <div class="sidebar-header">
-            <button class="tab-btn active" data-tab="tab-style">🎨 Стиль</button>
-            <button class="tab-btn" data-tab="tab-anim">✨ Анимации</button>
-            <button class="tab-btn" data-tab="tab-blocks">➕ Элементы</button>
-            <button class="tab-btn" data-tab="tab-settings">⚙️ Окно</button>
+</header>
+
+
+<!-- ================= HERO ================= -->
+
+<section class="hero">
+
+    <div class="hero-background"></div>
+
+    <div class="container hero-content">
+
+        <div class="hero-badge">
+            <span></span>
+            Принимаем новые проекты
         </div>
 
-        <!-- Контент вкладок -->
-        <div class="sidebar-content">
-            
-            <!-- Вкладка 1: Стили -->
-            <div class="tab-pane active" id="tab-style">
-                <h3>Дизайн и Цвета</h3>
-                <label>Цвет фона страницы:</label>
-                <input type="color" id="bg-color-picker" value="#0f0f11">
+        <h1>
+            Создаём сайты,
+            <br>
+            <strong>которые работают</strong>
+        </h1>
 
-                <label>Акцентный цвет (Золото / Неон):</label>
-                <input type="color" id="accent-color-picker" value="#d4af37">
+        <p class="hero-description">
+            Сайты, интернет-магазины, маркетплейсы,
+            веб-приложения и цифровые продукты под ваши задачи.
+        </p>
 
-                <label>Цвет текста:</label>
-                <input type="color" id="text-color-picker" value="#f5f5f7">
+        <div class="hero-buttons">
 
-                <label>Стиль шрифта:</label>
-                <select id="font-family-select">
-                    <option value="'Inter', sans-serif">Inter (Современный)</option>
-                    <option value="'Playfair Display', serif">Playfair (Элегантный)</option>
-                    <option value="'Space Mono', monospace">Space Mono (Технологичный)</option>
-                </select>
+            <a href="#order" class="button button-primary">
+                Создать проект
+                <span>→</span>
+            </a>
 
-                <label style="margin-top:20px;">Текст:</label>
-                <button class="gui-btn" id="toggle-3d-btn">✨ Вкл/Выкл 3D-эффект текста</button>
+            <a href="#works" class="button button-secondary">
+                Смотреть работы
+            </a>
+
+        </div>
+
+        <div class="hero-stats">
+
+            <div>
+                <strong>50+</strong>
+                <span>проектов</span>
             </div>
 
-            <!-- Вкладка 2: Анимации -->
-            <div class="tab-pane" id="tab-anim">
-                <h3>Спецэффекты блоков</h3>
-                <label>Анимация появления:</label>
-                <select id="anim-style-select">
-                    <option value="anim-fade">Плавное проявление (Fade)</option>
-                    <option value="anim-slide">Вылет снизу (Slide Up)</option>
-                    <option value="anim-bounce">Пружинящий эффект (Bounce)</option>
-                    <option value="anim-zoom">Увеличение (Zoom In)</option>
-                </select>
-
-                <label>Скорость анимации:</label>
-                <select id="anim-speed-select">
-                    <option value="0.2s">Быстро (0.2s)</option>
-                    <option value="0.4s" selected>Нормально (0.4s)</option>
-                    <option value="0.8s">Медленно и плавно (0.8s)</option>
-                </select>
-
-                <label>Эффект при наведении (Hover):</label>
-                <select id="hover-effect-select">
-                    <option value="translateY(-5px)">Легкий подъем</option>
-                    <option value="translateY(-12px) scale(1.01)">Сильный подъем + увеличение</option>
-                    <option value="scale(1.03)">Только увеличение</option>
-                    <option value="none">Без смещения</option>
-                </select>
+            <div>
+                <strong>24/7</strong>
+                <span>на связи</span>
             </div>
 
-            <!-- Вкладка 3: Добавление элементов -->
-            <div class="tab-pane" id="tab-blocks">
-                <h3>Конструктор блоков</h3>
-                <label>Добавить на сайт:</label>
-                <button class="gui-btn primary" id="add-hero-btn">➕ Hero Блок (Заголовок)</button>
-                <button class="gui-btn" id="add-card-btn">➕ Стеклянная карточка</button>
-                <button class="gui-btn" id="add-form-btn">➕ Форма обратной связи</button>
+            <div>
+                <strong>100%</strong>
+                <span>под ваш заказ</span>
             </div>
 
-            <!-- Вкладка 4: Настройки панели -->
-            <div class="tab-pane" id="tab-settings">
-                <h3>Параметры панели</h3>
-                <p style="color: #98989d; font-size: 13px; line-height: 1.5;">
-                    Ты можешь изменить ширину этой боковой панели, просто зажав левую границу панели мышкой и потянув её вбок!
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= SERVICES ================= -->
+
+<section class="section" id="services">
+
+    <div class="container">
+
+        <div class="section-heading">
+
+            <div>
+                <span class="section-label">ВОЗМОЖНОСТИ</span>
+
+                <h2>
+                    Что мы можем
+                    <span>создать?</span>
+                </h2>
+            </div>
+
+            <p>
+                От небольшой визитки до полноценной
+                онлайн-платформы.
+            </p>
+
+        </div>
+
+
+        <div class="services-grid">
+
+            <div class="service-card">
+                <div class="service-number">01</div>
+                <div class="service-icon">◈</div>
+
+                <h3>Сайты</h3>
+
+                <p>
+                    Лендинги, корпоративные сайты,
+                    портфолио и сайты компаний.
                 </p>
-                <button class="gui-btn" id="reset-width-btn" style="margin-top: 15px;">🔄 Сбросить ширину панели</button>
+
+                <a href="#order">Заказать →</a>
+            </div>
+
+
+            <div class="service-card featured">
+                <div class="service-number">02</div>
+                <div class="service-icon">▣</div>
+
+                <h3>Маркетплейсы</h3>
+
+                <p>
+                    Создание площадок для продажи
+                    товаров с каталогом и личными кабинетами.
+                </p>
+
+                <a href="#order">Заказать →</a>
+            </div>
+
+
+            <div class="service-card">
+                <div class="service-number">03</div>
+                <div class="service-icon">◫</div>
+
+                <h3>Магазины</h3>
+
+                <p>
+                    Интернет-магазины с товарами,
+                    корзиной, заказами и оплатой.
+                </p>
+
+                <a href="#order">Заказать →</a>
+            </div>
+
+
+            <div class="service-card">
+                <div class="service-number">04</div>
+                <div class="service-icon">✦</div>
+
+                <h3>Веб-приложения</h3>
+
+                <p>
+                    Личные кабинеты, панели управления,
+                    CRM и другие системы.
+                </p>
+
+                <a href="#order">Заказать →</a>
+            </div>
+
+
+            <div class="service-card">
+                <div class="service-number">05</div>
+                <div class="service-icon">⌁</div>
+
+                <h3>Дизайн</h3>
+
+                <p>
+                    Современный UI/UX-дизайн,
+                    прототипы и визуальный стиль.
+                </p>
+
+                <a href="#order">Заказать →</a>
+            </div>
+
+
+            <div class="service-card">
+                <div class="service-number">06</div>
+                <div class="service-icon">⚡</div>
+
+                <h3>Доработка</h3>
+
+                <p>
+                    Исправление ошибок и добавление
+                    новых функций в существующие проекты.
+                </p>
+
+                <a href="#order">Заказать →</a>
             </div>
 
         </div>
+
     </div>
 
-    <script>
-        const gearBtn = document.getElementById('gear-btn');
-        const sidebar = document.getElementById('builder-sidebar');
-        const root = document.documentElement;
-        const canvas = document.getElementById('canvas');
+</section>
 
-        // Открытие/закрытие боковой панели по шестеренке
-        gearBtn.addEventListener('click', () => {
-            sidebar.classList.toggle('open');
-        });
 
-        // Логика переключения вкладок (табов) внутри панели
-        const tabBtns = document.querySelectorAll('.tab-btn');
-        const tabPanes = document.querySelectorAll('.tab-pane');
+<!-- ================= WORKS ================= -->
 
-        tabBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                tabBtns.forEach(b => b.classList.remove('active'));
-                tabPanes.forEach(p => p.classList.remove('active'));
+<section class="section works-section" id="works">
 
-                btn.classList.add('active');
-                document.getElementById(btn.getAttribute('data-tab')).classList.add('active');
-            });
-        });
+    <div class="container">
 
-        // Изменение размера боковой панели мышкой (Resize)
-        const resizeHandle = document.getElementById('resize-handle');
-        let isResizing = false;
+        <div class="section-heading">
 
-        resizeHandle.addEventListener('mousedown', (e) => {
-            isResizing = true;
-            document.body.style.cursor = 'ew-resize';
-            e.preventDefault();
-        });
+            <div>
+                <span class="section-label">ПОРТФОЛИО</span>
 
-        window.addEventListener('mousemove', (e) => {
-            if (!isResizing) return;
-            let newWidth = window.innerWidth - e.clientX;
-            if (newWidth > 280 && newWidth < 700) {
-                root.style.setProperty('--sidebar-width', newWidth + 'px');
-            }
-        });
+                <h2>
+                    Примеры
+                    <span>работ</span>
+                </h2>
+            </div>
 
-        window.addEventListener('mouseup', () => {
-            isResizing = false;
-            document.body.style.cursor = 'default';
-        });
+            <p>
+                Каждый проект создаётся
+                индивидуально под задачу клиента.
+            </p>
 
-        document.getElementById('reset-width-btn').addEventListener('click', () => {
-            root.style.setProperty('--sidebar-width', '380px');
-        });
+        </div>
 
-        // Настройка цветов и шрифтов
-        document.getElementById('bg-color-picker').addEventListener('input', (e) => {
-            root.style.setProperty('--main-bg', e.target.value);
-        });
 
-        document.getElementById('accent-color-picker').addEventListener('input', (e) => {
-            const color = e.target.value;
-            root.style.setProperty('--accent-color', color);
-            root.style.setProperty('--accent-glow', color + '40');
-        });
+        <div class="works-grid">
 
-        document.getElementById('text-color-picker').addEventListener('input', (e) => {
-            root.style.setProperty('--main-text', e.target.value);
-        });
+            <div class="work-card work-large">
 
-        document.getElementById('font-family-select').addEventListener('change', (e) => {
-            root.style.setProperty('--font-family', e.target.value);
-        });
+                <div class="work-preview marketplace">
+                    <div class="mock-window">
+                        <div class="mock-top"></div>
 
-        // Анимации
-        let currentAnimClass = 'anim-fade';
-        document.getElementById('anim-style-select').addEventListener('change', (e) => {
-            currentAnimClass = e.target.value;
-            document.querySelectorAll('.editable-block').forEach(block => {
-                block.className = block.className.replace(/anim-\w+/g, '') + ' ' + currentAnimClass;
-            });
-        });
+                        <div class="mock-content">
+                            <div class="mock-sidebar"></div>
 
-        document.getElementById('anim-speed-select').addEventListener('change', (e) => {
-            root.style.setProperty('--anim-speed', e.target.value);
-        });
+                            <div class="mock-products">
+                                <i></i>
+                                <i></i>
+                                <i></i>
+                                <i></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-        document.getElementById('hover-effect-select').addEventListener('change', (e) => {
-            root.style.setProperty('--hover-effect', e.target.value);
-        });
+                <div class="work-info">
+                    <div>
+                        <span>WEB PLATFORM</span>
+                        <h3>Marketplace</h3>
+                    </div>
 
-        // Функция добавления блока
-        function addNewBlock(htmlContent) {
-            const block = document.createElement('div');
-            block.className = `editable-block ${currentAnimClass}`;
-            block.setAttribute('draggable', 'true');
-            block.innerHTML = `<button class="delete-btn">✕</button>` + htmlContent;
-            canvas.appendChild(block);
-            initDragAndDrop();
-            initDeleteButtons();
-        }
+                    <div class="work-arrow">↗</div>
+                </div>
 
-        document.getElementById('add-hero-btn').addEventListener('click', () => {
-            addNewBlock(`
-                <h2 contenteditable="true" style="font-size: 32px; margin: 0 0 10px 0;">Новый заголовок</h2>
-                <p contenteditable="true" style="color: #98989d; font-size: 16px; margin: 0 0 15px 0;">Описание продукта или услуги клиента.</p>
-                <a href="#" class="apple-button" contenteditable="true">Кнопка действия</a>
-            `);
-        });
+            </div>
 
-        document.getElementById('add-card-btn').addEventListener('click', () => {
-            addNewBlock(`
-                <h3 contenteditable="true" style="margin-top: 0; color: var(--accent-color);">Преимущество</h3>
-                <p contenteditable="true" style="color: #98989d; margin: 0;">Расскажите о ключевой особенности здесь.</p>
-            `);
-        });
 
-        document.getElementById('add-form-btn').addEventListener('click', () => {
-            addNewBlock(`
-                <h3 contenteditable="true" style="margin-top: 0;">Свяжитесь с нами</h3>
-                <input type="text" class="apple-input" placeholder="Ваше имя" disabled>
-                <input type="email" class="apple-input" placeholder="Ваш Email" disabled>
-                <button class="apple-button" style="width: 100%; text-align:center;">Отправить</button>
-            `);
-        });
+            <div class="work-card">
 
-        document.getElementById('toggle-3d-btn').addEventListener('click', () => {
-            document.querySelectorAll('h1, h2, h3').forEach(el => {
-                el.classList.toggle('text-3d');
-            });
-        });
+                <div class="work-preview landing">
+                    <div class="landing-title">
+                        YOUR<br>
+                        <b>BRAND</b>
+                    </div>
+                </div>
 
-        function initDeleteButtons() {
-            document.querySelectorAll('.delete-btn').forEach(btn => {
-                btn.onclick = function() {
-                    this.parentElement.remove();
-                }
-            });
-        }
+                <div class="work-info">
+                    <div>
+                        <span>LANDING PAGE</span>
+                        <h3>Brand Website</h3>
+                    </div>
 
-        // Drag & Drop
-        let draggedItem = null;
+                    <div class="work-arrow">↗</div>
+                </div>
 
-        function initDragAndDrop() {
-            const blocks = document.querySelectorAll('.editable-block');
-            blocks.forEach(block => {
-                block.addEventListener('dragstart', function () {
-                    draggedItem = this;
-                    setTimeout(() => this.style.display = 'none', 0);
-                });
+            </div>
 
-                block.addEventListener('dragend', function () {
-                    setTimeout(() => {
-                        draggedItem.style.display = 'block';
-                        draggedItem = null;
-                    }, 0);
-                });
 
-                block.addEventListener('dragover', function (e) {
-                    e.preventDefault();
-                });
+            <div class="work-card">
 
-                block.addEventListener('drop', function (e) {
-                    e.preventDefault();
-                    if (this !== draggedItem) {
-                        let allBlocks = [...canvas.querySelectorAll('.editable-block')];
-                        let draggedPos = allBlocks.indexOf(draggedItem);
-                        let targetPos = allBlocks.indexOf(this);
+                <div class="work-preview shop">
 
-                        if (draggedPos < targetPos) {
-                            canvas.insertBefore(draggedItem, this.nextSibling);
-                        } else {
-                            canvas.insertBefore(draggedItem, this);
-                        }
-                    }
-                });
-            });
-        }
+                    <div class="shop-circle"></div>
 
-        initDragAndDrop();
-        initDeleteButtons();
-    </script>
+                    <div class="shop-product">
+                        <div></div>
+                    </div>
+
+                    <span>ONLINE SHOP</span>
+
+                </div>
+
+                <div class="work-info">
+                    <div>
+                        <span>ECOMMERCE</span>
+                        <h3>Online Store</h3>
+                    </div>
+
+                    <div class="work-arrow">↗</div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= PROCESS ================= -->
+
+<section class="section process-section" id="process">
+
+    <div class="container">
+
+        <div class="section-heading">
+
+            <div>
+                <span class="section-label">ПРОЦЕСС</span>
+
+                <h2>
+                    От идеи
+                    <span>до запуска</span>
+                </h2>
+            </div>
+
+        </div>
+
+
+        <div class="process">
+
+            <div class="process-item">
+
+                <div class="process-number">01</div>
+
+                <div>
+                    <h3>Заявка</h3>
+
+                    <p>
+                        Вы рассказываете нам о своей идее
+                        через удобную анкету.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="process-item">
+
+                <div class="process-number">02</div>
+
+                <div>
+                    <h3>Обсуждение</h3>
+
+                    <p>
+                        Уточняем задачи, функции,
+                        дизайн и необходимые технологии.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="process-item">
+
+                <div class="process-number">03</div>
+
+                <div>
+                    <h3>Разработка</h3>
+
+                    <p>
+                        Создаём дизайн и разрабатываем
+                        ваш проект.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="process-item">
+
+                <div class="process-number">04</div>
+
+                <div>
+                    <h3>Запуск</h3>
+
+                    <p>
+                        Проверяем проект и передаём
+                        готовый сайт клиенту.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= ORDER ================= -->
+
+<section class="order-section" id="order">
+
+    <div class="container">
+
+        <div class="order-wrapper">
+
+            <div class="order-intro">
+
+                <span class="section-label">НОВЫЙ ПРОЕКТ</span>
+
+                <h2>
+                    Расскажите
+                    <span>о своей идее</span>
+                </h2>
+
+                <p>
+                    Заполните небольшую анкету.
+                    Мы получим её в WhatsApp и свяжемся
+                    с вами для обсуждения проекта.
+                </p>
+
+                <div class="contact-box">
+
+                    <span>WhatsApp</span>
+
+                    <strong>
+                        +7 700 253 8020
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <form id="projectForm" class="project-form">
+
+                <div class="form-progress">
+
+                    <div class="progress-line">
+                        <span id="progressBar"></span>
+                    </div>
+
+                    <span id="progressText">
+                        0% заполнено
+                    </span>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Как вас зовут?
+                    </label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        placeholder="Например, Артём"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Что хотите создать?
+                    </label>
+
+                    <div class="choice-grid">
+
+                        <label class="choice">
+                            <input type="checkbox" name="type" value="Сайт">
+                            <span>🌐 Сайт</span>
+                        </label>
+
+                        <label class="choice">
+                            <input type="checkbox" name="type" value="Маркетплейс">
+                            <span>🛒 Маркетплейс</span>
+                        </label>
+
+                        <label class="choice">
+                            <input type="checkbox" name="type" value="Магазин">
+                            <span>🏪 Магазин</span>
+                        </label>
+
+                        <label class="choice">
+                            <input type="checkbox" name="type" value="Веб-приложение">
+                            <span>⚙️ Веб-приложение</span>
+                        </label>
+
+                        <label class="choice">
+                            <input type="checkbox" name="type" value="Визитка">
+                            <span>💼 Визитка</span>
+                        </label>
+
+                        <label class="choice">
+                            <input type="checkbox" name="type" value="Другое">
+                            <span>✨ Другое</span>
+                        </label>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Расскажите о проекте
+                    </label>
+
+                    <textarea
+                        id="description"
+                        rows="5"
+                        placeholder="Что должен уметь сайт? Какие страницы и функции нужны?"
+                        required
+                    ></textarea>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Примерный бюджет
+                    </label>
+
+                    <div class="budget-grid">
+
+                        <label class="budget">
+                            <input type="radio" name="budget" value="до 50 000 ₸">
+                            <span>до 50 000 ₸</span>
+                        </label>
+
+                        <label class="budget">
+                            <input type="radio" name="budget" value="50 000 — 100 000 ₸">
+                            <span>50 000 — 100 000 ₸</span>
+                        </label>
+
+                        <label class="budget">
+                            <input type="radio" name="budget" value="100 000 — 250 000 ₸">
+                            <span>100 000 — 250 000 ₸</span>
+                        </label>
+
+                        <label class="budget">
+                            <input type="radio" name="budget" value="250 000+ ₸">
+                            <span>250 000+ ₸</span>
+                        </label>
+
+                        <label class="budget">
+                            <input type="radio" name="budget" value="Не знаю">
+                            <span>Не знаю</span>
+                        </label>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Ваш номер телефона
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="phone"
+                        placeholder="+7 700 000 00 00"
+                        required
+                    >
+
+                </div>
+
+
+                <button type="submit" class="submit-button">
+
+                    Отправить заявку в WhatsApp
+
+                    <span>↗</span>
+
+                </button>
+
+
+                <p class="form-note">
+                    После отправки откроется WhatsApp с
+                    автоматически сформированной заявкой.
+                </p>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer class="footer">
+
+    <div class="container footer-content">
+
+        <div class="logo">
+            <span class="logo-icon">W</span>
+            <span>WEB<span>CRAFT</span></span>
+        </div>
+
+        <p>
+            Создаём цифровые продукты
+            под ваши задачи.
+        </p>
+
+        <div class="footer-links">
+            <a href="#services">Услуги</a>
+            <a href="#works">Работы</a>
+            <a href="#order">Заказать</a>
+        </div>
+
+    </div>
+
+    <div class="copyright">
+        © 2026 WEBCRAFT. Все права защищены.
+    </div>
+
+</footer>
+
+
+<script src="script.js"></script>
+
 </body>
 </html>
