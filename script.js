@@ -1,488 +1,720 @@
-```javascript
 document.addEventListener("DOMContentLoaded", () => {
 
-    const form = document.getElementById("projectForm");
+```
+/* ==================================================
+   ELEMENTS
+================================================== */
 
-    const progressBar =
-        document.getElementById("progressBar");
+const searchInput =
+    document.getElementById("searchInput");
 
-    const progressText =
-        document.getElementById("progressText");
+const searchClear =
+    document.getElementById("searchClear");
 
-    const mobileButton =
-        document.getElementById("mobileMenuButton");
+const products =
+    Array.from(
+        document.querySelectorAll(".product")
+    );
 
-    const mobileMenu =
-        document.getElementById("mobileMenu");
+const categories =
+    Array.from(
+        document.querySelectorAll(".category")
+    );
 
-    const cursorGlow =
-        document.getElementById("cursorGlow");
+const noResults =
+    document.getElementById("noResults");
+
+const cartButton =
+    document.getElementById("cartButton");
+
+const cartDrawer =
+    document.getElementById("cartDrawer");
+
+const drawerClose =
+    document.getElementById("drawerClose");
+
+const overlay =
+    document.getElementById("overlay");
+
+const cartCount =
+    document.getElementById("cartCount");
+
+const cartItems =
+    document.getElementById("cartItems");
+
+const cartTotal =
+    document.getElementById("cartTotal");
+
+const loginButton =
+    document.getElementById("loginButton");
+
+const loginModal =
+    document.getElementById("loginModal");
+
+const modalClose =
+    document.getElementById("modalClose");
+
+const mobileMenuButton =
+    document.getElementById("mobileMenuButton");
+
+const sidebar =
+    document.getElementById("sidebar");
+
+const catalogButton =
+    document.getElementById("catalogButton");
+
+const viewAllButton =
+    document.getElementById("viewAllButton");
 
 
-    /* ================= CURSOR GLOW ================= */
+/* ==================================================
+   STATE
+================================================== */
 
-    if (cursorGlow && window.innerWidth > 800) {
+let currentCategory = "all";
 
-        document.addEventListener("mousemove", (event) => {
+let cart = [];
 
-            cursorGlow.style.left =
-                event.clientX + "px";
+let favorites = new Set();
 
-            cursorGlow.style.top =
-                event.clientY + "px";
 
+/* ==================================================
+   SEARCH
+================================================== */
+
+function filterProducts() {
+
+    const query =
+        searchInput.value
+            .toLowerCase()
+            .trim();
+
+    let visibleCount = 0;
+
+    products.forEach(product => {
+
+        const title =
+            (
+                product.dataset.title || ""
+            ).toLowerCase();
+
+        const category =
+            (
+                product.dataset.category || ""
+            ).toLowerCase();
+
+        const categoryMatch =
+            currentCategory === "all" ||
+            category === currentCategory;
+
+        const searchMatch =
+            !query ||
+            title.includes(query) ||
+            category.includes(query);
+
+        const visible =
+            categoryMatch &&
+            searchMatch;
+
+        product.style.display =
+            visible ? "" : "none";
+
+        if (visible) {
+            visibleCount++;
+        }
+
+    });
+
+    noResults.classList.toggle(
+        "visible",
+        visibleCount === 0
+    );
+
+    searchClear.classList.toggle(
+        "visible",
+        searchInput.value.length > 0
+    );
+}
+
+
+searchInput.addEventListener(
+    "input",
+    filterProducts
+);
+
+
+searchClear.addEventListener(
+    "click",
+    () => {
+
+        searchInput.value = "";
+
+        currentCategory = "all";
+
+        categories.forEach(category => {
+            category.classList.remove("active");
         });
 
+        categories[0].classList.add("active");
+
+        filterProducts();
+
+        searchInput.focus();
     }
+);
 
 
-    /* ================= MOBILE MENU ================= */
+/* ==================================================
+   CATEGORIES
+================================================== */
 
-    if (mobileButton) {
+categories.forEach(category => {
 
-        mobileButton.addEventListener("click", () => {
+    category.addEventListener(
+        "click",
+        () => {
 
-            mobileMenu.classList.toggle("active");
-
-        });
-
-    }
-
-
-    document
-        .querySelectorAll(".mobile-menu a")
-        .forEach(link => {
-
-            link.addEventListener("click", () => {
-
-                mobileMenu.classList.remove("active");
-
+            categories.forEach(item => {
+                item.classList.remove("active");
             });
 
-        });
+            category.classList.add("active");
 
+            currentCategory =
+                category.dataset.category;
 
-    /* ================= HEADER ================= */
+            filterProducts();
 
-    const header =
-        document.querySelector(".header");
-
-    window.addEventListener("scroll", () => {
-
-        if (window.scrollY > 40) {
-
-            header.style.background =
-                "rgba(7,7,8,.92)";
-
-        } else {
-
-            header.style.background =
-                "rgba(7,7,8,.68)";
-
-        }
-
-    });
-
-
-    /* ================= FORM PROGRESS ================= */
-
-    function updateProgress() {
-
-        const name =
             document
-                .getElementById("name")
-                .value
-                .trim();
-
-        const description =
-            document
-                .getElementById("description")
-                .value
-                .trim();
-
-        const phone =
-            document
-                .getElementById("phone")
-                .value
-                .trim();
-
-        const types =
-            document.querySelectorAll(
-                'input[name="type"]:checked'
-            );
-
-        const budget =
-            document.querySelector(
-                'input[name="budget"]:checked'
-            );
-
-
-        let completed = 0;
-
-
-        if (name.length >= 2) {
-            completed++;
-        }
-
-
-        if (types.length > 0) {
-            completed++;
-        }
-
-
-        if (description.length >= 10) {
-            completed++;
-        }
-
-
-        if (budget) {
-            completed++;
-        }
-
-
-        if (phone.length >= 7) {
-            completed++;
-        }
-
-
-        const percent =
-            Math.round(
-                (completed / 5) * 100
-            );
-
-
-        progressBar.style.width =
-            percent + "%";
-
-
-        progressText.textContent =
-            percent + "%";
-
-    }
-
-
-    document
-        .querySelectorAll(
-            "#projectForm input, #projectForm textarea"
-        )
-        .forEach(element => {
-
-            element.addEventListener(
-                "input",
-                updateProgress
-            );
-
-            element.addEventListener(
-                "change",
-                updateProgress
-            );
-
-        });
-
-
-    /* ================= PHONE FORMAT ================= */
-
-    const phoneInput =
-        document.getElementById("phone");
-
-
-    phoneInput.addEventListener("input", () => {
-
-        let value =
-            phoneInput.value.replace(
-                /[^0-9+]/g,
-                ""
-            );
-
-
-        if (
-            value.length > 0 &&
-            !value.startsWith("+")
-        ) {
-
-            if (value.startsWith("7")) {
-
-                value = "+" + value;
-
-            }
-
-        }
-
-
-        phoneInput.value = value;
-
-    });
-
-
-    /* ================= FORM SUBMIT ================= */
-
-    form.addEventListener("submit", (event) => {
-
-        event.preventDefault();
-
-
-        const name =
-            document
-                .getElementById("name")
-                .value
-                .trim();
-
-
-        const description =
-            document
-                .getElementById("description")
-                .value
-                .trim();
-
-
-        const phone =
-            document
-                .getElementById("phone")
-                .value
-                .trim();
-
-
-        const selectedTypes =
-            Array.from(
-                document.querySelectorAll(
-                    'input[name="type"]:checked'
-                )
-            ).map(
-                checkbox => checkbox.value
-            );
-
-
-        const budgetElement =
-            document.querySelector(
-                'input[name="budget"]:checked'
-            );
-
-
-        const budget =
-            budgetElement
-                ? budgetElement.value
-                : "Не указан";
-
-
-        /* CHECK PROJECT TYPE */
-
-        if (selectedTypes.length === 0) {
-
-            alert(
-                "Выберите хотя бы один тип проекта."
-            );
-
-            return;
-
-        }
-
-
-        /* CHECK DESCRIPTION */
-
-        if (description.length < 10) {
-
-            alert(
-                "Пожалуйста, немного подробнее расскажите о проекте."
-            );
-
-            return;
-
-        }
-
-
-        /* CHECK PHONE */
-
-        if (phone.length < 7) {
-
-            alert(
-                "Введите корректный номер телефона."
-            );
-
-            return;
-
-        }
-
-
-        /* ================= MESSAGE ================= */
-
-        const message =
-
-`🚀 НОВАЯ ЗАЯВКА — WEBCRAFT
-
-━━━━━━━━━━━━━━━━
-
-👤 КЛИЕНТ
-${name}
-
-💻 ТИП ПРОЕКТА
-${selectedTypes.join(", ")}
-
-📝 ЗАДАЧА
-${description}
-
-💰 БЮДЖЕТ
-${budget}
-
-📞 ТЕЛЕФОН
-${phone}
-
-━━━━━━━━━━━━━━━━
-
-🌐 Заявка отправлена с сайта WEBCRAFT.`;
-
-
-        /* ================= WHATSAPP ================= */
-
-        const whatsappNumber =
-            "77002538020";
-
-
-        const whatsappURL =
-            "https://wa.me/" +
-            whatsappNumber +
-            "?text=" +
-            encodeURIComponent(message);
-
-
-        const button =
-            form.querySelector(".submit-button");
-
-
-        button.innerHTML =
-            "<span>Открываем WhatsApp...</span><b>↗</b>";
-
-
-        setTimeout(() => {
-
-            window.open(
-                whatsappURL,
-                "_blank"
-            );
-
-
-            button.innerHTML =
-                "<span>Отправить заявку</span><b>↗</b>";
-
-        }, 400);
-
-    });
-
-
-    /* ================= REVEAL ANIMATION ================= */
-
-    const revealElements =
-        document.querySelectorAll(
-            ".service-card, .project, .process-row, .number-item"
-        );
-
-
-    const observer =
-        new IntersectionObserver(
-            entries => {
-
-                entries.forEach(entry => {
-
-                    if (entry.isIntersecting) {
-
-                        entry.target.classList.add(
-                            "visible"
-                        );
-
-                    }
-
+                .getElementById("catalog")
+                .scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
                 });
 
-            },
-            {
-                threshold: 0.08
+        }
+    );
+
+});
+
+
+/* ==================================================
+   FAVORITES
+================================================== */
+
+document
+    .querySelectorAll(".favorite-button")
+    .forEach((button, index) => {
+
+        button.addEventListener(
+            "click",
+            event => {
+
+                event.stopPropagation();
+
+                const product =
+                    products[index];
+
+                if (
+                    favorites.has(index)
+                ) {
+
+                    favorites.delete(index);
+
+                    button.classList.remove(
+                        "active"
+                    );
+
+                    button.textContent = "♡";
+
+                } else {
+
+                    favorites.add(index);
+
+                    button.classList.add(
+                        "active"
+                    );
+
+                    button.textContent = "♥";
+
+                }
+
             }
         );
-
-
-    revealElements.forEach(element => {
-
-        element.style.opacity = "0";
-
-        element.style.transform =
-            "translateY(20px)";
-
-        element.style.transition =
-            "opacity .6s ease, transform .6s ease";
-
-
-        observer.observe(element);
 
     });
 
 
-    /* ================= VISIBLE STATE ================= */
+/* ==================================================
+   CART
+================================================== */
 
-    const style =
-        document.createElement("style");
+function openCart() {
 
+    cartDrawer.classList.add("active");
 
-    style.textContent = `
+    overlay.classList.add("active");
 
-        .service-card.visible,
-        .project.visible,
-        .process-row.visible,
-        .number-item.visible {
+    document.body.style.overflow = "hidden";
 
-            opacity: 1 !important;
-
-            transform: translateY(0) !important;
-
-        }
-
-    `;
+}
 
 
-    document.head.appendChild(style);
+function closeCart() {
+
+    cartDrawer.classList.remove("active");
+
+    overlay.classList.remove("active");
+
+    document.body.style.overflow = "";
+
+}
 
 
-    /* ================= SMOOTH ANCHORS ================= */
+cartButton.addEventListener(
+    "click",
+    openCart
+);
+
+
+drawerClose.addEventListener(
+    "click",
+    closeCart
+);
+
+
+overlay.addEventListener(
+    "click",
+    closeCart
+);
+
+
+function updateCartCounter() {
+
+    cartCount.textContent =
+        cart.length;
+
+}
+
+
+function renderCart() {
+
+    if (cart.length === 0) {
+
+        cartItems.innerHTML = `
+
+            <div class="empty-cart">
+
+                <div class="empty-cart-icon">
+
+                    <svg viewBox="0 0 24 24">
+
+                        <path
+                            d="M3 4H5L7.5 16H19L21 8H6"
+                        />
+
+                        <circle
+                            cx="9"
+                            cy="20"
+                            r="1.5"
+                        />
+
+                        <circle
+                            cx="18"
+                            cy="20"
+                            r="1.5"
+                        />
+
+                    </svg>
+
+                </div>
+
+                <h3>
+                    Корзина пуста
+                </h3>
+
+                <p>
+                    Добавленные товары появятся здесь
+                </p>
+
+            </div>
+
+        `;
+
+        cartTotal.textContent =
+            "0 ₸";
+
+        return;
+    }
+
+
+    cartItems.innerHTML =
+        cart.map(
+            (item, index) => `
+
+                <div
+                    style="
+                        display:flex;
+                        align-items:center;
+                        gap:12px;
+                        padding:12px;
+                        margin-bottom:8px;
+                        border:1px solid #e6eee9;
+                        border-radius:15px;
+                    "
+                >
+
+                    <div
+                        style="
+                            width:50px;
+                            height:50px;
+                            border-radius:12px;
+                            background:#edf7f1;
+                            display:flex;
+                            align-items:center;
+                            justify-content:center;
+                            color:#18b950;
+                            font-weight:800;
+                        "
+                    >
+                        OM
+                    </div>
+
+                    <div style="flex:1">
+
+                        <strong
+                            style="
+                                display:block;
+                                font-size:12px;
+                            "
+                        >
+                            ${item.title}
+                        </strong>
+
+                        <span
+                            style="
+                                color:#9aa59f;
+                                font-size:10px;
+                            "
+                        >
+                            0 ₸
+                        </span>
+
+                    </div>
+
+                    <button
+                        class="remove-cart"
+                        data-index="${index}"
+                        style="
+                            width:28px;
+                            height:28px;
+                            border-radius:50%;
+                            border:0;
+                            background:#f2f6f4;
+                            cursor:pointer;
+                            color:#6d7972;
+                        "
+                    >
+                        ×
+                    </button>
+
+                </div>
+
+            `
+        )
+        .join("");
+
 
     document
-        .querySelectorAll('a[href^="#"]')
-        .forEach(anchor => {
+        .querySelectorAll(".remove-cart")
+        .forEach(button => {
 
-            anchor.addEventListener("click", event => {
+            button.addEventListener(
+                "click",
+                () => {
 
-                const targetId =
-                    anchor.getAttribute("href");
+                    const index =
+                        Number(
+                            button.dataset.index
+                        );
 
-                if (
-                    targetId === "#" ||
-                    !targetId
-                ) {
-                    return;
-                }
+                    cart.splice(index, 1);
 
+                    updateCartCounter();
 
-                const target =
-                    document.querySelector(
-                        targetId
-                    );
-
-
-                if (target) {
-
-                    event.preventDefault();
-
-                    target.scrollIntoView({
-                        behavior: "smooth"
-                    });
+                    renderCart();
 
                 }
-
-            });
+            );
 
         });
 
 
-    /* ================= INITIAL PROGRESS ================= */
+    cartTotal.textContent =
+        "0 ₸";
 
-    updateProgress();
+}
+
+
+document
+    .querySelectorAll(".add-cart")
+    .forEach((button, index) => {
+
+        button.addEventListener(
+            "click",
+            event => {
+
+                event.stopPropagation();
+
+                const product =
+                    products[index];
+
+                cart.push({
+                    title:
+                        product.dataset.title ||
+                        "Товар"
+                });
+
+                updateCartCounter();
+
+                button.classList.add("added");
+
+                button.innerHTML =
+                    "<span>✓</span> Добавлено";
+
+                setTimeout(
+                    () => {
+
+                        button.classList.remove(
+                            "added"
+                        );
+
+                        button.innerHTML =
+                            "<span>+</span> В корзину";
+
+                    },
+                    1200
+                );
+
+                renderCart();
+
+            }
+        );
+
+    });
+
+
+/* ==================================================
+   LOGIN MODAL
+================================================== */
+
+function openLogin() {
+
+    loginModal.classList.add("active");
+
+    document.body.style.overflow = "hidden";
+
+}
+
+
+function closeLogin() {
+
+    loginModal.classList.remove("active");
+
+    document.body.style.overflow = "";
+
+}
+
+
+loginButton.addEventListener(
+    "click",
+    openLogin
+);
+
+
+modalClose.addEventListener(
+    "click",
+    closeLogin
+);
+
+
+loginModal.addEventListener(
+    "click",
+    event => {
+
+        if (
+            event.target === loginModal
+        ) {
+            closeLogin();
+        }
+
+    }
+);
+
+
+/* ==================================================
+   MOBILE SIDEBAR
+================================================== */
+
+mobileMenuButton.addEventListener(
+    "click",
+    () => {
+
+        sidebar.classList.toggle(
+            "mobile-open"
+        );
+
+    }
+);
+
+
+document
+    .querySelectorAll(".side-link")
+    .forEach(link => {
+
+        link.addEventListener(
+            "click",
+            () => {
+
+                document
+                    .querySelectorAll(
+                        ".side-link"
+                    )
+                    .forEach(item => {
+                        item.classList.remove(
+                            "active"
+                        );
+                    });
+
+                link.classList.add("active");
+
+                sidebar.classList.remove(
+                    "mobile-open"
+                );
+
+            }
+        );
+
+    });
+
+
+/* ==================================================
+   CATALOG BUTTON
+================================================== */
+
+catalogButton.addEventListener(
+    "click",
+    () => {
+
+        document
+            .getElementById("catalog")
+            .scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+    }
+);
+
+
+viewAllButton.addEventListener(
+    "click",
+    () => {
+
+        currentCategory = "all";
+
+        searchInput.value = "";
+
+        categories.forEach(category => {
+            category.classList.remove("active");
+        });
+
+        categories[0].classList.add("active");
+
+        filterProducts();
+
+        document
+            .getElementById("catalog")
+            .scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+    }
+);
+
+
+/* ==================================================
+   HEADER FAVORITES
+================================================== */
+
+document
+    .getElementById("favoriteHeader")
+    .addEventListener(
+        "click",
+        () => {
+
+            const favoriteProducts =
+                products.filter(
+                    (_, index) =>
+                        favorites.has(index)
+                );
+
+            if (
+                favoriteProducts.length === 0
+            ) {
+
+                alert(
+                    "Избранное пока пустое"
+                );
+
+                return;
+
+            }
+
+            document
+                .getElementById("catalog")
+                .scrollIntoView({
+                    behavior: "smooth"
+                });
+
+        }
+    );
+
+
+/* ==================================================
+   ESCAPE
+================================================== */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key === "Escape"
+        ) {
+
+            closeCart();
+
+            closeLogin();
+
+            sidebar.classList.remove(
+                "mobile-open"
+            );
+
+        }
+
+    }
+);
+
+
+/* ==================================================
+   INITIAL
+================================================== */
+
+filterProducts();
+
+renderCart();
+```
 
 });
-```
