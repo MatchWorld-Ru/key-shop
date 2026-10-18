@@ -1,180 +1,77 @@
-let cart = 0;
-
-
-/* CART */
-
-function addToCart() {
-
-    cart++;
-
-    const counter = document.getElementById("cartCount");
-
-    counter.textContent = cart;
-
-    counter.style.display = "flex";
-
-    showToast("Товар добавлен в корзину 🛒");
-}
-
-
-/* TOAST */
-
-function showToast(message) {
-
-    const toast = document.getElementById("toast");
-
-    toast.textContent = message;
-
-    toast.classList.add("show");
-
-    setTimeout(() => {
-        toast.classList.remove("show");
-    }, 2200);
-}
-
-
-/* CATALOG */
-
-function openCatalog() {
-
-    document
-        .getElementById("catalogOverlay")
-        .classList.add("open");
-
-    document.body.style.overflow = "hidden";
-}
-
-
-function closeCatalog() {
-
-    document
-        .getElementById("catalogOverlay")
-        .classList.remove("open");
-
-    document.body.style.overflow = "";
-}
-
-
-/* SEARCH */
-
-function searchProducts() {
-
-    const input =
-        document
-            .getElementById("searchInput")
-            .value
-            .toLowerCase()
-            .trim();
-
-    const cards =
-        document.querySelectorAll(".product-card");
-
-    cards.forEach(card => {
-
-        const title =
-            card
-                .querySelector("h3")
-                .textContent
-                .toLowerCase();
-
-        if (title.includes(input)) {
-
-            card.style.display = "";
-
-        } else {
-
-            card.style.display = "none";
-
-        }
-
-    });
-}
-
-
-/* SCROLL */
-
-function scrollToProducts() {
-
-    document
-        .getElementById("products")
-        .scrollIntoView({
-            behavior: "smooth"
-        });
-}
-
-
-/* FAVORITES */
-
-document.querySelectorAll(".favorite").forEach(button => {
-
-    button.addEventListener("click", function () {
-
-        if (this.textContent === "♡") {
-
-            this.textContent = "♥";
-
-            this.style.color = "#ff4757";
-
-            showToast("Добавлено в избранное ❤️");
-
-        } else {
-
-            this.textContent = "♡";
-
-            this.style.color = "";
-
-            showToast("Удалено из избранного");
-
-        }
-
-    });
-
-});
-
-
-/* SORT */
-
-document.querySelectorAll(".sort").forEach(button => {
-
-    button.addEventListener("click", function () {
-
-        document
-            .querySelectorAll(".sort")
-            .forEach(btn => btn.classList.remove("active"));
-
-        this.classList.add("active");
-
-        showToast("Сортировка: " + this.textContent);
-
-    });
-
-});
-
-
-/* ESC CLOSE */
-
-document.addEventListener("keydown", function(event) {
-
-    if (event.key === "Escape") {
-
-        closeCatalog();
-
-    }
-
-});
-
-
-/* PAGE LOAD ANIMATION */
-
-window.addEventListener("load", () => {
-
-    document
-        .querySelectorAll(".product-card")
-        .forEach((card, index) => {
-
-            card.style.animationDelay =
-                `${index * 0.08}s`;
-
-        });
-
-});
+var D=[
+{d:"Пн",t:"Грудь, плечи, трицепс",run:"Спокойный бег, 60 минут",ex:[
+["Жим штанги лёжа","Скамья со стойками и штанга","4×8"],
+["Жим гантелей на наклонной","Наклонная скамья, гантели","4×10"],
+["Сведение рук","Тренажёр «бабочка»","3×12"],
+["Жим плечами","Гантели или тренажёр для жима плеч","3×10"],
+["Махи гантелей в стороны","Гантели","4×15"],
+["Разгибания рук","Верхний блок с канатом","3×15"],
+["Французский жим","EZ-гриф и скамья","3×12"],
+["Отжимания на брусьях","Брусья","3×10"],
+["Кроссовер","Два верхних блока","3×12"],
+["Жим гантелей лёжа","Горизонтальная скамья, гантели","3×10"]]},
+{d:"Вт",t:"Спина и бицепс",run:"Интервалы: 10 минут разминка, 8 раз по 1 минуте быстро и 2 минуты медленно, заминка",ex:[
+["Подтягивания","Турник или гравитрон","4×макс"],
+["Тяга штанги в наклоне","Штанга","4×8"],
+["Тяга верхнего блока","Блок для тяги к груди","3×10"],
+["Тяга нижнего блока к поясу","Горизонтальный блок","3×12"],
+["Подъём штанги на бицепс","EZ-гриф","3×10"],
+["Молотки","Гантели","3×12"],
+["Т-тяга","Рычажная тяга или Т-гриф","3×10"],
+["Шраги","Гантели или штанга","4×12"],
+["Сгибания на скамье Скотта","Скамья Скотта и EZ-гриф","3×12"],
+["Гиперэкстензия","Скамья для гиперэкстензии","3×15"]]},
+{d:"Ср",t:"Ноги и пресс",run:"Спокойный бег, 45–60 минут",ex:[
+["Присед со штангой","Силовая рама и штанга","4×8"],
+["Румынская тяга","Штанга","4×10"],
+["Жим ногами","Платформа для жима ногами","3×12"],
+["Выпады","Гантели","3×12"],
+["Сгибания ног лёжа","Тренажёр для сгибания ног","3×15"],
+["Подъём ног в висе","Турник или рама для пресса","4×15"],
+["Разгибания ног","Тренажёр для разгибания ног","3×15"],
+["Болгарские выпады","Скамья и гантели","3×10"],
+["Подъём на носки","Тренажёр для икр","4×15"],
+["Планка","Коврик","3×60 сек"]]},
+{d:"Чт",t:"Плечи, руки, верх груди",run:"Интервалы: 10 минут разминка, 8 раз по 1 минуте быстро и 2 минуты медленно, заминка",ex:[
+["Жим гантелей сидя","Скамья со спинкой, гантели","4×10"],
+["Жим на наклонной","Тренажёр Смита или гантели","3×10"],
+["Тяга к подбородку","Нижний блок или EZ-гриф","3×12"],
+["Задние дельты","Тренажёр «обратная бабочка»","3×15"],
+["Бицепс и трицепс суперсетом","Блоки и гантели","4×12"],
+["Разведение гантелей на наклонной","Наклонная скамья, гантели","3×12"],
+["Подъём гантелей перед собой","Гантели","3×12"],
+["Сгибания в кроссовере","Два верхних блока","3×15"],
+["Жим узким хватом","Скамья со стойками и штанга","3×10"]]},
+{d:"Пт",t:"Спина и ноги (легче)",run:"Спокойный бег, 60 минут",ex:[
+["Становая тяга","Штанга на помосте","3×6"],
+["Тяга верхнего блока","Блок для тяги к груди","3×12"],
+["Гакк-присед или жим ногами","Гакк-машина или платформа","3×12"],
+["Ягодичный мостик","Скамья и штанга","3×12"],
+["Скручивания на пресс","Коврик или скамья","3×15"],
+["Тяга гантели одной рукой","Скамья и гантель","3×12"],
+["Сгибания ног сидя","Тренажёр для сгибания ног","3×12"],
+["Боковая планка","Коврик","3×40 сек"]]},
+{d:"Сб",t:"Кардио и растяжка",run:"Длинный бег в лёгком темпе, 60–70 минут",ex:[
+["Кардио после бега","Дорожка, эллипс или велотренажёр","20–30 мин"],
+["Гребной тренажёр","Гребной тренажёр","10 мин"],
+["Пресс-колесо","Ролик для пресса","3×10"],
+["Растяжка","Коврик","15 мин"]]}
+];
+var done={},cur=0,tabs=document.getElementById("tabs"),view=document.getElementById("view");
+function render(){
+tabs.innerHTML="";
+D.forEach(function(x,i){var b=document.createElement("button");b.className="tab";b.setAttribute("role","tab");b.setAttribute("aria-selected",i===cur);b.textContent=x.d;b.onclick=function(){cur=i;render()};tabs.appendChild(b)});
+var b=document.createElement("button");b.className="tab";b.textContent="Вс";b.setAttribute("role","tab");b.setAttribute("aria-selected",cur===6);b.onclick=function(){cur=6;render()};tabs.appendChild(b);
+if(cur===6){view.innerHTML='<h2>Воскресенье</h2><p class="sub">Полный отдых</p><div class="run"><b>Только прогулка</b>Мышцы растут во время восстановления, поэтому этот день входит в план. Выспись и нормально поешь.</div>'+tips();return}
+var x=D[cur],n=0,h='<h2>'+x.t+'</h2><p class="sub">Зал около 2 часов</p><div class="run"><b>Утром</b>'+x.run+'</div><div class="bar"><i id="bar"></i></div><ul class="list">';
+x.ex.forEach(function(e,j){var k=cur+"-"+j,on=!!done[k];if(on)n++;
+h+='<li><button class="row" data-k="'+k+'" aria-pressed="'+on+'"><span class="chk">✓</span><span class="ic">'+ic(e[1])+'</span><span><span class="nm">'+e[0]+'</span><span class="tag">'+e[1]+'</span></span><span class="sets">'+e[2]+'</span></button></li>'});
+h+='</ul>'+tips();view.innerHTML=h;
+document.getElementById("bar").style.width=(n/x.ex.length*100)+"%";
+Array.prototype.forEach.call(view.querySelectorAll(".row"),function(r){r.onclick=function(){done[r.dataset.k]=!done[r.dataset.k];render()}})}
+var I={bar:'<svg viewBox="0 0 64 64"><path d="M6 32h52M14 20v24M20 24v16M50 20v24M44 24v16"/></svg>',db:'<svg viewBox="0 0 64 64"><path d="M22 32h20M14 22v20M22 25v14M50 22v20M42 25v14"/></svg>',bench:'<svg viewBox="0 0 64 64"><path d="M10 40h44M18 40v14M46 40v14M12 20h40M14 14v12M50 14v12M20 20v20M44 20v20"/></svg>',rack:'<svg viewBox="0 0 64 64"><path d="M16 6v50M48 6v50M10 56h44M10 24h44M12 18v12M52 18v12"/></svg>',cable:'<svg viewBox="0 0 64 64"><path d="M12 8h40M32 8v32M20 40h24M50 14v34M56 14v34M50 14h6M50 48h6"/><circle cx="32" cy="8" r="3"/></svg>',pull:'<svg viewBox="0 0 64 64"><path d="M8 10h48M10 10v46M54 10v46M32 28v14M32 28l-9-18M32 28l9-18M32 42l-4 12M32 42l4 12"/><circle cx="32" cy="22" r="4"/></svg>',pec:'<svg viewBox="0 0 64 64"><path d="M32 10v44M20 54h24M24 42h16M14 20h14M50 20H36M14 14v12M50 14v12"/></svg>',leg:'<svg viewBox="0 0 64 64"><path d="M8 54l46-30M8 54V36M50 12l8 16M14 36h12"/></svg>',tread:'<svg viewBox="0 0 64 64"><rect x="8" y="46" width="48" height="8" rx="4"/><path d="M50 46V16M44 16h12M28 20v14l-8 12M28 34l8 10"/><circle cx="28" cy="14" r="4"/></svg>',mat:'<svg viewBox="0 0 64 64"><rect x="6" y="36" width="52" height="10" rx="5"/><path d="M16 28c4-6 8 6 12 0s8 6 12 0"/></svg>',smith:'<svg viewBox="0 0 64 64"><path d="M16 6v50M48 6v50M8 28h48M10 22v12M54 22v12M22 50h20"/></svg>',mach:'<svg viewBox="0 0 64 64"><path d="M14 54h36M20 44h20M20 44V16M20 16h10M40 44l12-18M52 26l4 4M44 54v-10"/></svg>'};
+function ic(q){var s=q.toLowerCase(),k="mach";
+if(/смита/.test(s))k="smith";else if(/бабочка/.test(s))k="pec";else if(/турник|гравитрон/.test(s))k="pull";else if(/силовая/.test(s))k="rack";else if(/платформа|гакк/.test(s))k="leg";else if(/дорожка/.test(s))k="tread";else if(/коврик/.test(s))k="mat";else if(/блок|канат/.test(s))k="cable";else if(/скам/.test(s))k="bench";else if(/гантел/.test(s))k="db";else if(/штанга|гриф/.test(s))k="bar";
+return I[k]}
+function tips(){return '<div class="tips"><p>Ешь достаточно белка и углеводов, голодать при такой нагрузке нельзя.</p><p>Спи 7–8 часов и пей 2,5–3 литра воды.</p><p>Если несколько дней подряд болят суставы или пропала сила, возьми дополнительный день отдыха.</p></div>'}
+render();
